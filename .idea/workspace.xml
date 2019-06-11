@@ -2,28 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="98bd2966-d15a-48ad-ae4c-c6268609ca4a" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/_posts/2019-06-04-disciplined-paradigms.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/images/13.jpeg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/images/glass_wall.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/images/lambda.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_posts/2019-03-12-the-glass-wall.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/2019-03-12-the-glass-wall.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/404.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/404.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/about.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/about.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/assets/images/jumbotron.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/_site/assets/images/jumbotron.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/assets/js/lunrsearchengine.js" beforeDir="false" afterPath="$PROJECT_DIR$/_site/assets/js/lunrsearchengine.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/categories.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/categories.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/category/jekyll/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/category/jekyll/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/category/literature/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/category/literature/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/category/tutorial/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/category/tutorial/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/feed.xml" beforeDir="false" afterPath="$PROJECT_DIR$/_site/feed.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/powerful-things-markdown-editor/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/powerful-things-markdown-editor/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/sitemap.xml" beforeDir="false" afterPath="$PROJECT_DIR$/_site/sitemap.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/tags.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/tags.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/the-glass-wall/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/the-glass-wall/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/jumbotron.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/jumbotron.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_posts/2019-06-04-disciplined-paradigms.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/2019-06-04-disciplined-paradigms.md" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -40,8 +19,8 @@
         <entry file="file://$PROJECT_DIR$/_posts/2019-06-04-disciplined-paradigms.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="36">
-                <caret line="9" column="98" selection-start-line="9" selection-start-column="98" selection-end-line="9" selection-end-column="98" />
+              <first_editor relative-caret-position="46">
+                <caret line="2" column="15" selection-start-line="2" selection-start-column="15" selection-end-line="2" selection-end-column="15" />
               </first_editor>
               <second_editor />
             </state>
@@ -198,12 +177,12 @@
       <updated>1557707071522</updated>
       <workItem from="1557707072716" duration="3538000" />
       <workItem from="1558202569894" duration="853000" />
-      <workItem from="1559434398921" duration="10364000" />
+      <workItem from="1559434398921" duration="10547000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="14755000" />
+    <option name="totallyTimeSpent" value="14938000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1680" height="1050" extended-state="6" />
@@ -442,8 +421,8 @@
     <entry file="file://$PROJECT_DIR$/_posts/2019-06-04-disciplined-paradigms.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
-          <first_editor relative-caret-position="36">
-            <caret line="9" column="98" selection-start-line="9" selection-start-column="98" selection-end-line="9" selection-end-column="98" />
+          <first_editor relative-caret-position="46">
+            <caret line="2" column="15" selection-start-line="2" selection-start-column="15" selection-end-line="2" selection-end-column="15" />
           </first_editor>
           <second_editor />
         </state>

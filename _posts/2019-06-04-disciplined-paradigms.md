@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "The Zen of Disciplined Programmer"
+title: "STR: A Disciplined Programmer"
 author: durwasa
 categories: [ programming ]
 image: assets/images/13.jpeg
