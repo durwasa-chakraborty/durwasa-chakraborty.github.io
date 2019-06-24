@@ -1,9 +1,11 @@
 ---
 layout: post
+comments: true
 title: "STR: A Disciplined Programmer"
 author: durwasa
 categories: [ programming ]
 image: assets/images/13.jpeg
+
 ---  
   <h4>The Disciplined Programmer</h4>
   
