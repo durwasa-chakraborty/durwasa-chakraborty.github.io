@@ -3,11 +3,33 @@
   <channel>
     <title>Anachronistic Monk</title>
     <description>Durwasa Chakraborty</description>
-    <link>http://localhost:4000/</link>
-    <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 23 Jun 2019 21:41:50 -0400</pubDate>
-    <lastBuildDate>Sun, 23 Jun 2019 21:41:50 -0400</lastBuildDate>
-    <generator>Jekyll v3.8.5</generator>
+    <link>/</link>
+    <atom:link href="/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Sun, 06 Dec 2020 17:26:26 -0500</pubDate>
+    <lastBuildDate>Sun, 06 Dec 2020 17:26:26 -0500</lastBuildDate>
+    <generator>Jekyll v4.1.1</generator>
+    
+      <item>
+        <title>The 00 Estate : What if government tells you how to write the code?</title>
+        <description>&lt;p&gt;In the House of Commons of Great Britain, Edmund Burke said - “There were Three Estates in Parliament; but, in the Reporters’ Gallery yonder, there sat a Fourth Estate more important far than they all”. In the advent of the 21 century we have seen media houses exert biases towards their respective lobbys. ‘Truth’ that is supposed to be absolute has now shades of well crafted absolution. ‘Who’s truth is the truth’ is question that I seldom ask myself while reading news articles over the internet. While the government in power not only controls the First Three estates, it won’t be an overstatement that Orwell’s 1984 doesn’t sound like a work of fiction anymore. The blog tries to play with the idea of what if there is 00 Estate that encapsulates all the estates and dictates terms to write code.&lt;/p&gt;
+
+&lt;p&gt;I recently saw this wonderful talk - &lt;a href=&quot;https://www.youtube.com/watch?v=ecIWPzGEbFc&quot;&gt;Uncle Bob’s Talk - Future of programming&lt;/a&gt; where he emphasises on writing ‘good code’ and the problems with ‘what if we don’t’.
+Honestly, the ‘we don’t’ part is scary. With the world moving towards automation there is an increased dependency on machines. Ideas like ‘what if I have technology where I can speak out loud and the fan, light, television would turn on / off ‘ are almost ubiquitous in every household these days. Ideas that made it in the script of science fiction movies are now turning into reality. All this is powered by billions of lines of code. Thus, if we (the software engineering fraternity) do not emphasise over the quality of code there will be severe repurcussions. People have lost their lives because of faulty code resulting in machine failures, hacking of automobile,  privacy leaks and the list is long.&lt;/p&gt;
+
+&lt;p&gt;Since, the life of the people are on stake soon there will come a time when the government will regulate what code goes in the machine. The only problem is that policy makers who are running the government do not have enough knowledge about how sofwares work. These are individuals who have been selected by the people, not based on their expertise on technology but their experience in public policies and how it impacts their day-to-day life. Unfortunately, the code we write today and the impact it has on day-to-day life has coalesced into one big operational idea. In such a scenario these elected individuals will turn on to other parties for expertise. This outsourcing of ideas where a selected party can decide the fate of a software opens a pandora box of problems.  The law of diminishing returns - if you have a broken system and you incorporate another broker system to fix the previous system you are now left with two broken systems and the situation is worse than before. With an organization having power to label a software as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;good&lt;/code&gt; or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;bad&lt;/code&gt; introduces  hierarchy which breaks the egalitarian aspect of Software Industry. For example I see organizations write books, blogs, whitepapers about ‘best practices’ which is more of a suggestion and less of a dictation.&lt;/p&gt;
+
+&lt;p&gt;Earlier this year I used to believe that quality of a Software is  just how many test cases you write or percentage of code coverage but in reality it is how your software reacts during the times of outages along with the writing and maintaining test suites. Ideas like Chaos testing are hitting the market and scalability, load, performance, configuration testings are defined roles for the job of SDET.  It is important (more than ever) now to write good code because once the government dictates terms to ‘us’ it would not only be just how to write code but also allowing a backdoor entry to government and organizations. Ed Snowden has already discussed such ideas of how quickly one can run into an overfitting problem if an organization decides to track every single user of the system.  I also have my reasons to believe that success stories like the ones we have heard like an that came out of a Harvard University dorm, later become a billion dollar company, those stories will cease to exist. It’s almost funny that even a democratic system can kill the democratization of softwares in more ways than imaginable.&lt;/p&gt;
+
+&lt;p&gt;It is high time Software Engineers across the world decided on writing good code not just because a smelly code impacts the performance of the software but also because we are looking at the barrell of a gun and someday a major catastrophe can lead to regulations pouring in from all directions.&lt;/p&gt;
+</description>
+        <pubDate>Sun, 06 Dec 2020 00:00:00 -0500</pubDate>
+        <link>/The-00-Estate/</link>
+        <guid isPermaLink="true">/The-00-Estate/</guid>
+        
+        
+        <category>programming</category>
+        
+      </item>
     
       <item>
         <title>STR: A Disciplined Programmer</title>
@@ -19,7 +41,7 @@
   Every word of the programming language it is a holy word and a non-conformance is bordering  blasphemy.&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;May be the mind sees what it chooses to see and I am trying to deliberately draw parallels even if there isn’t one. However,
-   I could see a lot of similarity between &lt;code class=&quot;highlighter-rouge&quot;&gt;Bringing up Kids in an Eastern cultural environment 101&lt;/code&gt; and the the art of disciplined development.
+   I could see a lot of similarity between &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Bringing up Kids in an Eastern cultural environment 101&lt;/code&gt; and the the art of disciplined development.
   Interestingly, I found that the art of learning and the four phases of a Hindu life has a lot in common. &lt;br /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
@@ -50,8 +72,8 @@
 
 </description>
         <pubDate>Tue, 04 Jun 2019 00:00:00 -0400</pubDate>
-        <link>http://localhost:4000/disciplined-paradigms/</link>
-        <guid isPermaLink="true">http://localhost:4000/disciplined-paradigms/</guid>
+        <link>/disciplined-paradigms/</link>
+        <guid isPermaLink="true">/disciplined-paradigms/</guid>
         
         
         <category>programming</category>
@@ -65,8 +87,8 @@
 &lt;p&gt;All  bad dreams come to an end and so was mine… I could feel the tender  touch of someone right on my forehead and that belief that the world has  not ended. Everybody is haunted by their pasts but some have a haunted  story as well. Reaching the zenith they see their problems. Laugh at the  minuscule size of their problems and tread ahead for something more ,  each inch fuels them for more kilometers. I came to know about her.  Slowly and steadily I could wipe the mist of my glass wall and I saw her  right as my reflection. I had found the girl of my lifetime. I was  touched by her solicitude. Suddenly love ballads and romantic literature  started to make sense.I started to dream again and I got life my life  back. I wonder someone placed a talisman right under my pillow because  finding such a person was sheer good luck. One day my reflection started  to fade away from me. I could see her going I couldn’t do anything. I  tried but the cracks had become crevasses. She started to fill the crack  but she bled with the sharp cut. I never wanted this to happen to her. I  wanted the best for her. I ultimately failed ,the crack is still there;  my reflection is now distorted. But I was feeling obliged about the  fact that in this life I was loved by her. I left a silent tear and a  wishful request. I was sure that its impossible for her and me to  converge at some other point of space and time curve this was my last  chance. The chill of winter actually froze me and infinitely worse deep  inside I went cold. Couple of days later I was back to normal. Hoping  things could get better but it did not help. Now after so many years I  see her. I had always wished for a healthy prologue and a stronger  epilogue. My reflection was back. I scrounged for my glass wall  everywhere but I couldn’t find it anywhere. Some pieces I found in my  attic the image still being distorted. But now I see the love of my  life. Yet again I wished my reflection would identify me , imitate me  laterally inverted although but in coherence. A bonding that a man  shares with his shadow but a bonding that is colorful at both the ends.  Shes happier now …Married, successful having degrees from Ivy leagues  and couple of beautiful kids. I wished to rush to the other side of the  road and may be talk to her for couple of minutes. I wish to scream and  shout and tell her that miss I still love you beyond all measures beyond  all realms and still I do. But I didn’t or rather I could not. Not  because I was afraid that what society will talk. Because I just wanted  to live that dream once she had. Because do something as simple as  holding her hand and telling her that I would never let her go.But I  still did not or rather I would say I could not because long ago I had  left this world…&lt;/p&gt;
 </description>
         <pubDate>Tue, 12 Mar 2019 00:00:00 -0400</pubDate>
-        <link>http://localhost:4000/the-glass-wall/</link>
-        <guid isPermaLink="true">http://localhost:4000/the-glass-wall/</guid>
+        <link>/the-glass-wall/</link>
+        <guid isPermaLink="true">/the-glass-wall/</guid>
         
         
         <category>literature</category>
@@ -91,9 +113,9 @@
 
 &lt;h2 id=&quot;writing-code-blocks&quot;&gt;Writing code blocks&lt;/h2&gt;
 
-&lt;p&gt;There are two types of code elements which can be inserted in Markdown, the first is inline, and the other is block. Inline code is formatted by wrapping any word or words in back-ticks, &lt;code class=&quot;highlighter-rouge&quot;&gt;like this&lt;/code&gt;. Larger snippets of code can be displayed across multiple lines using triple back ticks:&lt;/p&gt;
+&lt;p&gt;There are two types of code elements which can be inserted in Markdown, the first is inline, and the other is block. Inline code is formatted by wrapping any word or words in back-ticks, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;like this&lt;/code&gt;. Larger snippets of code can be displayed across multiple lines using triple back ticks:&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
 2
 3
 &lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;.my-link {
@@ -150,9 +172,9 @@
 &lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;document&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;scroll&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
     &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;y&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;scrollTop&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;y&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;280&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'.alertbar'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;fadeIn&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;.alertbar&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;fadeIn&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
     &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'.alertbar'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;fadeOut&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;.alertbar&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;fadeOut&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
     &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
 &lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
@@ -194,8 +216,8 @@
 &lt;p&gt;&lt;iframe style=&quot;width:100%;&quot; height=&quot;315&quot; src=&quot;https://www.youtube.com/embed/Cniqsc9QfDo?rel=0&amp;amp;showinfo=0&quot; frameborder=&quot;0&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;&lt;/p&gt;
 </description>
         <pubDate>Tue, 12 Jun 2018 00:00:00 -0400</pubDate>
-        <link>http://localhost:4000/powerful-things-markdown-editor/</link>
-        <guid isPermaLink="true">http://localhost:4000/powerful-things-markdown-editor/</guid>
+        <link>/powerful-things-markdown-editor/</link>
+        <guid isPermaLink="true">/powerful-things-markdown-editor/</guid>
         
         
         <category>Jekyll</category>
