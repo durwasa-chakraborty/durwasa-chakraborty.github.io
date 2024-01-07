@@ -6,7 +6,16 @@
     <description>Recent content in Posts on Anachronistic Monk</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
+    <lastBuildDate>Sat, 06 Jan 2024 18:08:54 +0530</lastBuildDate>
     <atom:link href="https://durwasa-chakraborty.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Major Mode El</title>
+      <link>https://durwasa-chakraborty.github.io/posts/major-mode-el/</link>
+      <pubDate>Sat, 06 Jan 2024 18:08:54 +0530</pubDate>
+      <guid>https://durwasa-chakraborty.github.io/posts/major-mode-el/</guid>
+      <description>Any sufficiently complicated C or Fortran program contains an ad hoc, informally-specified, bug-ridden, slow implementation of half of Common Lisp.
+Before you think I&amp;rsquo;m crowning Lisp as God&amp;rsquo;s own language after just one blog stint at a coding exercise, hold your horses. I&amp;rsquo;m not here to bash Object-Oriented Programming or its design patterns. In fact, I believe it&amp;rsquo;s crucial to know these patterns inside out. Only then can you play the game of &amp;lsquo;Design Pattern or Anti-Pattern?</description>
+    </item>
     <item>
       <title>STR: A Disciplined Programmer</title>
       <link>https://durwasa-chakraborty.github.io/posts/disciplined-paradigms/</link>
