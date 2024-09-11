@@ -6,8 +6,17 @@
     <description>Recent content in Posts on Anachronistic Monk</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 12 Apr 2024 10:56:26 +0530</lastBuildDate>
+    <lastBuildDate>Tue, 11 Jun 2024 12:54:54 +0530</lastBuildDate>
     <atom:link href="https://durwasa-chakraborty.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>How B&#43; Trees Optimize SQL Queries: A Primer</title>
+      <link>https://durwasa-chakraborty.github.io/posts/b&#43;-trees-sql-optimization/</link>
+      <pubDate>Tue, 11 Jun 2024 12:54:54 +0530</pubDate>
+      <guid>https://durwasa-chakraborty.github.io/posts/b&#43;-trees-sql-optimization/</guid>
+      <description>Introduction For someone who has taken a course in Computer Science, they have probably come across a B+ tree, often used in the context of databases for storing data. A B+ tree schematically looks like this:
+[ 1003 ] / | \ [1001] [1002] [1004 1005] [1007] / | | | [Naruto] [Sasuke] [Sakura Hinata Kakashi] [Itachi] In a B+ tree, the data always lies in the leaf nodes.
+However, what are the advantages of using such a structure in a database?</description>
+    </item>
     <item>
       <title>Echoes of a Timeless Curse</title>
       <link>https://durwasa-chakraborty.github.io/posts/echoes-of-a-timeless-curse/</link>

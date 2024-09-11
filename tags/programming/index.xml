@@ -6,8 +6,17 @@
     <description>Recent content in programming on Anachronistic Monk</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 06 Jan 2024 18:08:54 +0530</lastBuildDate>
+    <lastBuildDate>Tue, 11 Jun 2024 12:54:54 +0530</lastBuildDate>
     <atom:link href="https://durwasa-chakraborty.github.io/tags/programming/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>How B&#43; Trees Optimize SQL Queries: A Primer</title>
+      <link>https://durwasa-chakraborty.github.io/posts/b&#43;-trees-sql-optimization/</link>
+      <pubDate>Tue, 11 Jun 2024 12:54:54 +0530</pubDate>
+      <guid>https://durwasa-chakraborty.github.io/posts/b&#43;-trees-sql-optimization/</guid>
+      <description>Introduction For someone who has taken a course in Computer Science, they have probably come across a B+ tree, often used in the context of databases for storing data. A B+ tree schematically looks like this:
+[ 1003 ] / | \ [1001] [1002] [1004 1005] [1007] / | | | [Naruto] [Sasuke] [Sakura Hinata Kakashi] [Itachi] In a B+ tree, the data always lies in the leaf nodes.
+However, what are the advantages of using such a structure in a database?</description>
+    </item>
     <item>
       <title>Major Mode El</title>
       <link>https://durwasa-chakraborty.github.io/posts/major-mode-el/</link>
