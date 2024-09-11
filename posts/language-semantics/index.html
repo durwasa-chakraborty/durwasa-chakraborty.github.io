@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Language Semantics | Anachronistic Monk</title>
+<meta name="keywords" content="">
+<meta name="description" content="Happy Birthday to Me: Musings on Language and Code
+Today, I find myself celebrating my birthday in the tranquil confines of a cozy Airbnb in Vancouver. It’s a momentary escape from the pressures of work, a rare breather amidst the ever-present demands of the office. Through the frost-touched window, I watch the Canadian flag battle the icy winds. Below, I can hear the faint murmurs of a French-speaking couple, my neighbors.">
+<meta name="author" content="durwasa">
+<link rel="canonical" href="https://durwasa-chakraborty.github.io/posts/language-semantics/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.e087fd1dc76e73a35ae6d7028ddc1ba41e0131e7f9b3a6e2d019a208e6d6c4b5.css" integrity="sha256-4If9Hcduc6Na5tcCjdwbpB4BMef5s6bi0BmiCObWxLU=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.f413e19d0714851f6474e7ee9632408e58ac146fbdbe62747134bea2fa3415e0.js" integrity="sha256-9BPhnQcUhR9kdOfuljJAjlisFG&#43;9vmJ0cTS&#43;ovo0FeA="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="https://durwasa-chakraborty.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://durwasa-chakraborty.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://durwasa-chakraborty.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://durwasa-chakraborty.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://durwasa-chakraborty.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="Language Semantics" />
+<meta property="og:description" content="Happy Birthday to Me: Musings on Language and Code
+Today, I find myself celebrating my birthday in the tranquil confines of a cozy Airbnb in Vancouver. It’s a momentary escape from the pressures of work, a rare breather amidst the ever-present demands of the office. Through the frost-touched window, I watch the Canadian flag battle the icy winds. Below, I can hear the faint murmurs of a French-speaking couple, my neighbors." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://durwasa-chakraborty.github.io/posts/language-semantics/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-03-24T11:07:52+05:30" />
+<meta property="article:modified_time" content="2023-03-24T11:07:52+05:30" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Language Semantics"/>
+<meta name="twitter:description" content="Happy Birthday to Me: Musings on Language and Code
+Today, I find myself celebrating my birthday in the tranquil confines of a cozy Airbnb in Vancouver. It’s a momentary escape from the pressures of work, a rare breather amidst the ever-present demands of the office. Through the frost-touched window, I watch the Canadian flag battle the icy winds. Below, I can hear the faint murmurs of a French-speaking couple, my neighbors."/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://durwasa-chakraborty.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Language Semantics",
+      "item": "https://durwasa-chakraborty.github.io/posts/language-semantics/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Language Semantics",
+  "name": "Language Semantics",
+  "description": "Happy Birthday to Me: Musings on Language and Code\nToday, I find myself celebrating my birthday in the tranquil confines of a cozy Airbnb in Vancouver. It’s a momentary escape from the pressures of work, a rare breather amidst the ever-present demands of the office. Through the frost-touched window, I watch the Canadian flag battle the icy winds. Below, I can hear the faint murmurs of a French-speaking couple, my neighbors.",
+  "keywords": [
+    
+  ],
+  "articleBody": "Happy Birthday to Me: Musings on Language and Code\nToday, I find myself celebrating my birthday in the tranquil confines of a cozy Airbnb in Vancouver. It’s a momentary escape from the pressures of work, a rare breather amidst the ever-present demands of the office. Through the frost-touched window, I watch the Canadian flag battle the icy winds. Below, I can hear the faint murmurs of a French-speaking couple, my neighbors. A little later, the cadence of Mandarin reaches my ears, no doubt my landlord going about his day. And then, the phone rings. It’s my mother, calling from home, so naturally, the conversation begins in Bengali. When my father takes the phone, we switch seamlessly to Hindi. After the call, I set the phone down, open my laptop, and begin composing an email in English.\nAs the email closes, I dive into writing code, shifting once again—but this time into the realm of Java. Before long, I realize the data needs some cleaning up, so Python it is. A little infrastructure work follows, and suddenly I’m typing away in TypeScript.\nAnd so I ask myself: why so many languages? Why do we burden ourselves with this linguistic and computational multiplicity? The world has long sought a universal tongue. Philosophers and scientists alike have proposed solutions, from the constructed language of Esperanto to the formalized structure of Loglan. Yet here we remain, in a world where diversity of language reigns, and we must transition from one to another at a moment’s notice.\nThis rumination takes me back to a particularly memorable lesson from my programming languages (PL) class, where my professor once remarked, “Semantics are greater than syntax.” Semantics, the meaning behind the words and symbols, form the bedrock of all communication, be it in human languages or in code. Syntax, the structure and form, is what gives language its recognizable shape, but it is the semantics that give it life.\nLet’s stretch this notion beyond programming and into everyday speech. Take Latin, for example: an ancient language from which so many modern tongues have evolved. For nearly every Latin term, there exists an English counterpart. Suo Moto becomes “on its own motion,” Ad Hominem transforms into “to the person.” Each word, though different in form, carries with it the same weight of meaning—the same semantics. The symbols may change, but the message remains.\nYet, in the legal world, Latin has emerged as the lingua franca, a curious decision for a modern field. One might argue that Latin’s dominance stems from its ancient roots, with much of Western legal tradition borrowing heavily from Roman law, making Latin a natural choice. However, this reasoning feels like a mere case of “following the herd” or “going with the flow”—a tendency to adopt something just because it has been done before. There is a deeper explanation, I believe, rooted not in convenience but in the allure of the precision Latin offers.\nConsider Japanese, a language rich with words that have permeated the world of business and management. It’s not as if other languages lack equivalents for terms like Ikigai (reason for being) or Kaizen (continuous improvement), or even Shoshin (beginner’s mind) and Gemba (the actual place). These words evoke a sense of discipline and mindfulness that transcends their simple translations. English may offer approximations, but the adoption of these Japanese terms in global contexts speaks to something greater than just a linguistic gap. It’s about the cultural weight behind the words—the ethos that underpins their meaning.\nThe same phenomenon occurs when I turn to the world of emotions and the arts. A sad poem can be written in English or Hindi, but when heartache strikes deeply, I turn to the lyrical beauty of Bengali or Urdu / Hindustani for solace. The tender phrases, the soft melancholy of Urdu literature, seem to resonate with the human condition in a way that no mere translation can capture. Personally, I find myself drawn to Tamil songs when in need of comfort, though I must often search for their English translations. And Bengali is a complete universe in its own. I just sometimes feel lucky to be born in a bengali family, to know enough bengali to not search meanings of the word by word but rather need to look up for one word in a sentence. (Ya, its bad but more manageable than say Spanish or Tamil). Even with the meaning intact, the experience feels incomplete; the original language carries a certain emotional depth that translations simply cannot map one-to-one.\nThis, I think, perfectly illustrates the difference between syntax and semantics. You can change the words, but the true meaning—the emotional or cultural resonance—may not always follow.\n// In C for (int i = 0; i \u003c size; i++) { printf(\"%d\\n\", list[i]); } // In C++ for (int val : vec) { std::cout \u003c\u003c val \u003c\u003c std::endl; } // In Scala // Using foreach to traverse list.foreach(println) // Alternatively, you can use a simple for loop for (elem \u003c- list) { println(elem) } // In Racket (define (my-functor f l) (map f l)) (my-functor (lambda (x) (displayln x)) list) // In Brainf*ck +[-\u003e,----------] ; Reads input until 0 (input ended) \u003e++++++++++++[-\u003e+++++++++++++\u003c]\u003e+++. ; Output first value (65 -\u003e A) Programming languages exhibit a vast range of syntactic and semantic differences, and these differences play a crucial role in how various constructs, such as list traversal, are executed. This variance raises essential questions about the orthogonality of programming languages—specifically, their capacity to support multiple paradigms for achieving similar tasks. For instance, does a language restrict itself to traditional constructs like the for loop, or does it embrace functional programming paradigms, offering operations like map, list comprehensions, or functors?\nThe primary objective in list traversal remains constant across languages, yet the choice of method alters the semantics of the operation. A for loop is often more familiar to many programmers, providing clarity and ease of understanding, while functional approaches, such as a map function with a lambda expression, offer a more elegant and concise method. These functional paradigms tend to generate more robust, maintainable code. Despite both methods being syntactically valid, the choice between them has broader implications for readability, flexibility, and a language’s capacity to facilitate more complex, functional patterns.\nThis brings us to an important realization: the popularity of a programming language often does not hinge solely on its syntax. A language’s success is often driven by its semantics—the underlying meaning behind its constructs—and the ecosystem it fosters, including libraries, frameworks, and tools. Semantics, in this context, are far more critical than simply offering numerous syntactic options. The strength of a language lies in how clearly and efficiently it can express complex ideas, rather than how many ways it allows one to express the same task.\nAt the heart of this discussion is a critical question: Is it possible to design a language where the syntax is intuitive, yet the underlying semantics are versatile enough to accommodate diverse use cases? Can we create a programming language that is not merely a tool but a medium—one that is expressive, relatable, and capable of encapsulating the nuances of the problems it aims to solve?\nThe challenge in language design lies in achieving a balance between generality and specificity. A language designed for broad applicability needs to offer both flexible syntax and deep semantic richness, whereas a domain-specific language might prioritize strict syntactic rules to ensure precision and correctness. The ultimate goal is to find a middle ground—a language that offers enough expressive power and robust semantics to handle complex problems while remaining accessible and intuitive to a wide range of developers.\n",
+  "wordCount" : "1272",
+  "inLanguage": "en",
+  "datePublished": "2023-03-24T11:07:52+05:30",
+  "dateModified": "2023-03-24T11:07:52+05:30",
+  "author":{
+    "@type": "Person",
+    "name": "durwasa"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://durwasa-chakraborty.github.io/posts/language-semantics/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Anachronistic Monk",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://durwasa-chakraborty.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://durwasa-chakraborty.github.io/" accesskey="h" title="Anachronistic Monk (Alt + H)">Anachronistic Monk</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      Language Semantics
+    </h1>
+    <div class="post-meta"><span title='2023-03-24 11:07:52 +0530 IST'>March 24, 2023</span>&nbsp;·&nbsp;durwasa
+
+</div>
+  </header> 
+  <div class="post-content"><p><strong>Happy Birthday to Me: Musings on Language and Code</strong></p>
+<p>Today, I find myself celebrating my birthday in the tranquil confines of a cozy Airbnb in Vancouver. It’s a momentary escape from the pressures of work, a rare breather amidst the ever-present demands of the office. Through the frost-touched window, I watch the Canadian flag battle the icy winds. Below, I can hear the faint murmurs of a French-speaking couple, my neighbors. A little later, the cadence of Mandarin reaches my ears, no doubt my landlord going about his day. And then, the phone rings. It&rsquo;s my mother, calling from home, so naturally, the conversation begins in Bengali. When my father takes the phone, we switch seamlessly to Hindi. After the call, I set the phone down, open my laptop, and begin composing an email in English.</p>
+<p>As the email closes, I dive into writing code, shifting once again—but this time into the realm of Java. Before long, I realize the data needs some cleaning up, so Python it is. A little infrastructure work follows, and suddenly I’m typing away in TypeScript.</p>
+<p>And so I ask myself: why so many languages? Why do we burden ourselves with this linguistic and computational multiplicity? The world has long sought a universal tongue. Philosophers and scientists alike have proposed solutions, from the constructed language of Esperanto to the formalized structure of Loglan. Yet here we remain, in a world where diversity of language reigns, and we must transition from one to another at a moment&rsquo;s notice.</p>
+<p>This rumination takes me back to a particularly memorable lesson from my programming languages (PL) class, where my professor once remarked, &ldquo;Semantics are greater than syntax.&rdquo; Semantics, the meaning behind the words and symbols, form the bedrock of all communication, be it in human languages or in code. Syntax, the structure and form, is what gives language its recognizable shape, but it is the semantics that give it life.</p>
+<p>Let’s stretch this notion beyond programming and into everyday speech. Take Latin, for example: an ancient language from which so many modern tongues have evolved. For nearly every Latin term, there exists an English counterpart. <em>Suo Moto</em> becomes “on its own motion,” <em>Ad Hominem</em> transforms into “to the person.” Each word, though different in form, carries with it the same weight of meaning—the same semantics. The symbols may change, but the message remains.</p>
+<p>Yet, in the legal world, Latin has emerged as the lingua franca, a curious decision for a modern field. One might argue that Latin’s dominance stems from its ancient roots, with much of Western legal tradition borrowing heavily from Roman law, making Latin a natural choice. However, this reasoning feels like a mere case of &ldquo;following the herd&rdquo; or &ldquo;going with the flow&rdquo;—a tendency to adopt something just because it has been done before. There is a deeper explanation, I believe, rooted not in convenience but in the allure of the precision Latin offers.</p>
+<p>Consider Japanese, a language rich with words that have permeated the world of business and management. It&rsquo;s not as if other languages lack equivalents for terms like <em>Ikigai</em> (reason for being) or <em>Kaizen</em> (continuous improvement), or even <em>Shoshin</em> (beginner&rsquo;s mind) and <em>Gemba</em> (the actual place). These words evoke a sense of discipline and mindfulness that transcends their simple translations. English may offer approximations, but the adoption of these Japanese terms in global contexts speaks to something greater than just a linguistic gap. It&rsquo;s about the cultural weight behind the words—the ethos that underpins their meaning.</p>
+<p>The same phenomenon occurs when I turn to the world of emotions and the arts. A sad poem can be written in English or Hindi, but when heartache strikes deeply, I turn to the lyrical beauty of Bengali or Urdu / Hindustani for solace. The tender phrases, the soft melancholy of Urdu literature, seem to resonate with the human condition in a way that no mere translation can capture. Personally, I find myself drawn to Tamil songs when in need of comfort, though I must often search for their English translations. And Bengali is a complete universe in its own. I just sometimes feel lucky to be born in a bengali family, to know enough bengali to not search meanings of the word by word but rather need to look up for one word in a sentence. (Ya, its bad but more manageable than say Spanish or Tamil). Even with the meaning intact, the experience feels incomplete; the original language carries a certain emotional depth that translations simply cannot map one-to-one.</p>
+<p>This, I think, perfectly illustrates the difference between syntax and semantics. You can change the words, but the true meaning—the emotional or cultural resonance—may not always follow.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plaintext" data-lang="plaintext"><span style="display:flex;"><span>// In C
+</span></span><span style="display:flex;"><span>    for (int i = 0; i &lt; size; i++) {
+</span></span><span style="display:flex;"><span>        printf(&#34;%d\n&#34;, list[i]);
+</span></span><span style="display:flex;"><span>    }
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plaintext" data-lang="plaintext"><span style="display:flex;"><span>// In C++ 
+</span></span><span style="display:flex;"><span>    for (int val : vec) {
+</span></span><span style="display:flex;"><span>        std::cout &lt;&lt; val &lt;&lt; std::endl;
+</span></span><span style="display:flex;"><span>    }
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plaintext" data-lang="plaintext"><span style="display:flex;"><span>// In Scala
+</span></span><span style="display:flex;"><span>    // Using foreach to traverse
+</span></span><span style="display:flex;"><span>    list.foreach(println)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    // Alternatively, you can use a simple for loop
+</span></span><span style="display:flex;"><span>    for (elem &lt;- list) {
+</span></span><span style="display:flex;"><span>      println(elem)
+</span></span><span style="display:flex;"><span>    }
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plaintext" data-lang="plaintext"><span style="display:flex;"><span>// In Racket
+</span></span><span style="display:flex;"><span>(define (my-functor f l)
+</span></span><span style="display:flex;"><span>  (map f l))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>(my-functor (lambda (x) (displayln x)) list)
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plaintext" data-lang="plaintext"><span style="display:flex;"><span>// In Brainf*ck
+</span></span><span style="display:flex;"><span>+[-&gt;,----------]     ; Reads input until 0 (input ended)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&gt;++++++++++++[-&gt;+++++++++++++&lt;]&gt;+++.  ; Output first value (65 -&gt; A)
+</span></span></code></pre></div><p>Programming languages exhibit a vast range of syntactic and semantic differences, and these differences play a crucial role in how various constructs, such as list traversal, are executed. This variance raises essential questions about the orthogonality of programming languages—specifically, their capacity to support multiple paradigms for achieving similar tasks. For instance, does a language restrict itself to traditional constructs like the <code>for</code> loop, or does it embrace functional programming paradigms, offering operations like <code>map</code>, <code>list</code> comprehensions, or <code>functors</code>?</p>
+<p>The primary objective in list traversal remains constant across languages, yet the choice of method alters the semantics of the operation. A for loop is often more familiar to many programmers, providing clarity and ease of understanding, while functional approaches, such as a map function with a lambda expression, offer a more elegant and concise method. These functional paradigms tend to generate more robust, maintainable code. Despite both methods being syntactically valid, the choice between them has broader implications for readability, flexibility, and a language’s capacity to facilitate more complex, functional patterns.</p>
+<p>This brings us to an important realization: the popularity of a programming language often does not hinge solely on its syntax. A language&rsquo;s success is often driven by its semantics—the underlying meaning behind its constructs—and the ecosystem it fosters, including libraries, frameworks, and tools. Semantics, in this context, are far more critical than simply offering numerous syntactic options. The strength of a language lies in how clearly and efficiently it can express complex ideas, rather than how many ways it allows one to express the same task.</p>
+<p>At the heart of this discussion is a critical question: Is it possible to design a language where the syntax is intuitive, yet the underlying semantics are versatile enough to accommodate diverse use cases? Can we create a programming language that is not merely a tool but a medium—one that is expressive, relatable, and capable of encapsulating the nuances of the problems it aims to solve?</p>
+<p>The challenge in language design lies in achieving a balance between generality and specificity. A language designed for broad applicability needs to offer both flexible syntax and deep semantic richness, whereas a domain-specific language might prioritize strict syntactic rules to ensure precision and correctness. The ultimate goal is to find a middle ground—a language that offers enough expressive power and robust semantics to handle complex problems while remaining accessible and intuitive to a wide range of developers.</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2024 <a href="https://durwasa-chakraborty.github.io/">Anachronistic Monk</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>
