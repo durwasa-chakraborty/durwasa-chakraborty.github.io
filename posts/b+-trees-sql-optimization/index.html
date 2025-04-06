@@ -1,27 +1,31 @@
 <!DOCTYPE html>
 <html lang="en" dir="auto">
 
-<head><meta charset="utf-8">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="robots" content="index, follow">
+<meta name="robots" content="noindex, nofollow">
 <title>How B&#43; Trees Optimize SQL Queries: A Primer | Anachronistic Monk</title>
 <meta name="keywords" content="programming">
-<meta name="description" content="Introduction For someone who has taken a course in Computer Science, they have probably come across a B&#43; tree, often used in the context of databases for storing data. A B&#43; tree schematically looks like this:
-[ 1003 ] / | \ [1001] [1002] [1004 1005] [1007] / | | | [Naruto] [Sasuke] [Sakura Hinata Kakashi] [Itachi] In a B&#43; tree, the data always lies in the leaf nodes.
-However, what are the advantages of using such a structure in a database?">
+<meta name="description" content="Introduction
+For someone who has taken a course in Computer Science, they have probably come across a B&#43; tree, often used in the context of databases for storing data. A B&#43; tree schematically looks like this:
+                   [   1003   ]
+                  /     |     \
+          [1001]  [1002]  [1004 1005]  [1007]
+         /       |             |           |
+    [Naruto] [Sasuke] [Sakura Hinata Kakashi] [Itachi]
+In a B&#43; tree, the data always lies in the leaf nodes.">
 <meta name="author" content="durwasa">
-<link rel="canonical" href="https://durwasa-chakraborty.github.io/posts/b&#43;-trees-sql-optimization/">
-<link crossorigin="anonymous" href="/assets/css/stylesheet.e087fd1dc76e73a35ae6d7028ddc1ba41e0131e7f9b3a6e2d019a208e6d6c4b5.css" integrity="sha256-4If9Hcduc6Na5tcCjdwbpB4BMef5s6bi0BmiCObWxLU=" rel="preload stylesheet" as="style">
-<script defer crossorigin="anonymous" src="/assets/js/highlight.f413e19d0714851f6474e7ee9632408e58ac146fbdbe62747134bea2fa3415e0.js" integrity="sha256-9BPhnQcUhR9kdOfuljJAjlisFG&#43;9vmJ0cTS&#43;ovo0FeA="
-    onload="hljs.initHighlightingOnLoad();"></script>
-<link rel="icon" href="https://durwasa-chakraborty.github.io/favicon.ico">
-<link rel="icon" type="image/png" sizes="16x16" href="https://durwasa-chakraborty.github.io/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="https://durwasa-chakraborty.github.io/favicon-32x32.png">
-<link rel="apple-touch-icon" href="https://durwasa-chakraborty.github.io/apple-touch-icon.png">
-<link rel="mask-icon" href="https://durwasa-chakraborty.github.io/safari-pinned-tab.svg">
+<link rel="canonical" href="http://localhost:1313/posts/b&#43;-trees-sql-optimization/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.f49d66caae9ea0fd43f21f29e71a8d3e284517ed770f2aa86fa012953ad3c9ef.css" integrity="sha256-9J1myq6eoP1D8h8p5xqNPihFF&#43;13Dyqob6ASlTrTye8=" rel="preload stylesheet" as="style">
+<link rel="icon" href="http://localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/posts/b&#43;-trees-sql-optimization/">
 <noscript>
     <style>
         #theme-toggle,
@@ -39,7 +43,7 @@ However, what are the advantages of using such a structure in a database?">
                 --secondary: rgb(155, 156, 157);
                 --tertiary: rgb(65, 66, 68);
                 --content: rgb(196, 196, 197);
-                --hljs-bg: rgb(46, 46, 51);
+                --code-block-bg: rgb(46, 46, 51);
                 --code-bg: rgb(55, 56, 62);
                 --border: rgb(51, 51, 51);
             }
@@ -58,75 +62,8 @@ However, what are the advantages of using such a structure in a database?">
         }
 
     </style>
-</noscript><meta property="og:title" content="How B&#43; Trees Optimize SQL Queries: A Primer" />
-<meta property="og:description" content="Introduction For someone who has taken a course in Computer Science, they have probably come across a B&#43; tree, often used in the context of databases for storing data. A B&#43; tree schematically looks like this:
-[ 1003 ] / | \ [1001] [1002] [1004 1005] [1007] / | | | [Naruto] [Sasuke] [Sakura Hinata Kakashi] [Itachi] In a B&#43; tree, the data always lies in the leaf nodes.
-However, what are the advantages of using such a structure in a database?" />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://durwasa-chakraborty.github.io/posts/b&#43;-trees-sql-optimization/" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2024-06-11T12:54:54+05:30" />
-<meta property="article:modified_time" content="2024-06-11T12:54:54+05:30" />
+</noscript>
 
-<meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="How B&#43; Trees Optimize SQL Queries: A Primer"/>
-<meta name="twitter:description" content="Introduction For someone who has taken a course in Computer Science, they have probably come across a B&#43; tree, often used in the context of databases for storing data. A B&#43; tree schematically looks like this:
-[ 1003 ] / | \ [1001] [1002] [1004 1005] [1007] / | | | [Naruto] [Sasuke] [Sakura Hinata Kakashi] [Itachi] In a B&#43; tree, the data always lies in the leaf nodes.
-However, what are the advantages of using such a structure in a database?"/>
-
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    {
-      "@type": "ListItem",
-      "position":  1 ,
-      "name": "Posts",
-      "item": "https://durwasa-chakraborty.github.io/posts/"
-    }, 
-    {
-      "@type": "ListItem",
-      "position":  2 ,
-      "name": "How B+ Trees Optimize SQL Queries: A Primer",
-      "item": "https://durwasa-chakraborty.github.io/posts/b+-trees-sql-optimization/"
-    }
-  ]
-}
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "How B+ Trees Optimize SQL Queries: A Primer",
-  "name": "How B\u002b Trees Optimize SQL Queries: A Primer",
-  "description": "Introduction For someone who has taken a course in Computer Science, they have probably come across a B+ tree, often used in the context of databases for storing data. A B+ tree schematically looks like this:\n[ 1003 ] / | \\ [1001] [1002] [1004 1005] [1007] / | | | [Naruto] [Sasuke] [Sakura Hinata Kakashi] [Itachi] In a B+ tree, the data always lies in the leaf nodes.\nHowever, what are the advantages of using such a structure in a database?",
-  "keywords": [
-    "programming"
-  ],
-  "articleBody": "Introduction For someone who has taken a course in Computer Science, they have probably come across a B+ tree, often used in the context of databases for storing data. A B+ tree schematically looks like this:\n[ 1003 ] / | \\ [1001] [1002] [1004 1005] [1007] / | | | [Naruto] [Sasuke] [Sakura Hinata Kakashi] [Itachi] In a B+ tree, the data always lies in the leaf nodes.\nHowever, what are the advantages of using such a structure in a database? Considering that data always resides on disk, how are disk operations optimized? Where does the OS come into play in optimizing queries? Ultimately, running a SQL application involves executing a binary like say ./sql, which runs in RAM. So, how does this binary interact with the disk, seek through it, return to RAM, perform calculations, and fetch more data from the disk? These questions prompted me to explore deeply what happens when you execute:\nSELECT * FROM table WHERE id='122'; Setup Let’s consider a database with the following structure:\nStudent ID | Name | Marks ------------------------------ 1001 | Naruto | 85 1002 | Sasuke | 72 1003 | Sakura | 90 1004 | Hinata | 78 1005 | Kakashi | 88 1006 | Shikamaru| 65 1007 | Itachi | 92 1008 | Gaara | 81 1009 | Rock Lee | 70 1010 | Neji | 87 In the disk, the data is stored in a B+ tree as follows:\n[ 1003 ] / | \\ [1001] [1002] [1004 1005] [1007] / | \\ | | [Naruto] [Sasuke] [Sakura Hinata Kakashi] [Itachi] When creating the table, we inform the query engine which column is our indexed key. The index key is used to navigate through the B+ tree. Remember, the values are always in the leaf nodes, so we must traverse through the B+ tree.\nTraversal So, what happens when the query is executed? The OS needs to know where to locate the root of the B+ tree. Usually, this information is kept in a System Catalog (Metadata). This catalog includes information about tables, columns, data types, constraints, and indexes. In our minimal example, the table type and the indexed student_id are stored in the catalog. The system catalog includes pointers or references to the index files.\nOnce the root node is located on the disk, it is loaded into RAM, and the execution starts for the engine.\nRoot Node (in RAM): Keys: [1004] Pointers: [pointer_to_child_1, pointer_to_child_2] Child Nodes (on disk): Node 1 (1001, 1002, 1003) Node 2 (1005, 1006, 1007) Here’s the refined section with added details, and data on why disk seek is more costly than RAM calculations.\nSequence Diagram When the RAM loads the B+ tree node, it decides which child node to access next, requiring a disk operation. This seems inefficient, doesn’t it? Each decision necessitates a trip to the disk to fetch the next node, which is time-consuming. Any Computer Science graduate knows that RAM operations are much faster than disk operations. Even if one is not a CS graduate, it is intuitive—disk operations involve mechanical components moving the head to the correct memory address, introducing inertia.\nClearly, this approach is superior to a linear search where each Student ID is loaded into RAM, compared, discarded, and then the next block is loaded and searched. A linear search would involve one load to RAM and one comparison per node. Instead, the system brings the top k nodes of the hierarchy into RAM, leaving the leaf nodes on the disk. Instead of searching the entire leaf node, the system filters decisions at the RAM level using pointers to determine which subtree may contain the desired index.\nFor instance, in a large tree with 20+ levels:\nLevel 1 (RAM): [Root Node] Level 2 (RAM): [Internal Nodes] Level 3 (RAM): [Internal Nodes] Level 4-20 (Disk): [Internal Nodes] ... [Leaf Nodes] This significantly reduces the time required for the search. Additional techniques like cache eviction and LRU (Least Recently Used) strategies can further optimize performance. However, the overarching idea remains the same.\nFetching from RAM to Disk Below is a representation of how data is fetched from RAM to disk:\n+------------------------------------+ | RAM | +------------------------------------+ | Root Node [1003] | | Internal Node 1 [1001, 1002] | | Internal Node 2 [1004, 1005] | +------------------------------------+ | | v v +----------------+ +-----------------+ | Disk | | Disk | +----------------+ +-----------------+ | Leaf Nodes | | Leaf Nodes | | [Naruto, Sasuke] | [Sakura, Hinata]| +----------------+ +-----------------+ What if the column is not INDEXED When a column is not indexed, the database must perform a linear search to locate the desired data. This involves scanning each row in the table sequentially, which is highly inefficient, especially for large datasets. In contrast, an indexed column allows the database to quickly locate data using a structured B+ tree, significantly reducing search time. The WHERE clause on an indexed column leverages the B+ tree’s hierarchy to rapidly navigate to the relevant data, minimizing disk access and computational overhead. Therefore, queries on indexed columns execute much faster than those on non-indexed columns, highlighting the critical role of indexing in database performance optimization.\nConclusion B+ trees are essential for optimizing SQL query performance through efficient data organization and indexing. By leveraging the speed of RAM for intermediate node processing and minimizing disk access to leaf nodes, B+ trees significantly enhance query execution times. This hierarchical approach reduces costly disk seeks, capitalizing on the rapid access speeds of RAM for decision-making. Techniques like cache eviction and LRU further improve efficiency by keeping frequently accessed nodes readily available. This deep dive into B+ tree mechanics underscores the importance of indexing in modern databases, demonstrating how foundational computer science concepts can solve practical problems, ensuring databases remain robust, efficient, and responsive.\n",
-  "wordCount" : "963",
-  "inLanguage": "en",
-  "datePublished": "2024-06-11T12:54:54+05:30",
-  "dateModified": "2024-06-11T12:54:54+05:30",
-  "author":{
-    "@type": "Person",
-    "name": "durwasa"
-  },
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https://durwasa-chakraborty.github.io/posts/b+-trees-sql-optimization/"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "Anachronistic Monk",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://durwasa-chakraborty.github.io/favicon.ico"
-    }
-  }
-}
-</script>
 </head>
 
 <body class="" id="top">
@@ -144,9 +81,9 @@ However, what are the advantages of using such a structure in a database?"/>
 <header class="header">
     <nav class="nav">
         <div class="logo">
-            <a href="https://durwasa-chakraborty.github.io/" accesskey="h" title="Anachronistic Monk (Alt + H)">Anachronistic Monk</a>
+            <a href="http://localhost:1313/" accesskey="h" title="Anachronistic Monk (Alt + H)">Anachronistic Monk</a>
             <div class="logo-switches">
-                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
                     <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                         stroke-linejoin="round">
@@ -262,14 +199,15 @@ However, what are the advantages of using such a structure in a database?"/>
 
   <footer class="post-footer">
     <ul class="post-tags">
-      <li><a href="https://durwasa-chakraborty.github.io/tags/programming/">programming</a></li>
+      <li><a href="http://localhost:1313/tags/programming/">Programming</a></li>
     </ul>
   </footer>
 </article>
     </main>
     
 <footer class="footer">
-    <span>&copy; 2024 <a href="https://durwasa-chakraborty.github.io/">Anachronistic Monk</a></span>
+        <span>&copy; 2025 <a href="http://localhost:1313/">Anachronistic Monk</a></span> · 
+
     <span>
         Powered by
         <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &

@@ -1,88 +1,110 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Anachronistic Monk</title>
-    <link>https://durwasa-chakraborty.github.io/</link>
+    <link>http://localhost:1313/</link>
     <description>Recent content on Anachronistic Monk</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo -- 0.140.2</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 10 Sep 2024 17:15:27 +0530</lastBuildDate>
-    <atom:link href="https://durwasa-chakraborty.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 06 Apr 2025 18:50:32 +0530</lastBuildDate>
+    <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Data Races</title>
+      <link>http://localhost:1313/posts/data-races/</link>
+      <pubDate>Sun, 06 Apr 2025 18:50:32 +0530</pubDate>
+      <guid>http://localhost:1313/posts/data-races/</guid>
+      <description>&lt;p&gt;&lt;em&gt;“Data races are bad.”&lt;/em&gt; — Every systems programming course, ever.&lt;br&gt;
+But &lt;strong&gt;why&lt;/strong&gt; are they bad? And &lt;strong&gt;what&lt;/strong&gt; exactly are they?&lt;/p&gt;
+&lt;p&gt;Let’s be a little Aristotelian about this—&lt;strong&gt;question everything&lt;/strong&gt;. So here we go:&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;so-what-is-a-data-race&#34;&gt;So&amp;hellip; What &lt;em&gt;Is&lt;/em&gt; a Data Race?&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;A &lt;strong&gt;data race&lt;/strong&gt; occurs when two or more concurrent threads access the &lt;strong&gt;same memory location&lt;/strong&gt; simultaneously, at least one of them performs a &lt;strong&gt;write&lt;/strong&gt;, and there&amp;rsquo;s &lt;strong&gt;no synchronization mechanism&lt;/strong&gt; (like a lock or atomic operation) protecting that access.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Is Quantity Trumping Quality in University Rankings? A Closer Look at NIRF and Beyond</title>
-      <link>https://durwasa-chakraborty.github.io/posts/is-quantiy-trumping-quality/</link>
+      <link>http://localhost:1313/posts/is-quantiy-trumping-quality/</link>
       <pubDate>Tue, 10 Sep 2024 17:15:27 +0530</pubDate>
-      <guid>https://durwasa-chakraborty.github.io/posts/is-quantiy-trumping-quality/</guid>
-      <description>Recently, The Hindu published an article that raised a pertinent question regarding the National Institutional Ranking Framework (NIRF): &amp;ldquo;Is quantity trumping quality?&amp;rdquo; As I write from the hallowed halls of one of India’s premier institutions—the Indian Institute of Technology, Madras—I find myself compelled to delve deeper into this issue. Are private institutions genuinely improving, or have they [sic] discovered ways to manipulate research metrics?
-It is often said that data is the new oil, but just like oil, it needs refinement to be of any use.</description>
+      <guid>http://localhost:1313/posts/is-quantiy-trumping-quality/</guid>
+      <description>&lt;p&gt;Recently, &lt;em&gt;The Hindu&lt;/em&gt; published an article that raised a pertinent question regarding the National Institutional Ranking Framework (NIRF): &amp;ldquo;Is quantity trumping quality?&amp;rdquo; As I write from the hallowed halls of one of India’s premier institutions—the Indian Institute of Technology, Madras—I find myself compelled to delve deeper into this issue. Are private institutions genuinely improving, or have they [sic] discovered ways to manipulate research metrics?&lt;/p&gt;
+&lt;p&gt;It is often said that data is the new oil, but just like oil, it needs refinement to be of any use.&lt;/p&gt;</description>
     </item>
     <item>
       <title>How B&#43; Trees Optimize SQL Queries: A Primer</title>
-      <link>https://durwasa-chakraborty.github.io/posts/b&#43;-trees-sql-optimization/</link>
+      <link>http://localhost:1313/posts/b&#43;-trees-sql-optimization/</link>
       <pubDate>Tue, 11 Jun 2024 12:54:54 +0530</pubDate>
-      <guid>https://durwasa-chakraborty.github.io/posts/b&#43;-trees-sql-optimization/</guid>
-      <description>Introduction For someone who has taken a course in Computer Science, they have probably come across a B+ tree, often used in the context of databases for storing data. A B+ tree schematically looks like this:
-[ 1003 ] / | \ [1001] [1002] [1004 1005] [1007] / | | | [Naruto] [Sasuke] [Sakura Hinata Kakashi] [Itachi] In a B+ tree, the data always lies in the leaf nodes.
-However, what are the advantages of using such a structure in a database?</description>
+      <guid>http://localhost:1313/posts/b&#43;-trees-sql-optimization/</guid>
+      <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;For someone who has taken a course in Computer Science, they have probably come across a B+ tree, often used in the context of databases for storing data. A B+ tree schematically looks like this:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                   [   1003   ]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                  /     |     \
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;          [1001]  [1002]  [1004 1005]  [1007]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;         /       |             |           |
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    [Naruto] [Sasuke] [Sakura Hinata Kakashi] [Itachi]
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;In a B+ tree, the data always lies in the leaf nodes.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Echoes of a Timeless Curse</title>
-      <link>https://durwasa-chakraborty.github.io/posts/echoes-of-a-timeless-curse/</link>
+      <link>http://localhost:1313/posts/echoes-of-a-timeless-curse/</link>
       <pubDate>Fri, 12 Apr 2024 10:56:26 +0530</pubDate>
-      <guid>https://durwasa-chakraborty.github.io/posts/echoes-of-a-timeless-curse/</guid>
-      <description>Preface: Rishi Durvasa, known for his irascible nature, was infamous for his ability to curse. As mythology suggests, Durvasa visited Kanav Rishi&amp;rsquo;s ashram, and Shakuntala was lost in her daydreams of Dushyant. Furious, Durvasa cursed Shakuntala, saying that the one she dreamed of would forget her when the time came. This is a modern retelling of that ancient story.
-The ceiling fans at Kanav Café whirred lazily above, barely stirring the humid afternoon air.</description>
+      <guid>http://localhost:1313/posts/echoes-of-a-timeless-curse/</guid>
+      <description>&lt;p&gt;&lt;strong&gt;Preface:&lt;/strong&gt;
+Rishi Durvasa, known for his irascible nature, was infamous for his ability to curse. As mythology suggests, Durvasa visited Kanav Rishi&amp;rsquo;s ashram, and Shakuntala was lost in her daydreams of Dushyant. Furious, Durvasa cursed Shakuntala, saying that the one she dreamed of would forget her when the time came. This is a modern retelling of that ancient story.&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;The ceiling fans at Kanav Café whirred lazily above, barely stirring the humid afternoon air. Durvasa sat at his usual corner table, nursing a black coffee, his eyes flicking between the window and his notebook. His mind, however, was far from the café, lost in the endless research spiral. He was close—tantalizingly close—to finding a cure for a rare form of Alzheimer&amp;rsquo;s that had haunted him for years. The disease crept like a thief, stealing memories and identities, stripping people of their past. But Durvasa, with his relentless mind, was determined to stop it. Or, perhaps, rewrite it.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Major Mode El</title>
-      <link>https://durwasa-chakraborty.github.io/posts/major-mode-el/</link>
+      <link>http://localhost:1313/posts/major-mode-el/</link>
       <pubDate>Sat, 06 Jan 2024 18:08:54 +0530</pubDate>
-      <guid>https://durwasa-chakraborty.github.io/posts/major-mode-el/</guid>
-      <description>Any sufficiently complicated C or Fortran program contains an ad hoc, informally-specified, bug-ridden, slow implementation of half of Common Lisp.
-Before you think I&amp;rsquo;m crowning Lisp as God&amp;rsquo;s own language after just one blog stint at a coding exercise, hold your horses. I&amp;rsquo;m not here to bash Object-Oriented Programming or its design patterns. In fact, I believe it&amp;rsquo;s crucial to know these patterns inside out. Only then can you play the game of &amp;lsquo;Design Pattern or Anti-Pattern?</description>
+      <guid>http://localhost:1313/posts/major-mode-el/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;Any sufficiently complicated C or Fortran program contains an ad hoc, informally-specified, bug-ridden, slow implementation of half of Common Lisp.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Before you think I&amp;rsquo;m crowning Lisp as God&amp;rsquo;s own language after just one blog stint at a coding exercise, hold your horses. I&amp;rsquo;m not here to bash Object-Oriented Programming or its design patterns. In fact, I believe it&amp;rsquo;s crucial to know these patterns inside out. Only then can you play the game of &amp;lsquo;Design Pattern or Anti-Pattern?&amp;rsquo; with any confidence. Remember, these musings are all from my little corner of the world and don&amp;rsquo;t reflect the hard work of other developers who’ve been sweating over &lt;a href=&#34;https://arxiv.org/pdf/2305.03317.pdf&#34;&gt;StarPlat&lt;/a&gt;.&lt;/p&gt;</description>
     </item>
     <item>
       <title>The Circle of Incompleteness</title>
-      <link>https://durwasa-chakraborty.github.io/posts/the-circle-of-incompleteness/</link>
+      <link>http://localhost:1313/posts/the-circle-of-incompleteness/</link>
       <pubDate>Tue, 30 May 2023 01:02:10 +0530</pubDate>
-      <guid>https://durwasa-chakraborty.github.io/posts/the-circle-of-incompleteness/</guid>
-      <description>Am I too comfortable or am I dying from within
-I wish at the word go I could drop my skin
-The quotes of the dead do not interest me
-Nor does the aphorism of the sickened living
-I am still searching for lost letters and their meaning
-To go back to the gardens of my uninterrupted musing
-And every night I hope to find the old you;
-And every day I hope for a new story to begin.</description>
+      <guid>http://localhost:1313/posts/the-circle-of-incompleteness/</guid>
+      <description>&lt;p&gt;Am I too comfortable or am I dying from within&lt;br&gt;
+I wish at the word go I could drop my skin&lt;br&gt;
+The quotes of the dead do not interest me&lt;br&gt;
+Nor does the aphorism of the sickened living&lt;/p&gt;
+&lt;p&gt;I am still searching for lost letters and their meaning&lt;br&gt;
+To go back to the gardens of my uninterrupted musing&lt;br&gt;
+And every night I hope to find the old you;&lt;br&gt;
+And every day I hope for a new story to begin.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Language Semantics</title>
-      <link>https://durwasa-chakraborty.github.io/posts/language-semantics/</link>
+      <link>http://localhost:1313/posts/language-semantics/</link>
       <pubDate>Fri, 24 Mar 2023 11:07:52 +0530</pubDate>
-      <guid>https://durwasa-chakraborty.github.io/posts/language-semantics/</guid>
-      <description>Happy Birthday to Me: Musings on Language and Code
-Today, I find myself celebrating my birthday in the tranquil confines of a cozy Airbnb in Vancouver. It’s a momentary escape from the pressures of work, a rare breather amidst the ever-present demands of the office. Through the frost-touched window, I watch the Canadian flag battle the icy winds. Below, I can hear the faint murmurs of a French-speaking couple, my neighbors.</description>
+      <guid>http://localhost:1313/posts/language-semantics/</guid>
+      <description>&lt;p&gt;&lt;strong&gt;Happy Birthday to Me: Musings on Language and Code&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Today, I find myself celebrating my birthday in the tranquil confines of a cozy Airbnb in Vancouver. It’s a momentary escape from the pressures of work, a rare breather amidst the ever-present demands of the office. Through the frost-touched window, I watch the Canadian flag battle the icy winds. Below, I can hear the faint murmurs of a French-speaking couple, my neighbors. A little later, the cadence of Mandarin reaches my ears, no doubt my landlord going about his day. And then, the phone rings. It&amp;rsquo;s my mother, calling from home, so naturally, the conversation begins in Bengali. When my father takes the phone, we switch seamlessly to Hindi. After the call, I set the phone down, open my laptop, and begin composing an email in English.&lt;/p&gt;</description>
     </item>
     <item>
       <title>STR: A Disciplined Programmer</title>
-      <link>https://durwasa-chakraborty.github.io/posts/disciplined-paradigms/</link>
+      <link>http://localhost:1313/posts/disciplined-paradigms/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://durwasa-chakraborty.github.io/posts/disciplined-paradigms/</guid>
-      <description>A trainee undergoing military training can disassemble and assemble a machine gun within a minute. At first, this might seem very complex, but everyone in the academy manages to do it. The more pertinent question is not &amp;lsquo;how&amp;rsquo; but &amp;lsquo;why&amp;rsquo;. It&amp;rsquo;s because their lives depend on it. Similarly, a disciplined programmer learns the vocabulary and syntax of a programming language with utmost sincerity. Every word in the programming language is sacred, and any non-conformance is akin to blasphemy.</description>
+      <guid>http://localhost:1313/posts/disciplined-paradigms/</guid>
+      <description>&lt;p&gt;A trainee undergoing military training can disassemble and assemble a machine gun within a minute. At first, this might seem very complex, but everyone in the academy manages to do it. The more pertinent question is not &amp;lsquo;how&amp;rsquo; but &amp;lsquo;why&amp;rsquo;. It&amp;rsquo;s because their lives depend on it. Similarly, a disciplined programmer learns the vocabulary and syntax of a programming language with utmost sincerity. Every word in the programming language is sacred, and any non-conformance is akin to blasphemy.&lt;/p&gt;</description>
     </item>
     <item>
       <title>The 00 Estate: What Happens When the Government Dictates How to Write Code?</title>
-      <link>https://durwasa-chakraborty.github.io/posts/the-00-estate/</link>
+      <link>http://localhost:1313/posts/the-00-estate/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://durwasa-chakraborty.github.io/posts/the-00-estate/</guid>
-      <description>In the House of Commons of Great Britain, Edmund Burke once stated, &amp;ldquo;There were Three Estates in Parliament; but, in the Reporters’ Gallery yonder, there sat a Fourth Estate more important than them all.&amp;rdquo; As the 21st century dawned, we observed media houses displaying biases towards their respective lobbies. The &amp;rsquo;truth,&amp;rsquo; which should be absolute, now has shades of well-crafted absolution. &amp;ldquo;Whose truth is the truth?&amp;rdquo; is a question I often ask myself while reading news articles on the internet.</description>
+      <guid>http://localhost:1313/posts/the-00-estate/</guid>
+      <description>&lt;p&gt;In the House of Commons of Great Britain, Edmund Burke once stated, &amp;ldquo;There were Three Estates in Parliament; but, in the Reporters’ Gallery yonder, there sat a Fourth Estate more important than them all.&amp;rdquo; As the 21st century dawned, we observed media houses displaying biases towards their respective lobbies. The &amp;rsquo;truth,&amp;rsquo; which should be absolute, now has shades of well-crafted absolution. &amp;ldquo;Whose truth is the truth?&amp;rdquo; is a question I often ask myself while reading news articles on the internet. With the government in power controlling the first three estates, it&amp;rsquo;s not an exaggeration to say that Orwell&amp;rsquo;s &amp;ldquo;1984&amp;rdquo; no longer seems like fiction. This blog explores the hypothetical &amp;ldquo;00 Estate&amp;rdquo; that encompasses all estates and dictates the terms for writing code.&lt;/p&gt;</description>
     </item>
     <item>
       <title>The Glass Wall</title>
-      <link>https://durwasa-chakraborty.github.io/posts/the-glass-wall/</link>
+      <link>http://localhost:1313/posts/the-glass-wall/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://durwasa-chakraborty.github.io/posts/the-glass-wall/</guid>
-      <description>An extraordinary year comes to an end, just like many others, yet I distinctly remember that one year when a remarkable entourage of human beings gathered around me. I had hoped our story would have a happy ending, but sometimes wishes don&amp;rsquo;t come true. Now, staring at the glass wall, I see only myself, alone, burdened with a heavy bag of despair and endless remorse. The seeds I had sown were now bearing their bitter fruit.</description>
+      <guid>http://localhost:1313/posts/the-glass-wall/</guid>
+      <description>&lt;p&gt;An extraordinary year comes to an end, just like many others, yet I distinctly remember that one year when a remarkable entourage of human beings gathered around me. I had hoped our story would have a happy ending, but sometimes wishes don&amp;rsquo;t come true. Now, staring at the glass wall, I see only myself, alone, burdened with a heavy bag of despair and endless remorse. The seeds I had sown were now bearing their bitter fruit. But my story wasn&amp;rsquo;t always like this.&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>politics on Anachronistic Monk</title>
-    <link>https://durwasa-chakraborty.github.io/tags/politics/</link>
-    <description>Recent content in politics on Anachronistic Monk</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <title>Politics on Anachronistic Monk</title>
+    <link>http://localhost:1313/tags/politics/</link>
+    <description>Recent content in Politics on Anachronistic Monk</description>
+    <generator>Hugo -- 0.140.2</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 10 Sep 2024 17:15:27 +0530</lastBuildDate>
-    <atom:link href="https://durwasa-chakraborty.github.io/tags/politics/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/tags/politics/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Is Quantity Trumping Quality in University Rankings? A Closer Look at NIRF and Beyond</title>
-      <link>https://durwasa-chakraborty.github.io/posts/is-quantiy-trumping-quality/</link>
+      <link>http://localhost:1313/posts/is-quantiy-trumping-quality/</link>
       <pubDate>Tue, 10 Sep 2024 17:15:27 +0530</pubDate>
-      <guid>https://durwasa-chakraborty.github.io/posts/is-quantiy-trumping-quality/</guid>
-      <description>Recently, The Hindu published an article that raised a pertinent question regarding the National Institutional Ranking Framework (NIRF): &amp;ldquo;Is quantity trumping quality?&amp;rdquo; As I write from the hallowed halls of one of India’s premier institutions—the Indian Institute of Technology, Madras—I find myself compelled to delve deeper into this issue. Are private institutions genuinely improving, or have they [sic] discovered ways to manipulate research metrics?
-It is often said that data is the new oil, but just like oil, it needs refinement to be of any use.</description>
+      <guid>http://localhost:1313/posts/is-quantiy-trumping-quality/</guid>
+      <description>&lt;p&gt;Recently, &lt;em&gt;The Hindu&lt;/em&gt; published an article that raised a pertinent question regarding the National Institutional Ranking Framework (NIRF): &amp;ldquo;Is quantity trumping quality?&amp;rdquo; As I write from the hallowed halls of one of India’s premier institutions—the Indian Institute of Technology, Madras—I find myself compelled to delve deeper into this issue. Are private institutions genuinely improving, or have they [sic] discovered ways to manipulate research metrics?&lt;/p&gt;
+&lt;p&gt;It is often said that data is the new oil, but just like oil, it needs refinement to be of any use.&lt;/p&gt;</description>
     </item>
     <item>
       <title>The 00 Estate: What Happens When the Government Dictates How to Write Code?</title>
-      <link>https://durwasa-chakraborty.github.io/posts/the-00-estate/</link>
+      <link>http://localhost:1313/posts/the-00-estate/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://durwasa-chakraborty.github.io/posts/the-00-estate/</guid>
-      <description>In the House of Commons of Great Britain, Edmund Burke once stated, &amp;ldquo;There were Three Estates in Parliament; but, in the Reporters’ Gallery yonder, there sat a Fourth Estate more important than them all.&amp;rdquo; As the 21st century dawned, we observed media houses displaying biases towards their respective lobbies. The &amp;rsquo;truth,&amp;rsquo; which should be absolute, now has shades of well-crafted absolution. &amp;ldquo;Whose truth is the truth?&amp;rdquo; is a question I often ask myself while reading news articles on the internet.</description>
+      <guid>http://localhost:1313/posts/the-00-estate/</guid>
+      <description>&lt;p&gt;In the House of Commons of Great Britain, Edmund Burke once stated, &amp;ldquo;There were Three Estates in Parliament; but, in the Reporters’ Gallery yonder, there sat a Fourth Estate more important than them all.&amp;rdquo; As the 21st century dawned, we observed media houses displaying biases towards their respective lobbies. The &amp;rsquo;truth,&amp;rsquo; which should be absolute, now has shades of well-crafted absolution. &amp;ldquo;Whose truth is the truth?&amp;rdquo; is a question I often ask myself while reading news articles on the internet. With the government in power controlling the first three estates, it&amp;rsquo;s not an exaggeration to say that Orwell&amp;rsquo;s &amp;ldquo;1984&amp;rdquo; no longer seems like fiction. This blog explores the hypothetical &amp;ldquo;00 Estate&amp;rdquo; that encompasses all estates and dictates the terms for writing code.&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>
