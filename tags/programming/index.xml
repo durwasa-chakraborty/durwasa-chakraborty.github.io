@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Programming on Anachronistic Monk</title>
-    <link>https://durwasa-chakraborty.github.io/tags/programming/</link>
+    <link>http://localhost:1313/tags/programming/</link>
     <description>Recent content in Programming on Anachronistic Monk</description>
     <generator>Hugo -- 0.140.2</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 11 Jun 2024 12:54:54 +0530</lastBuildDate>
-    <atom:link href="https://durwasa-chakraborty.github.io/tags/programming/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/tags/programming/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>How B&#43; Trees Optimize SQL Queries: A Primer</title>
-      <link>https://durwasa-chakraborty.github.io/posts/b&#43;-trees-sql-optimization/</link>
+      <link>http://localhost:1313/posts/b&#43;-trees-sql-optimization/</link>
       <pubDate>Tue, 11 Jun 2024 12:54:54 +0530</pubDate>
-      <guid>https://durwasa-chakraborty.github.io/posts/b&#43;-trees-sql-optimization/</guid>
+      <guid>http://localhost:1313/posts/b&#43;-trees-sql-optimization/</guid>
       <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
 &lt;p&gt;For someone who has taken a course in Computer Science, they have probably come across a B+ tree, often used in the context of databases for storing data. A B+ tree schematically looks like this:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                   [   1003   ]
@@ -24,9 +24,9 @@
     </item>
     <item>
       <title>Major Mode El</title>
-      <link>https://durwasa-chakraborty.github.io/posts/major-mode-el/</link>
+      <link>http://localhost:1313/posts/major-mode-el/</link>
       <pubDate>Sat, 06 Jan 2024 18:08:54 +0530</pubDate>
-      <guid>https://durwasa-chakraborty.github.io/posts/major-mode-el/</guid>
+      <guid>http://localhost:1313/posts/major-mode-el/</guid>
       <description>&lt;blockquote&gt;
 &lt;p&gt;Any sufficiently complicated C or Fortran program contains an ad hoc, informally-specified, bug-ridden, slow implementation of half of Common Lisp.&lt;/p&gt;
 &lt;/blockquote&gt;
