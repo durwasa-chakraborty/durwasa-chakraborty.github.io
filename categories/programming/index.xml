@@ -2,16 +2,16 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Programming on Anachronistic Monk</title>
-    <link>http://localhost:1313/categories/programming/</link>
+    <link>https://durwasa-chakraborty.github.io/categories/programming/</link>
     <description>Recent content in Programming on Anachronistic Monk</description>
     <generator>Hugo -- 0.140.2</generator>
     <language>en-us</language>
-    <atom:link href="http://localhost:1313/categories/programming/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://durwasa-chakraborty.github.io/categories/programming/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>STR: A Disciplined Programmer</title>
-      <link>http://localhost:1313/posts/disciplined-paradigms/</link>
+      <link>https://durwasa-chakraborty.github.io/posts/disciplined-paradigms/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/disciplined-paradigms/</guid>
+      <guid>https://durwasa-chakraborty.github.io/posts/disciplined-paradigms/</guid>
       <description>&lt;p&gt;A trainee undergoing military training can disassemble and assemble a machine gun within a minute. At first, this might seem very complex, but everyone in the academy manages to do it. The more pertinent question is not &amp;lsquo;how&amp;rsquo; but &amp;lsquo;why&amp;rsquo;. It&amp;rsquo;s because their lives depend on it. Similarly, a disciplined programmer learns the vocabulary and syntax of a programming language with utmost sincerity. Every word in the programming language is sacred, and any non-conformance is akin to blasphemy.&lt;/p&gt;</description>
     </item>
   </channel>

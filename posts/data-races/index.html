@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" dir="auto">
 
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="robots" content="noindex, nofollow">
+<meta name="robots" content="index, follow">
 <title>Data Races | Anachronistic Monk</title>
 <meta name="keywords" content="">
 <meta name="description" content="“Data races are bad.” — Every systems programming course, ever.
@@ -15,16 +15,16 @@ So&hellip; What Is a Data Race?
 
 A data race occurs when two or more concurrent threads access the same memory location , at least one of them performs a write, and there&rsquo;s no synchronization mechanism (like a lock or atomic operation) protecting that access.">
 <meta name="author" content="durwasa">
-<link rel="canonical" href="http://localhost:1313/posts/data-races/">
+<link rel="canonical" href="https://durwasa-chakraborty.github.io/posts/data-races/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.f49d66caae9ea0fd43f21f29e71a8d3e284517ed770f2aa86fa012953ad3c9ef.css" integrity="sha256-9J1myq6eoP1D8h8p5xqNPihFF&#43;13Dyqob6ASlTrTye8=" rel="preload stylesheet" as="style">
-<link rel="icon" href="http://localhost:1313/favicon.ico">
-<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
-<link rel="apple-touch-icon" href="http://localhost:1313/apple-touch-icon.png">
-<link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
+<link rel="icon" href="https://durwasa-chakraborty.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://durwasa-chakraborty.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://durwasa-chakraborty.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://durwasa-chakraborty.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://durwasa-chakraborty.github.io/safari-pinned-tab.svg">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" hreflang="en" href="http://localhost:1313/posts/data-races/">
+<link rel="alternate" hreflang="en" href="https://durwasa-chakraborty.github.io/posts/data-races/">
 <noscript>
     <style>
         #theme-toggle,
@@ -80,7 +80,82 @@ A data race occurs when two or more concurrent threads access the same memory lo
 </script>
 
 
+<meta property="og:url" content="https://durwasa-chakraborty.github.io/posts/data-races/">
+  <meta property="og:site_name" content="Anachronistic Monk">
+  <meta property="og:title" content="Data Races">
+  <meta property="og:description" content="“Data races are bad.” — Every systems programming course, ever.
+But why are they bad? And what exactly are they?
+Let’s be a little Aristotelian about this—question everything. So here we go:
+So… What Is a Data Race? A data race occurs when two or more concurrent threads access the same memory location , at least one of them performs a write, and there’s no synchronization mechanism (like a lock or atomic operation) protecting that access.">
+  <meta property="og:locale" content="en-us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-04-06T18:50:32+05:30">
+    <meta property="article:modified_time" content="2025-04-06T18:50:32+05:30">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Data Races">
+<meta name="twitter:description" content="“Data races are bad.” — Every systems programming course, ever.
+But why are they bad? And what exactly are they?
+Let’s be a little Aristotelian about this—question everything. So here we go:
 
+So&hellip; What Is a Data Race?
+
+A data race occurs when two or more concurrent threads access the same memory location , at least one of them performs a write, and there&rsquo;s no synchronization mechanism (like a lock or atomic operation) protecting that access.">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://durwasa-chakraborty.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Data Races",
+      "item": "https://durwasa-chakraborty.github.io/posts/data-races/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Data Races",
+  "name": "Data Races",
+  "description": "“Data races are bad.” — Every systems programming course, ever.\nBut why are they bad? And what exactly are they?\nLet’s be a little Aristotelian about this—question everything. So here we go:\nSo\u0026hellip; What Is a Data Race? A data race occurs when two or more concurrent threads access the same memory location , at least one of them performs a write, and there\u0026rsquo;s no synchronization mechanism (like a lock or atomic operation) protecting that access.\n",
+  "keywords": [
+    
+  ],
+  "articleBody": "“Data races are bad.” — Every systems programming course, ever.\nBut why are they bad? And what exactly are they?\nLet’s be a little Aristotelian about this—question everything. So here we go:\nSo… What Is a Data Race? A data race occurs when two or more concurrent threads access the same memory location , at least one of them performs a write, and there’s no synchronization mechanism (like a lock or atomic operation) protecting that access.\nWhew. That’s a lot of words. Let’s unpack that.\n“Two or more threads” → We’re dealing with a multithreaded (or concurrent) program. A single-threaded program is too well-behaved to ever encounter a data race.\n“Same memory location” → Both threads are peeking (or poking) at the same variable.\n“At least one write” → If both threads are just reading, all’s peaceful. But the moment one tries to write—or update—the memory, conflict brews.\n“No synchronization” → No locks, no atomics, no coordination. It’s the memory access version of “every thread for itself.”\nPut all of that together, and you’ve got yourself a classic case of undefined behavior, kicking down the door and yelling: “You summoned me? Initiating FireRocket().”\nDekker’s Algorithm Just two threads doing two things each.\nInitial Setup We have two shared variables:\nint x = 0; int y = 0; And two threads:\nThread A: x = 1; r1 = y; Thread B: y = 1; r2 = x; That’s it. No mutex. No atomic. Just pure, unfiltered concurrent drama.\nWhat Should Be the Output? Let’s think like a sequential human being.\nIf Thread A runs fully before Thread B:\nx = 1; r1 = y; // r1 = 0 ---------------- y = 1; r2 = x; // r2 = 1 =\u003e r1 = 0, r2 = 1 If Thread B runs fully before Thread A:\ny = 1; r2 = x; // r2 = 0 ---------------- x = 1; r1 = y; // r1 = 1 =\u003e r1 = 1, r2 = 0 If both writes happen before both reads:\nx = 1; y = 1; r1 = y; // r1 = 1 r2 = x; // r2 = 1 =\u003e r1 = 1, r2 = 1 So our intuitive, reasonable human outputs are:\n(r1, r2) = (0, 1) (r1, r2) = (1, 0) (r1, r2) = (1, 1) All of these are fine and expected.\nBut Wait—A Quick Math Detour Let’s get mathematical for a second. If you have two threads and each one performs two operations (a write and a read), the total number of interleavings of those operations is given by:\n$$ [ \\binom{2 + 2}{2} = \\frac{(2 + 2)!}{2! \\cdot 2!} = \\frac{4!}{2! \\cdot 2!} = \\frac{24}{4} = 6 ] $$\nSo there are 6 valid interleavings of the operations from Thread A and Thread B.\nThese correspond to permutations where the relative order of operations within each thread is preserved. That is:\nx = 1 before r1 = y (Thread A’s order preserved) y = 1 before r2 = x (Thread B’s order preserved) Let’s list a few examples:\nA1 A2 B1 B2 → (r1 = 0, r2 = 1) A1 B1 A2 B2 → (r1 = 1, r2 = 1) B1 B2 A1 A2 → (r1 = 1, r2 = 0) B1 A1 B2 A2 → and so on… These 6 interleavings give rise to our expected outputs:\n(0,1), (1,0), and (1,1).\nIn general :: For $n$ threads, where each thread performs $o_1, o_2, \\cdot o_n$ memory operations, $$ [ \\text{Total Interleavings} = \\frac{(o_1 + o_2 + \\ldots + o_n)!}{o_1! \\cdot o_2! \\cdots o_n!} ] $$\nSo What’s the Problem? That nasty little (r1, r2) = (0, 0) doesn’t appear in any of the above 6 valid interleavings!\nWhy? Because it would require reading both x and y before either write has occurred, which violates the intra-thread ordering unless reads were moved before writes.\nThis is why:\nReordering breaks the mathematical expectation based on interleavings and causes outputs that should be impossible under sequential consistency.\nSo while our math predicted 6 nice, clean outcomes, the CPU/compiler pulls a little abracadabra, breaks the sequential spell, and suddenly:\n(r1, r2) = (0, 0) But Here’s the Twist… Suppose your compiler or hardware chooses to reorder instructions, perhaps assuming it knows best. (For example, reordering a load $\\rightarrow$ a store, among other classic computer architecture behaviors—which I’ll delve into in a separate post.)\nImagine this:\nBoth threads reorder the read before write. Now, Thread A reads y (which is still 0), then writes x = 1. Simultaneously, Thread B reads x (also still 0), then writes y = 1. So we get:\nr1 = y; // 0 r2 = x; // 0 x = 1; y = 1; =\u003e r1 = 0, r2 = 0 ← the \"impossible\" outcome! But that shouldn’t be possible, right?\nIf either thread had seen the other’s write, one of the reads should be 1.\nYet due to reordering and no synchronization, both reads saw 0.\nThis output:\n(r1, r2) = (0, 0) should be impossible under sequential consistency.\nBut under real-world hardware + compiler optimizations, it can happen.\nWhat is sequential consistency now? Leslie Lamport defines sequential consistency as:\n“The result of any execution is the same as if the operations of all the processors were executed in some sequential order, and the operations of each individual processor appear in this sequence in the order issued.”\nTranslation: It should feel like all memory operations from all threads were executed in some sequential order, even if they were running concurrently.\n$$ \\forall a, b \\in S,\\ a \\leq b\\ \\vee\\ b \\leq a $$\nFor any two processes $p$ and $q$ you can always determine which one comes before the other (or that they are the same).\nThis contrasts with partial orders, where some processes might be incomparable like concurrent processes in a distributed system with no causal link. This implies a total order of all operations. That is, everything can be lined up in a single straight line.\nIf you only had partial order (like Thread A and Thread B doing stuff independently), you’d never know which came first.\nWhich is great for eggs, terrible for memory consistency.\nDear Compiler: Please Stop Being So Smart I mean, seriously. I wrote my code like this:\nx = 1; y = 2; I want you to do exactly that. Line by line.\nNo backflips, no clever tricks, no playing 4D chess with my instructions.\nI want you to translate it into assembly like a faithful scribe from an ecclesiastical journal—quietly, obediently, reverently.\nJust copy it down, convert into assembly, binary, the works!\nI’ve got the world’s biggest SSD, a GPU that can simulate Interstellar in 16K, and enough RAM to mine all the bitcoins—twice.\nOptimization is not my concern. I want correctness.\nSo what’s the problem?\nWell, here’s the catch: correctness isn’t the only thing you care about—even if you think it is.\nBecause guess what? Turning off every optimization doesn’t magically fix data races or memory consistency issues.\nThat bug you blamed on “compiler wizardry”?\nYeah, that’s on you, buddy.\nModern processors are sneaky little devils. They reorder instructions under the hood.\nThey prefetch, speculate, parallelize—all while laughing in binary.\nEven if the compiler leaves your code untouched, the hardware might still go, “eh, close enough.”\nSo unless you explicitly tell both the compiler and the CPU:\n“Hey, don’t mess this up—I mean it,”\nyou’re still rolling the dice.\nAnd if you think -O0 is your silver bullet?\nWell… welcome to the illusion of safety.\nLet’s Make That Concrete Here’s a simple-looking C++ example:\nint flag = 0; int data = 0; void writer() { data = 42; flag = 1; } void reader() { if (flag == 1) { printf(\"%d\\n\", data); } } Two threads. writer() sets data, then signals with flag. reader() checks flag and reads data.\nLooks innocent, right? But this code has a data race.\nNo locks, no atomics, no memory fences.\nEven with -O0, the compiler is allowed to reorder instructions because C++ says: “you gave me undefined behavior, so all bets are off.”\nSo What Happens? Maybe flag = 1 gets reordered before data = 42.\nMaybe reader() sees flag == 1, but reads stale or garbage from data.\nIt might run flawlessly on your machine, but crashes on the production server at 3AM—triggering a page and dragging you out of bed at an ungodly hour.\nFix It the Right Way #include std::atomic\u003cint\u003e flag{0}; int data = 0; void writer() { data = 42; flag.store(1, std::memory_order_release); } void reader() { if (flag.load(std::memory_order_acquire) == 1) { printf(\"%d\\n\", data); } } This version uses proper synchronization:\nmemory_order_release in writer() ensures data is visible before flag is updated. memory_order_acquire in reader() ensures data is read after confirming flag. Bottom Line? Correctness isn’t passive.\nYou don’t get it by turning knobs like -O0. You earn it by using the right tools—locks, atomics, memory barriers.\nBecause neither your compiler nor your CPU is in the business of babysitting your assumptions.\nWelcome to the real world!\nYou wanted a cup of water.\nThe compiler optimization will give you a caramel swirl, three skim, one sugar — and maybe some regret.\nSource\nIn the next part we will cover - Memory model of Programming Languages.\n",
+  "wordCount" : "1551",
+  "inLanguage": "en",
+  "datePublished": "2025-04-06T18:50:32+05:30",
+  "dateModified": "2025-04-06T18:50:32+05:30",
+  "author":{
+    "@type": "Person",
+    "name": "durwasa"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://durwasa-chakraborty.github.io/posts/data-races/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Anachronistic Monk",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://durwasa-chakraborty.github.io/favicon.ico"
+    }
+  }
+}
+</script>
 </head>
 
 <body class="" id="top">
@@ -98,7 +173,7 @@ A data race occurs when two or more concurrent threads access the same memory lo
 <header class="header">
     <nav class="nav">
         <div class="logo">
-            <a href="http://localhost:1313/" accesskey="h" title="Anachronistic Monk (Alt + H)">Anachronistic Monk</a>
+            <a href="https://durwasa-chakraborty.github.io/" accesskey="h" title="Anachronistic Monk (Alt + H)">Anachronistic Monk</a>
             <div class="logo-switches">
                 <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
                     <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
@@ -379,7 +454,7 @@ The compiler optimization will  give you a <em>caramel swirl, three skim, one su
     </main>
     
 <footer class="footer">
-        <span>&copy; 2025 <a href="http://localhost:1313/">Anachronistic Monk</a></span> · 
+        <span>&copy; 2025 <a href="https://durwasa-chakraborty.github.io/">Anachronistic Monk</a></span> · 
 
     <span>
         Powered by
