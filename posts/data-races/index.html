@@ -147,10 +147,20 @@ But <strong>why</strong> are they bad? And <strong>what</strong> exactly are the
 <p>A <strong>data race</strong> occurs when two or more concurrent threads access the <strong>same memory location</strong> , at least one of them performs a <strong>write</strong>, and there&rsquo;s <strong>no synchronization mechanism</strong> (like a lock or atomic operation) protecting that access.</p>
 </blockquote>
 <p>Whew. That’s a lot of words. Let’s unpack that.</p>
-<p>✅ “Two or more threads” → We&rsquo;re dealing with a multithreaded (or concurrent) program. A single-threaded program is too well-behaved to ever encounter a data race.</p>
-<p>✅ “Same memory location” → Both threads are peeking (or poking) at the same variable.</p>
-<p>✅ “At least one write” → If both threads are just reading, all’s peaceful. But the moment one tries to write—or update—the memory, conflict brews.</p>
-<p>✅ “No synchronization” → No locks, no atomics, no coordination. It’s the memory access version of “every thread for itself.”</p>
+<ul>
+<li>
+<p>“Two or more threads” → We&rsquo;re dealing with a multithreaded (or concurrent) program. A single-threaded program is too well-behaved to ever encounter a data race.</p>
+</li>
+<li>
+<p>“Same memory location” → Both threads are peeking (or poking) at the same variable.</p>
+</li>
+<li>
+<p>“At least one write” → If both threads are just reading, all’s peaceful. But the moment one tries to write—or update—the memory, conflict brews.</p>
+</li>
+<li>
+<p>“No synchronization” → No locks, no atomics, no coordination. It’s the memory access version of “every thread for itself.”</p>
+</li>
+</ul>
 <p>Put all of that together, and you’ve got yourself a classic case of undefined behavior, kicking down the door and yelling:
 “You summoned me? Initiating FireRocket().”</p>
 <hr>
