@@ -1,0 +1,22 @@
+disabled = false
+locale = "en"
+label = "English"
+weight = 1
+title = "Anachronistic Monk"
+
+[params]
+  displayName = "EN"
+  isoCode = "en"
+  rtl = false
+  dateFormat = "January 2, 2006"
+  description = "Code, chords, and couplets — essays by Durwasa Chakraborty."
+
+[params.author]
+  name = "Durwasa Chakraborty"
+  headline = "Welcome to my world, where code, chords, and couplets dance together in harmony."
+  bio = "PhD student. Writes about programming, language, photography, and the occasional poem."
+  links = [
+    { github = "https://github.com/durwasa-chakraborty" },
+    { linkedin = "https://www.linkedin.com/in/durwasa-chakraborty" },
+    { stack-overflow = "https://stackoverflow.com/users/3092476/durwasa-chakraborty" },
+  ]

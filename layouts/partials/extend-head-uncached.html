@@ -1,0 +1,22 @@
+{{/* Load KaTeX whenever math is enabled — site-wide via params.math or */}}
+{{/* per-page via a math = true frontmatter flag. This preserves the raw    */}}
+{{/* $...$, $$...$$, \(...\), \[...\] delimiters used in posts so authors  */}}
+{{/* don't have to wrap math in a katex shortcode.                          */}}
+{{ $math := or .Site.Params.math .Params.math }}
+{{ if $math }}
+  {{ $katexCSS := resources.Get "lib/katex/katex.min.css" | resources.Fingerprint (.Site.Params.fingerprintAlgorithm | default "sha512") }}
+  <link
+    type="text/css"
+    rel="stylesheet"
+    href="{{ $katexCSS.RelPermalink }}"
+    integrity="{{ $katexCSS.Data.Integrity }}">
+  {{ $katexLib := resources.Get "lib/katex/katex.min.js" }}
+  {{ $katexRenderLib := resources.Get "lib/katex/auto-render.min.js" }}
+  {{ $katexJS := slice $katexLib $katexRenderLib | resources.Concat "js/katex.bundle.js" | resources.Fingerprint (.Site.Params.fingerprintAlgorithm | default "sha512") }}
+  <script
+    defer
+    type="text/javascript"
+    src="{{ $katexJS.RelPermalink }}"
+    integrity="{{ $katexJS.Data.Integrity }}"
+    onload="renderMathInElement(document.body, {delimiters:[{left:'$$',right:'$$',display:true},{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false},{left:'$',right:'$',display:false}],throwOnError:false});"></script>
+{{ end }}

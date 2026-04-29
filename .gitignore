@@ -1,0 +1,13 @@
+# Hugo build artifacts
+/public/
+/resources/_gen/
+.hugo_build.lock
+
+# Editor / OS
+.DS_Store
+*.swp
+*.swo
+*~
+
+# Node (in case the theme adds tooling)
+node_modules/
