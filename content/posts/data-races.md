@@ -115,9 +115,7 @@ All of these are fine and expected.
 Let’s get mathematical for a second. If you have two threads and each one performs two operations (a write and a read), the total number of **interleavings** of those operations is given by:
 
 $$
-\[
 \binom{2 + 2}{2} = \frac{(2 + 2)!}{2! \cdot 2!} = \frac{4!}{2! \cdot 2!} = \frac{24}{4} = 6
-\]
 $$
 
 So there are **6 valid interleavings** of the operations from Thread A and Thread B.
@@ -140,9 +138,7 @@ These 6 interleavings give rise to our **expected outputs**:
 In general ::
 For $n$ threads, where each thread performs $o_1, o_2, \cdot o_n$ memory operations,
 $$
-\[
 \text{Total Interleavings} = \frac{(o_1 + o_2 + \ldots + o_n)!}{o_1! \cdot o_2! \cdots o_n!}
-\]
 $$
 
 
@@ -349,8 +345,7 @@ Because neither your compiler nor your CPU is in the business of babysitting you
 Welcome to the real world!
 
 You wanted a **cup of water**.  
-The compiler optimization will  give you a *caramel swirl, three skim, one sugar* — and maybe some regret.  
-[Source](https://www.instagram.com/p/CZ0RjLzFOMX/)
+The compiler optimization will  give you a *caramel swirl, three skim, one sugar* — and maybe some regret.  {{<mention "Courtesy Dunkin Donuts" "https://www.instagram.com/p/CZ0RjLzFOMX/">}}
 
 In the next part we will cover - Memory model of Programming Languages.
 

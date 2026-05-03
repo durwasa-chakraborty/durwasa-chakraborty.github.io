@@ -1,0 +1,7 @@
+{{- $name  := .Get 0 -}}
+{{- $url   := .Get 1 -}}
+{{- $label := .Get 2 | default $url -}}
+{{- if or (not $name) (not $url) -}}
+  {{- errorf "mention shortcode in %q requires a name and URL: {{< mention \"Name\" \"https://...\" >}}" .Page.File.Path -}}
+{{- end -}}
+<span class="mention">{{- $name -}}<sup class="mention-ref"></sup><a class="mention-link" href="{{ $url | safeURL }}" target="_blank" rel="noopener noreferrer">{{ $label }}</a></span>

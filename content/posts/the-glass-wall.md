@@ -1,7 +1,7 @@
 +++
 title = "The Glass Wall"
 date = 2022-12-31T00:00:00+05:30
-draft = false
+draft = true
 author = 'durwasa'
 tags = ['literature']
 +++
@@ -21,3 +21,6 @@ I came to know her. Slowly, I cleared the mist from my glass wall and saw her as
 But one day, my reflection started to fade. I watched her leave, unable to stop the widening cracks. She tried to mend them but only got hurt in the process. I never wanted that for her. I wanted the best for her, but I ultimately failed. The crack remains, my reflection now distorted. Yet, I felt grateful to have been loved by her. I left behind a silent tear and a hopeful wish, knowing it was impossible for us to converge again in this space and time. The winter chill froze me inside, deepening my coldness.
 
 Years later, I see her again. I had always hoped for a meaningful beginning and a strong ending to our story. I searched for my glass wall, finding only distorted fragments in my attic. Now, I see the love of my life. She's happier – married, successful, with Ivy League degrees and beautiful children. I long to cross the street, talk to her, and express my undying love. But I don't, or rather, I can't. Not out of fear of societal judgment, but because I want to preserve the dream she once had. I wish to do something as simple as holding her hand and promising never to let go. But I still don't, or rather, I can't. Long ago, I left this world...
+
+
+ I was chatting with {{< mention "Vipul Sharma" "https://vipul.xyz" >}} falana.

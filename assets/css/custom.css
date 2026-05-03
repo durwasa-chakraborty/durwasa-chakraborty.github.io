@@ -1,0 +1,61 @@
+/* Inline mentions with auto-numbered sidenote-style margin references.
+   Used by layouts/shortcodes/mention.html. */
+
+.article-content { counter-reset: mention; }
+.mention { counter-increment: mention; }
+
+.mention-ref::before {
+  content: counter(mention);
+  vertical-align: super;
+  font-size: 0.7em;
+  font-weight: 600;
+  color: var(--color-primary-600, #2563eb);
+  margin-left: 0.1em;
+}
+.dark .mention-ref::before {
+  color: var(--color-primary-400, #60a5fa);
+}
+
+@media (min-width: 1024px) {
+  .mention-link {
+    float: right;
+    clear: right;
+    width: 14rem;
+    margin-top: 0.35em;
+    margin-right: -15.5rem;
+    margin-left: 1rem;
+    font-size: 0.8em;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+    color: var(--color-neutral-500, #737373);
+    text-decoration: none;
+    border-bottom: 1px dotted currentColor;
+  }
+  .mention-link::before {
+    content: counter(mention) ". ";
+    font-weight: 600;
+    color: var(--color-primary-600, #2563eb);
+    margin-right: 0.15em;
+  }
+  .mention-link:hover {
+    color: var(--color-primary-500, #3b82f6);
+  }
+  .dark .mention-link {
+    color: var(--color-neutral-400, #a3a3a3);
+  }
+  .dark .mention-link::before {
+    color: var(--color-primary-400, #60a5fa);
+  }
+}
+
+@media (max-width: 1023px) {
+  .mention-link {
+    color: var(--color-primary-600, #2563eb);
+    text-decoration: underline;
+  }
+  .mention-link::before { content: " ("; }
+  .mention-link::after  { content: ")"; }
+  .dark .mention-link {
+    color: var(--color-primary-400, #60a5fa);
+  }
+}
