@@ -259,7 +259,7 @@ and the product runs.
 
 ### About the team name
 
-We were **Soundness & Sambar**.
+We were **Sambar & Soundness**.
 
 The name does double duty. **Soundness**, in the strict sense, is a property of
 a logical system: every theorem the system proves is in fact true under the
