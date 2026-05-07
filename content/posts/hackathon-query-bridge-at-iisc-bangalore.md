@@ -178,9 +178,6 @@ top and let the machine do most of the discharging.
 
 ## What the front-end and back-end actually do
 
-This is the part I think people get wrong when they imagine "verified
-software served over HTTP", so I want to be specific.
-
 There is no long-running Lean server. There is no socket or RPC. The wire protocol between FastAPI and the
 Lean kernel is, quite simply, 
 `subprocess.run`. 
