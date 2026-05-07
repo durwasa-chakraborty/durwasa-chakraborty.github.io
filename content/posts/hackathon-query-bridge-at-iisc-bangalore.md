@@ -258,15 +258,18 @@ and the product runs.
 
 We were **Sambar & Soundness**.
 
-The name does double duty. **Soundness**, in the strict sense, is a property of
-a logical system: every theorem the system proves is in fact true under the
-intended semantics - the system *cannot* derive a falsehood. That was, quite
-literally, the property we were trying to establish for our translator: every
-SQL query it produces agrees with the jq query it came from. It is also, unmissably, a
-homage to our team lead's last name - *Soundarapandian*.
+The name pulled double duty. In formal logic, **soundness** means a system
+proves only what is actually true under its intended semantics — no falsehoods,
+no sleight of hand. That was precisely the guarantee we were chasing: every SQL
+query our translator produced had to faithfully preserve the meaning of its
+originating jq query. It was also, quite unmistakably, a nod to our team lead’s
+surname — *Soundarapandian* (for those who have a penchant for prefixes).
 
-I am also an unrepentant sucker for alliteration, in Hindi, *अनुप्रास अलंकार*
-(anupras alankar), and the name had a good ring to it.
+And then there was **Sambar**: an unapologetically Chennai marker, impossible to
+miss. As an unrepentant devotee of alliteration or *अनुप्रास अलंकार* (anupras
+alankar) I found the pairing irresistible. It signaled both where we came from
+and, perhaps more importantly, it simply had a very good ring to it.
+
 
 I briefly considered _Madras Monads_ :: a name rooted in my affection for my
 almamater IIT Madras, alliteration and _{{< mention "Madraspattinam"
