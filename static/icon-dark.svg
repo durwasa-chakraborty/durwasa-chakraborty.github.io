@@ -1,6 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
-<rect width="512" height="512" rx="71.68" fill="#111111"/><g transform="translate(50.616,357.346) scale(0.153788,-0.153788)" fill="#ffffff">
-<path d="M880 1000 1059 1493H1304L761 0H552L9 1493H254L433 1000ZM517 770 657 385 796 770Z"/>
-<g transform="translate(1163,0)"><path d="M217 55H1499V-175H217ZM1499 177H217V1459H1499V1229H447V407H1499Z"/></g>
-</g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="71.68" fill="#111111"/><g fill="none" stroke="#ffffff" stroke-width="32" stroke-linejoin="miter" stroke-linecap="square" stroke-miterlimit="6"><polygon points="56.82,345.00 243.88,345.00 150.35,183.00"/><polyline points="466.89,167.00 315.59,167.00 315.59,295.16 466.89,295.16"/><line x1="315.59" y1="345.00" x2="466.89" y2="345.00"/></g></svg>
