@@ -45,6 +45,7 @@ fingerprintAlgorithm = "sha512"
   showTaxonomies = true
   showWordCount = true
   showZenMode = true
+  showComments = true
   sharingLinks = ["linkedin", "twitter", "reddit", "email"]
 
 [list]
