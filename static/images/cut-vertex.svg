@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 360" role="img" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">
+  <title>Cut vertex diagram</title>
+  <desc>A graph where every path from vertex x to vertex y must pass through vertex b.</desc>
+
+  <style>
+    .ink-stroke   { stroke: #5F5E5A; }
+    .muted-fill   { fill:   #5F5E5A; }
+    .node-fill    { fill:   #F1EFE8; }
+    .s-stroke     { stroke: #0F6E56; }
+    .s-fill       { fill:   #085041; }
+    .s-region     { fill:   #E1F5EE; }
+    .vs-stroke    { stroke: #993C1D; }
+    .vs-fill      { fill:   #712B13; }
+    .vs-region    { fill:   #FAECE7; }
+
+    .bg-fill      { fill:   #FFFFFF; }
+
+    @media (prefers-color-scheme: dark) {
+      .ink-stroke   { stroke: #C8C5BC; }
+      .muted-fill   { fill:   #B8B5AC; }
+      .node-fill    { fill:   #2A2A28; }
+      .s-stroke     { stroke: #6FD4B5; }
+      .s-fill       { fill:   #A8E8D2; }
+      .s-region     { fill:   #1B3A33; }
+      .vs-stroke    { stroke: #F0865B; }
+      .vs-fill      { fill:   #F5B59A; }
+      .vs-region    { fill:   #3A2620; }
+      .bg-fill      { fill:   #1A1A1A; }
+    }
+  </style>
+
+  <rect width="100%" height="100%" class="bg-fill"/>
+
+  <!-- Edges -->
+  <g class="ink-stroke" stroke-width="1" fill="none" opacity="0.7">
+    <line x1="90"  y1="200" x2="200" y2="110"/>
+    <line x1="90"  y1="200" x2="200" y2="290"/>
+    <line x1="200" y1="110" x2="200" y2="290"/>
+    <line x1="200" y1="110" x2="340" y2="200"/>
+    <line x1="200" y1="290" x2="340" y2="200"/>
+    <line x1="340" y1="200" x2="480" y2="110"/>
+    <line x1="340" y1="200" x2="480" y2="290"/>
+    <line x1="480" y1="110" x2="480" y2="290"/>
+    <line x1="480" y1="110" x2="590" y2="200"/>
+    <line x1="480" y1="290" x2="590" y2="200"/>
+  </g>
+
+  <!-- Neutral nodes -->
+  <g class="node-fill ink-stroke" stroke-width="0.8">
+    <circle cx="200" cy="110" r="16"/>
+    <circle cx="200" cy="290" r="16"/>
+    <circle cx="480" cy="110" r="16"/>
+    <circle cx="480" cy="290" r="16"/>
+  </g>
+
+  <!-- Witness vertices x and y -->
+  <g class="s-region s-stroke" stroke-width="1.2">
+    <circle cx="90"  cy="200" r="22"/>
+    <circle cx="590" cy="200" r="22"/>
+  </g>
+  <g class="s-fill" font-size="14" font-weight="500" text-anchor="middle" dominant-baseline="central">
+    <text x="90"  y="200">x</text>
+    <text x="590" y="200">y</text>
+  </g>
+
+  <!-- Cut vertex b -->
+  <g>
+    <circle cx="340" cy="200" r="26" class="vs-region vs-stroke" stroke-width="1.6"/>
+    <text x="340" y="200" class="vs-fill" font-size="14" font-weight="500"
+          text-anchor="middle" dominant-baseline="central">b</text>
+  </g>
+
+  <!-- Caption -->
+  <text x="340" y="340" class="muted-fill" font-size="12" text-anchor="middle">
+    Remove b and the graph falls into two pieces — x can no longer reach y.
+  </text>
+</svg>

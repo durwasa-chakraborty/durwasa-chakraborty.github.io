@@ -1,0 +1,269 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 480" role="img" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">
+  <title>The flip — partner[v] from V\S, additive update on the worked example</title>
+  <desc>Animated SVG looping between two frames. Frame A: S = {a}, V\S = {b,c,d,e,f,g,h}, drawn as labelled regions with a dashed boundary between them. Each V\S-vertex with an edge to a has a purple partner arrow pointing back to a; the other three (f, g, h) have partner = infinity. partner[b] = (a, 1) is the global min and will be picked. Frame B: b has crossed into S; the S region has grown to enclose it. The partner arrows from c, d, e still cross the cut and still terminate at a — a is monotonically retained in S, so those pointers stay valid. Green checkmarks confirm this. A pulsing orange dashed edge from h to b shows the single comparison the update performs, after which partner[h] = (b, 5). Captions emphasize: deg(b) = 2 comparisons this move, summing to 2m = O(m) total update work over the algorithm.</desc>
+
+  <style>
+    .bg-fill        { fill:   #FFFFFF; }
+    .ink-stroke     { stroke: #5F5E5A; }
+    .ink-fill       { fill:   #3F3E3A; }
+    .muted-fill     { fill:   #5F5E5A; }
+    .node-fill      { fill:   #F1EFE8; }
+    .cross-stroke   { stroke: #C0532E; }
+    .s-stroke       { stroke: #0F6E56; }
+    .s-fill         { fill:   #085041; }
+    .s-region       { fill:   #E1F5EE; }
+    .vs-stroke      { stroke: #993C1D; }
+    .vs-fill        { fill:   #712B13; }
+    .vs-region      { fill:   #FAECE7; }
+    .partner-stroke { stroke: #7A2D9B; }
+    .partner-fill   { fill:   #5C2278; }
+    .ok-fill        { fill:   #0F6E56; }
+    .compare-stroke { stroke: #C0532E; }
+    .compare-fill   { fill:   #8A3B1F; }
+    .a-stroke       { stroke: #1E5AA8; }
+    .a-fill         { fill:   #1E5AA8; }
+    .new-stroke     { stroke: #F0865B; }
+
+    @media (prefers-color-scheme: dark) {
+      .bg-fill        { fill:   #1A1A1A; }
+      .ink-stroke     { stroke: #C8C5BC; }
+      .ink-fill       { fill:   #E8E5DC; }
+      .muted-fill     { fill:   #B8B5AC; }
+      .node-fill      { fill:   #2A2A28; }
+      .cross-stroke   { stroke: #F0865B; }
+      .s-stroke       { stroke: #6FD4B5; }
+      .s-fill         { fill:   #A8E8D2; }
+      .s-region       { fill:   #1B3A33; }
+      .vs-stroke      { stroke: #F0865B; }
+      .vs-fill        { fill:   #F5B59A; }
+      .vs-region      { fill:   #3A2620; }
+      .partner-stroke { stroke: #C088E8; }
+      .partner-fill   { fill:   #D9A8F0; }
+      .ok-fill        { fill:   #6FD4B5; }
+      .compare-stroke { stroke: #F0865B; }
+      .compare-fill   { fill:   #F5B59A; }
+      .a-stroke       { stroke: #7BB3F0; }
+      .a-fill         { fill:   #9BC8F5; }
+      .new-stroke     { stroke: #F0A065; }
+    }
+
+    @keyframes show-A { 0%, 49.999% { opacity: 1; } 50%, 100% { opacity: 0; } }
+    @keyframes show-B { 0%, 49.999% { opacity: 0; } 50%, 100% { opacity: 1; } }
+    @keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.9; } }
+    .frame-A { animation: show-A 7s infinite; opacity: 1; }
+    .frame-B { animation: show-B 7s infinite; opacity: 0; }
+    .compare-edge { animation: pulse 1.2s ease-in-out infinite; }
+  </style>
+
+  <rect width="100%" height="100%" class="bg-fill"/>
+
+  <text x="260" y="26" class="ink-fill" font-size="13" font-weight="600" text-anchor="middle">The flip  —  partner[x] for x ∈ V \ S = x's lightest direct edge to anyone in S</text>
+
+  <!-- Vertical divider between graph and right caption panel -->
+  <line x1="520" y1="70" x2="520" y2="395" class="ink-stroke" stroke-width="1" opacity="0.3"/>
+  <line x1="20" y1="408" x2="740" y2="408" class="ink-stroke" stroke-width="1" opacity="0.3"/>
+
+  <!-- ========================== FRAME A: before picking (a, b) ========================== -->
+  <g class="frame-A">
+
+    <!-- S / V\S regions (cut x = 105) -->
+    <rect x="12" y="70" width="88" height="325" rx="26" ry="26" class="s-region s-stroke" stroke-width="1.2" stroke-dasharray="5 4" opacity="0.85"/>
+    <rect x="110" y="70" width="398" height="325" rx="26" ry="26" class="vs-region vs-stroke" stroke-width="1.2" stroke-dasharray="5 4" opacity="0.85"/>
+    <text x="24" y="88" class="s-fill" font-size="13" font-weight="700">S</text>
+    <text x="122" y="88" class="vs-fill" font-size="13" font-weight="700">V \ S</text>
+
+    <text x="260" y="46" class="ink-fill" font-size="12" font-weight="500" text-anchor="middle">Before  —  every v ∈ V \ S names its lightest edge into S (or ∞ if it has none).</text>
+
+    <!-- Graph edges (faint grey) -->
+    <g class="ink-stroke" stroke-width="1" opacity="0.3" fill="none" stroke-linecap="round">
+      <line x1="60" y1="250" x2="150" y2="140"/>   <!-- a-b -->
+      <line x1="60" y1="250" x2="210" y2="280"/>   <!-- a-c -->
+      <line x1="60" y1="250" x2="260" y2="360"/>   <!-- a-d -->
+      <line x1="60" y1="250" x2="320" y2="180"/>   <!-- a-e -->
+      <line x1="150" y1="140" x2="430" y2="95"/>   <!-- b-h -->
+      <line x1="210" y1="280" x2="450" y2="270"/>  <!-- c-g -->
+      <line x1="260" y1="360" x2="450" y2="360"/>  <!-- d-f -->
+      <line x1="320" y1="180" x2="450" y2="360"/>  <!-- e-f -->
+    </g>
+
+    <!-- Edge weight labels -->
+    <g class="muted-fill" font-size="10" text-anchor="middle" dominant-baseline="central">
+      <text x="90" y="205">1</text>
+      <text x="125" y="250">2</text>
+      <text x="140" y="290">3</text>
+      <text x="180" y="200">4</text>
+      <text x="290" y="105">5</text>
+      <text x="330" y="263">6</text>
+      <text x="355" y="350">7</text>
+      <text x="400" y="250">8</text>
+    </g>
+
+    <!-- Purple partner arrows: b→a, c→a, d→a, e→a (each crosses the cut V\S→S) -->
+    <g stroke-linecap="round" fill="none">
+      <line x1="150" y1="140" x2="60" y2="250" class="partner-stroke" stroke-width="7" opacity="0.4"/>
+      <line x1="150" y1="140" x2="60" y2="250" class="partner-stroke" stroke-width="2.4"/>
+      <line x1="210" y1="280" x2="60" y2="250" class="partner-stroke" stroke-width="7" opacity="0.4"/>
+      <line x1="210" y1="280" x2="60" y2="250" class="partner-stroke" stroke-width="2.4"/>
+      <line x1="260" y1="360" x2="60" y2="250" class="partner-stroke" stroke-width="7" opacity="0.4"/>
+      <line x1="260" y1="360" x2="60" y2="250" class="partner-stroke" stroke-width="2.4"/>
+      <line x1="320" y1="180" x2="60" y2="250" class="partner-stroke" stroke-width="7" opacity="0.4"/>
+      <line x1="320" y1="180" x2="60" y2="250" class="partner-stroke" stroke-width="2.4"/>
+    </g>
+
+    <!-- ∞ labels for f, g, h (no S-neighbour) -->
+    <g class="muted-fill" font-size="10" font-style="italic" text-anchor="middle">
+      <text x="430" y="75">∞</text>
+      <text x="475" y="270">∞</text>
+      <text x="475" y="360">∞</text>
+    </g>
+
+    <!-- Vertices -->
+    <g stroke-width="1.4">
+      <circle cx="60" cy="250" r="14" class="node-fill s-stroke"/>
+      <circle cx="150" cy="140" r="14" class="node-fill vs-stroke"/>
+      <circle cx="210" cy="280" r="14" class="node-fill vs-stroke"/>
+      <circle cx="260" cy="360" r="14" class="node-fill vs-stroke"/>
+      <circle cx="320" cy="180" r="14" class="node-fill vs-stroke"/>
+      <circle cx="430" cy="95"  r="14" class="node-fill vs-stroke"/>
+      <circle cx="450" cy="270" r="14" class="node-fill vs-stroke"/>
+      <circle cx="450" cy="360" r="14" class="node-fill vs-stroke"/>
+    </g>
+    <g font-size="12" text-anchor="middle" dominant-baseline="central" font-weight="600">
+      <text x="60"  y="250" class="s-fill">a</text>
+      <text x="150" y="140" class="vs-fill">b</text>
+      <text x="210" y="280" class="vs-fill">c</text>
+      <text x="260" y="360" class="vs-fill">d</text>
+      <text x="320" y="180" class="vs-fill">e</text>
+      <text x="430" y="95"  class="vs-fill">h</text>
+      <text x="450" y="270" class="vs-fill">g</text>
+      <text x="450" y="360" class="vs-fill">f</text>
+    </g>
+
+    <!-- Right-side partner table -->
+    <text x="540" y="92" class="ink-fill" font-size="11" font-weight="700">partner[v]  for  v ∈ V \ S</text>
+    <line x1="540" y1="100" x2="740" y2="100" class="ink-stroke" stroke-width="0.6" opacity="0.5"/>
+    <g font-size="11">
+      <text x="540" y="124" class="partner-fill" font-weight="700">b:  (b, a)   w = 1   ← min</text>
+      <text x="540" y="146" class="ink-fill"     font-weight="400">c:  (c, a)   w = 2</text>
+      <text x="540" y="168" class="ink-fill"     font-weight="400">d:  (d, a)   w = 3</text>
+      <text x="540" y="190" class="ink-fill"     font-weight="400">e:  (e, a)   w = 4</text>
+      <text x="540" y="212" class="muted-fill"   font-style="italic">f:  —   w = ∞</text>
+      <text x="540" y="234" class="muted-fill"   font-style="italic">g:  —   w = ∞</text>
+      <text x="540" y="256" class="muted-fill"   font-style="italic">h:  —   w = ∞</text>
+    </g>
+
+    <!-- Bottom caption strip -->
+    <text x="380" y="430" class="partner-fill" font-size="12" font-weight="700" text-anchor="middle">Global min:  partner[b] = (b, a, 1)   →   pick (a, b);  b will cross into S</text>
+    <text x="380" y="455" class="muted-fill"   font-size="11" text-anchor="middle">Four V \ S-vertices have an edge to S so far.  Three (f, g, h) wait for an S-neighbour to appear.</text>
+  </g>
+
+  <!-- ========================== FRAME B: after picking (a, b) ========================== -->
+  <g class="frame-B">
+
+    <!-- S / V\S regions (cut x = 180; S has grown) -->
+    <rect x="12" y="70" width="163" height="325" rx="26" ry="26" class="s-region s-stroke" stroke-width="1.2" stroke-dasharray="5 4" opacity="0.85"/>
+    <rect x="185" y="70" width="323" height="325" rx="26" ry="26" class="vs-region vs-stroke" stroke-width="1.2" stroke-dasharray="5 4" opacity="0.85"/>
+    <text x="24" y="88" class="s-fill" font-size="13" font-weight="700">S  (grew by 1)</text>
+    <text x="197" y="88" class="vs-fill" font-size="13" font-weight="700">V \ S  (shrank by 1)</text>
+
+    <text x="260" y="46" class="ink-fill" font-size="12" font-weight="500" text-anchor="middle">After  —  b joined S.  c, d, e's partners still point at a (still in S).  h needs one comparison.</text>
+
+    <!-- Graph edges (faint, minus a-b which is now MST) -->
+    <g class="ink-stroke" stroke-width="1" opacity="0.3" fill="none" stroke-linecap="round">
+      <line x1="60" y1="250" x2="210" y2="280"/>
+      <line x1="60" y1="250" x2="260" y2="360"/>
+      <line x1="60" y1="250" x2="320" y2="180"/>
+      <line x1="210" y1="280" x2="450" y2="270"/>
+      <line x1="260" y1="360" x2="450" y2="360"/>
+      <line x1="320" y1="180" x2="450" y2="360"/>
+    </g>
+
+    <!-- MST edge (a, b) — blue with orange halo -->
+    <line x1="60" y1="250" x2="150" y2="140" class="new-stroke" stroke-width="7" opacity="0.45" stroke-linecap="round" fill="none"/>
+    <line x1="60" y1="250" x2="150" y2="140" class="a-stroke" stroke-width="2.6" stroke-linecap="round" fill="none"/>
+
+    <!-- Edge weight labels -->
+    <g class="muted-fill" font-size="10" text-anchor="middle" dominant-baseline="central">
+      <text x="90" y="205">1</text>
+      <text x="125" y="250">2</text>
+      <text x="140" y="290">3</text>
+      <text x="180" y="200">4</text>
+      <text x="290" y="105">5</text>
+      <text x="330" y="263">6</text>
+      <text x="355" y="350">7</text>
+      <text x="400" y="250">8</text>
+    </g>
+
+    <!-- Surviving partner arrows c→a, d→a, e→a (still cross the cut into S) -->
+    <g stroke-linecap="round" fill="none">
+      <line x1="210" y1="280" x2="60" y2="250" class="partner-stroke" stroke-width="7" opacity="0.4"/>
+      <line x1="210" y1="280" x2="60" y2="250" class="partner-stroke" stroke-width="2.4"/>
+      <line x1="260" y1="360" x2="60" y2="250" class="partner-stroke" stroke-width="7" opacity="0.4"/>
+      <line x1="260" y1="360" x2="60" y2="250" class="partner-stroke" stroke-width="2.4"/>
+      <line x1="320" y1="180" x2="60" y2="250" class="partner-stroke" stroke-width="7" opacity="0.4"/>
+      <line x1="320" y1="180" x2="60" y2="250" class="partner-stroke" stroke-width="2.4"/>
+    </g>
+
+    <!-- Settled new partner arrow h→b (purple, behind the pulse) -->
+    <line x1="430" y1="95" x2="150" y2="140" class="partner-stroke" stroke-width="7" opacity="0.35" stroke-linecap="round" fill="none"/>
+    <line x1="430" y1="95" x2="150" y2="140" class="partner-stroke" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+
+    <!-- Pulsing comparison edge h↔b (orange dashed, ON TOP, signals "one comparison happening") -->
+    <line x1="430" y1="95" x2="150" y2="140" class="compare-stroke compare-edge" stroke-width="3.2" stroke-dasharray="6 4" fill="none"/>
+
+    <!-- ✓ marks for c, d, e — their partner arrows still cross the cut to a -->
+    <g class="ok-fill" font-size="15" font-weight="800" text-anchor="middle">
+      <text x="130" y="280">✓</text>
+      <text x="160" y="320">✓</text>
+      <text x="195" y="200">✓</text>
+    </g>
+
+    <!-- Comparison annotation near the h↔b pulse -->
+    <text x="295" y="123" class="compare-fill" font-size="11" font-weight="700" text-anchor="middle">w(b, h) = 5  vs  ∞   →   one comparison</text>
+
+    <!-- f, g still ∞ (no edge to b) -->
+    <g class="muted-fill" font-size="10" font-style="italic" text-anchor="middle">
+      <text x="475" y="270">∞ still</text>
+      <text x="475" y="360">∞ still</text>
+    </g>
+
+    <!-- Vertices: a and b now in S -->
+    <g stroke-width="1.4">
+      <circle cx="60" cy="250" r="14" class="node-fill s-stroke"/>
+      <circle cx="150" cy="140" r="14" class="node-fill s-stroke"/>
+      <circle cx="210" cy="280" r="14" class="node-fill vs-stroke"/>
+      <circle cx="260" cy="360" r="14" class="node-fill vs-stroke"/>
+      <circle cx="320" cy="180" r="14" class="node-fill vs-stroke"/>
+      <circle cx="430" cy="95"  r="14" class="node-fill vs-stroke"/>
+      <circle cx="450" cy="270" r="14" class="node-fill vs-stroke"/>
+      <circle cx="450" cy="360" r="14" class="node-fill vs-stroke"/>
+    </g>
+    <g font-size="12" text-anchor="middle" dominant-baseline="central" font-weight="600">
+      <text x="60"  y="250" class="s-fill">a</text>
+      <text x="150" y="140" class="s-fill">b</text>
+      <text x="210" y="280" class="vs-fill">c</text>
+      <text x="260" y="360" class="vs-fill">d</text>
+      <text x="320" y="180" class="vs-fill">e</text>
+      <text x="430" y="95"  class="vs-fill">h</text>
+      <text x="450" y="270" class="vs-fill">g</text>
+      <text x="450" y="360" class="vs-fill">f</text>
+    </g>
+
+    <!-- Right-side partner table -->
+    <text x="540" y="92" class="ink-fill" font-size="11" font-weight="700">partner[v]  for  v ∈ V \ S</text>
+    <line x1="540" y1="100" x2="740" y2="100" class="ink-stroke" stroke-width="0.6" opacity="0.5"/>
+    <g font-size="11">
+      <text x="540" y="124" class="ok-fill"   font-weight="700">c:  (c, a)   w = 2   ✓</text>
+      <text x="540" y="146" class="ok-fill"   font-weight="700">d:  (d, a)   w = 3   ✓</text>
+      <text x="540" y="168" class="ok-fill"   font-weight="700">e:  (e, a)   w = 4   ✓</text>
+      <text x="540" y="190" class="compare-fill" font-weight="700">h:  (h, b)   w = 5   new</text>
+      <text x="540" y="208" class="muted-fill"   font-style="italic" font-size="9">(was ∞ ; one comparison)</text>
+      <text x="540" y="232" class="muted-fill"   font-style="italic">f:  —   w = ∞   (no edge to b)</text>
+      <text x="540" y="254" class="muted-fill"   font-style="italic">g:  —   w = ∞   (no edge to b)</text>
+    </g>
+
+    <!-- Bottom caption strip -->
+    <text x="380" y="425" class="ok-fill" font-size="12" font-weight="700" text-anchor="middle">3 partners survived for free — pointers into S stay valid because S only grew.</text>
+    <text x="380" y="445" class="compare-fill" font-size="12" font-weight="700" text-anchor="middle">Total work this move:  at most deg(b) = 2 comparisons.    Σ_u deg(u) = 2m   ⇒   O(m) across the whole algorithm.</text>
+  </g>
+</svg>

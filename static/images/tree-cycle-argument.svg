@@ -1,0 +1,124 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 330" role="img" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">
+  <title>Adding a non-tree edge to a spanning tree creates exactly one cycle</title>
+  <desc>Three side-by-side panels on the same small spanning tree T. Panel 1: T drawn alone, with two non-adjacent vertices labelled u and v. Panel 2: the unique path in T from u to v is highlighted in yellow — trees have a unique path between any two vertices. Panel 3: adding the non-tree edge e = (u,v), shown dashed gold, closes the unique path into a unique cycle (yellow halo around the loop).</desc>
+
+  <style>
+    .ink-stroke    { stroke: #5F5E5A; }
+    .ink-fill      { fill:   #3F3E3A; }
+    .muted-fill    { fill:   #5F5E5A; }
+    .node-fill     { fill:   #F1EFE8; }
+    .tree-stroke   { stroke: #1E5AA8; }
+    .tree-fill     { fill:   #1E5AA8; }
+    .e-stroke      { stroke: #B07418; }
+    .e-fill        { fill:   #8F5E15; }
+    .cycle-stroke  { stroke: #F0C84A; }
+    .uv-fill       { fill:   #7A2D24; }
+
+    .bg-fill      { fill:   #FFFFFF; }
+
+    @media (prefers-color-scheme: dark) {
+      .ink-stroke    { stroke: #C8C5BC; }
+      .ink-fill      { fill:   #E8E5DC; }
+      .muted-fill    { fill:   #B8B5AC; }
+      .node-fill     { fill:   #2A2A28; }
+      .tree-stroke   { stroke: #7BB3F0; }
+      .tree-fill     { fill:   #9BC8F5; }
+      .e-stroke      { stroke: #E8B458; }
+      .e-fill        { fill:   #F0CB7C; }
+      .cycle-stroke  { stroke: #6B5424; }
+      .uv-fill       { fill:   #F0B5AD; }
+      .bg-fill      { fill:   #1A1A1A; }
+    }
+  </style>
+
+  <rect width="100%" height="100%" class="bg-fill"/>
+
+  <text x="140" y="26" class="ink-fill" font-size="12" font-weight="600" text-anchor="middle">(1)  A spanning tree T</text>
+  <text x="380" y="26" class="ink-fill" font-size="12" font-weight="600" text-anchor="middle">(2)  Unique u→v path in T</text>
+  <text x="620" y="26" class="ink-fill" font-size="12" font-weight="600" text-anchor="middle">(3)  Add e = (u,v) → one cycle</text>
+
+  <g class="tree-stroke" stroke-width="2.4" fill="none" stroke-linecap="round">
+    <line x1="140" y1="75"  x2="95"  y2="135"/>
+    <line x1="140" y1="75"  x2="185" y2="135"/>
+    <line x1="95"  y1="135" x2="95"  y2="215"/>
+    <line x1="185" y1="135" x2="185" y2="215"/>
+  </g>
+  <g class="node-fill ink-stroke" stroke-width="1.0">
+    <circle cx="140" cy="75"  r="12"/>
+    <circle cx="95"  cy="135" r="12"/>
+    <circle cx="185" cy="135" r="12"/>
+    <circle cx="95"  cy="215" r="12"/>
+    <circle cx="185" cy="215" r="12"/>
+  </g>
+  <g font-size="11" text-anchor="middle" dominant-baseline="central">
+    <text x="140" y="75"  class="ink-fill">1</text>
+    <text x="95"  y="135" class="ink-fill">2</text>
+    <text x="185" y="135" class="ink-fill">3</text>
+    <text x="95"  y="215" class="uv-fill" font-weight="700">u</text>
+    <text x="185" y="215" class="uv-fill" font-weight="700">v</text>
+  </g>
+  <text x="140" y="250" class="muted-fill" font-size="10" text-anchor="middle">u and v are not directly connected;</text>
+  <text x="140" y="264" class="muted-fill" font-size="10" text-anchor="middle">the edge (u,v) is not in T.</text>
+
+  <g class="cycle-stroke" stroke-width="11" fill="none" stroke-linecap="round" opacity="0.6">
+    <line x1="335" y1="215" x2="335" y2="135"/>
+    <line x1="335" y1="135" x2="380" y2="75"/>
+    <line x1="380" y1="75"  x2="425" y2="135"/>
+    <line x1="425" y1="135" x2="425" y2="215"/>
+  </g>
+  <g class="tree-stroke" stroke-width="2.4" fill="none" stroke-linecap="round">
+    <line x1="380" y1="75"  x2="335" y2="135"/>
+    <line x1="380" y1="75"  x2="425" y2="135"/>
+    <line x1="335" y1="135" x2="335" y2="215"/>
+    <line x1="425" y1="135" x2="425" y2="215"/>
+  </g>
+  <g class="node-fill ink-stroke" stroke-width="1.0">
+    <circle cx="380" cy="75"  r="12"/>
+    <circle cx="335" cy="135" r="12"/>
+    <circle cx="425" cy="135" r="12"/>
+    <circle cx="335" cy="215" r="12"/>
+    <circle cx="425" cy="215" r="12"/>
+  </g>
+  <g font-size="11" text-anchor="middle" dominant-baseline="central">
+    <text x="380" y="75"  class="ink-fill">1</text>
+    <text x="335" y="135" class="ink-fill">2</text>
+    <text x="425" y="135" class="ink-fill">3</text>
+    <text x="335" y="215" class="uv-fill" font-weight="700">u</text>
+    <text x="425" y="215" class="uv-fill" font-weight="700">v</text>
+  </g>
+  <text x="380" y="250" class="muted-fill" font-size="10" text-anchor="middle">In a tree, there is exactly one path</text>
+  <text x="380" y="264" class="muted-fill" font-size="10" text-anchor="middle">between any two vertices.</text>
+
+  <path d="M 575 215 L 575 135 L 620 75 L 665 135 L 665 215 Z" class="cycle-stroke" stroke-width="12" fill="none" opacity="0.6" stroke-linejoin="round"/>
+  <g class="tree-stroke" stroke-width="2.4" fill="none" stroke-linecap="round">
+    <line x1="620" y1="75"  x2="575" y2="135"/>
+    <line x1="620" y1="75"  x2="665" y2="135"/>
+    <line x1="575" y1="135" x2="575" y2="215"/>
+    <line x1="665" y1="135" x2="665" y2="215"/>
+  </g>
+  <line x1="575" y1="215" x2="665" y2="215" class="e-stroke" stroke-width="2.4" stroke-dasharray="5 3" fill="none"/>
+  <g class="node-fill ink-stroke" stroke-width="1.0">
+    <circle cx="620" cy="75"  r="12"/>
+    <circle cx="575" cy="135" r="12"/>
+    <circle cx="665" cy="135" r="12"/>
+    <circle cx="575" cy="215" r="12"/>
+    <circle cx="665" cy="215" r="12"/>
+  </g>
+  <g font-size="11" text-anchor="middle" dominant-baseline="central">
+    <text x="620" y="75"  class="ink-fill">1</text>
+    <text x="575" y="135" class="ink-fill">2</text>
+    <text x="665" y="135" class="ink-fill">3</text>
+    <text x="575" y="215" class="uv-fill" font-weight="700">u</text>
+    <text x="665" y="215" class="uv-fill" font-weight="700">v</text>
+  </g>
+  <text x="620" y="232" class="e-fill" font-size="11" font-weight="700" text-anchor="middle">e</text>
+  <text x="620" y="250" class="muted-fill" font-size="10" text-anchor="middle">The unique path closes into</text>
+  <text x="620" y="264" class="muted-fill" font-size="10" text-anchor="middle">one cycle through the new edge e.</text>
+
+  <text x="380" y="298" class="muted-fill" font-size="11" text-anchor="middle">
+    Suppose a second cycle existed.  Removing e from it would give a second u→v path in T — but a tree allows only one path between two vertices.
+  </text>
+  <text x="380" y="315" class="muted-fill" font-size="11" text-anchor="middle">
+    So no second cycle.  Exactly one.
+  </text>
+</svg>

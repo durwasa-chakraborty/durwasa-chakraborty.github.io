@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 380" role="img" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">
+  <title>Why e is a non-tree edge of T* under the assumption</title>
+  <desc>Flowchart. Top red box: the assumption that no MST contains A union {e}. Center text: T* is an MST containing A — does it contain e? Two branches split. Left branch (YES, red): T* contains e, so T* itself contains A union {e}, immediately breaking the assumption — marked with a red cross. Right branch (NO, green): T* omits e, consistent with the assumption — marked with a green tick. Conclusion arrow: under the assumption, T* must omit e, so e is a non-tree edge of T*.</desc>
+
+  <style>
+    .ink-stroke    { stroke: #5F5E5A; }
+    .ink-fill      { fill:   #3F3E3A; }
+    .muted-fill    { fill:   #5F5E5A; }
+    .assume-fill   { fill:   #FBEAE5; }
+    .assume-stroke { stroke: #B14C40; }
+    .assume-text   { fill:   #7A2D24; }
+    .ok-fill       { fill:   #E1F5EE; }
+    .ok-stroke     { stroke: #0F6E56; }
+    .ok-text       { fill:   #085041; }
+    .ok-mark       { fill:   #0F6E56; }
+    .bad-mark      { fill:   #B14C40; }
+
+    .bg-fill      { fill:   #FFFFFF; }
+
+    @media (prefers-color-scheme: dark) {
+      .ink-stroke    { stroke: #C8C5BC; }
+      .ink-fill      { fill:   #E8E5DC; }
+      .muted-fill    { fill:   #B8B5AC; }
+      .assume-fill   { fill:   #3A201D; }
+      .assume-stroke { stroke: #E08070; }
+      .assume-text   { fill:   #F0B5AD; }
+      .ok-fill       { fill:   #1B3A33; }
+      .ok-stroke     { stroke: #6FD4B5; }
+      .ok-text       { fill:   #A8E8D2; }
+      .ok-mark       { fill:   #6FD4B5; }
+      .bad-mark      { fill:   #E08070; }
+      .bg-fill      { fill:   #1A1A1A; }
+    }
+  </style>
+
+  <rect width="100%" height="100%" class="bg-fill"/>
+
+  <text x="380" y="22" class="ink-fill" font-size="13" font-weight="600" text-anchor="middle">Why e is a non-tree edge of T*</text>
+
+  <rect x="180" y="40" width="400" height="46" rx="6" class="assume-fill assume-stroke" stroke-width="1.4" stroke-dasharray="6 4" opacity="0.85"/>
+  <text x="380" y="60" class="assume-text" font-size="11" font-weight="700" text-anchor="middle">ASSUMPTION  (the thing we are contradicting)</text>
+  <text x="380" y="78" class="assume-text" font-size="11" font-style="italic" text-anchor="middle">No MST of G contains A ∪ {e}.</text>
+
+  <g class="ink-stroke" stroke-width="1" opacity="0.6">
+    <line x1="380" y1="92" x2="380" y2="108"/>
+    <polygon points="376,104 380,114 384,104" class="ink-stroke muted-fill"/>
+  </g>
+
+  <text x="380" y="130" class="ink-fill" font-size="12" text-anchor="middle">Invariant: T* is an MST with A ⊆ T*.</text>
+  <text x="380" y="148" class="ink-fill" font-size="12" font-weight="600" text-anchor="middle">Does T* also contain e?</text>
+
+  <g class="ink-stroke" stroke-width="1" opacity="0.6">
+    <line x1="320" y1="158" x2="220" y2="180"/>
+    <polygon points="225,177 213,182 220,172" class="ink-stroke muted-fill"/>
+    <line x1="440" y1="158" x2="540" y2="180"/>
+    <polygon points="535,172 542,182 530,177" class="ink-stroke muted-fill"/>
+  </g>
+  <text x="250" y="166" class="muted-fill" font-size="11" font-style="italic">if YES</text>
+  <text x="510" y="166" class="muted-fill" font-size="11" font-style="italic">if NO</text>
+
+  <rect x="60" y="186" width="290" height="120" rx="6" class="assume-fill assume-stroke" stroke-width="1.2" stroke-dasharray="5 3" opacity="0.7"/>
+  <text x="205" y="208" class="assume-text" font-size="12" font-weight="700" text-anchor="middle">T* contains e</text>
+  <text x="205" y="228" class="assume-text" font-size="11" text-anchor="middle">Then T* itself contains A ∪ {e}.</text>
+  <text x="205" y="245" class="assume-text" font-size="11" text-anchor="middle">T* is an MST  ⇒  some MST contains A ∪ {e}.</text>
+  <text x="205" y="262" class="assume-text" font-size="11" text-anchor="middle">But the assumption said no MST does.</text>
+  <text x="205" y="290" class="bad-mark" font-size="14" font-weight="700" text-anchor="middle">✗  Impossible under the assumption.</text>
+
+  <rect x="410" y="186" width="290" height="120" rx="6" class="ok-fill ok-stroke" stroke-width="1.2" stroke-dasharray="5 3" opacity="0.7"/>
+  <text x="555" y="208" class="ok-text" font-size="12" font-weight="700" text-anchor="middle">T* omits e</text>
+  <text x="555" y="228" class="ok-text" font-size="11" text-anchor="middle">T* contains A but not e.</text>
+  <text x="555" y="245" class="ok-text" font-size="11" text-anchor="middle">Consistent with the assumption.</text>
+  <text x="555" y="262" class="ok-text" font-size="11" text-anchor="middle">e is a non-tree edge of T*.</text>
+  <text x="555" y="290" class="ok-mark" font-size="14" font-weight="700" text-anchor="middle">✓  This is the case we work in.</text>
+
+  <g class="ink-stroke" stroke-width="1" opacity="0.6">
+    <line x1="555" y1="314" x2="555" y2="332"/>
+    <polygon points="551,328 555,338 559,328" class="ink-stroke muted-fill"/>
+  </g>
+
+  <text x="380" y="358" class="ink-fill" font-size="12" text-anchor="middle">
+    So under the assumption, T* must omit e.  Adding e to T* is a "non-tree edge"
+  </text>
+  <text x="380" y="374" class="ink-fill" font-size="12" text-anchor="middle">
+    move — and the "exactly one cycle" fact applies.
+  </text>
+</svg>

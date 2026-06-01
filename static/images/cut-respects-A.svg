@@ -1,0 +1,173 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 440" role="img" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">
+  <title>A cut that respects a partial MST A</title>
+  <desc>The same graph in two views. A subset A of edges (highlighted in blue) lies entirely inside S or inside V minus S — no edge of A crosses the partition. The cut therefore respects A.</desc>
+
+  <style>
+    .ink-stroke   { stroke: #5F5E5A; }
+    .ink-fill     { fill:   #3F3E3A; }
+    .muted-fill   { fill:   #5F5E5A; }
+    .node-fill    { fill:   #F1EFE8; }
+    .cross-stroke { stroke: #C0532E; }
+    .a-stroke     { stroke: #1E5AA8; }
+    .a-fill       { fill:   #1E5AA8; }
+    .s-stroke     { stroke: #0F6E56; }
+    .vs-stroke    { stroke: #993C1D; }
+    .s-fill       { fill:   #085041; }
+    .vs-fill      { fill:   #712B13; }
+    .s-region     { fill:   #E1F5EE; }
+    .vs-region    { fill:   #FAECE7; }
+
+    .bg-fill      { fill:   #FFFFFF; }
+
+    @media (prefers-color-scheme: dark) {
+      .ink-stroke   { stroke: #C8C5BC; }
+      .ink-fill     { fill:   #E8E5DC; }
+      .muted-fill   { fill:   #B8B5AC; }
+      .node-fill    { fill:   #2A2A28; }
+      .cross-stroke { stroke: #F0865B; }
+      .a-stroke     { stroke: #7BB3F0; }
+      .a-fill       { fill:   #9BC8F5; }
+      .s-stroke     { stroke: #6FD4B5; }
+      .vs-stroke    { stroke: #F0865B; }
+      .s-fill       { fill:   #A8E8D2; }
+      .vs-fill      { fill:   #F5B59A; }
+      .s-region     { fill:   #1B3A33; }
+      .vs-region    { fill:   #3A2620; }
+      .bg-fill      { fill:   #1A1A1A; }
+    }
+  </style>
+
+  <rect width="100%" height="100%" class="bg-fill"/>
+
+  <!-- Panel titles -->
+  <text x="180" y="40" class="ink-fill" font-size="14" font-weight="500" text-anchor="middle">Graph G with A &#8838; E</text>
+  <text x="565" y="40" class="ink-fill" font-size="14" font-weight="500" text-anchor="middle">Cut (S, V \ S) respects A</text>
+
+  <!-- ============ LEFT PANEL ============ -->
+
+  <!-- Dashed cut hint -->
+  <line x1="60" y1="200" x2="300" y2="200"
+        class="cross-stroke" stroke-width="1" stroke-dasharray="4 4" opacity="0.55"/>
+
+  <!-- Internal non-A edges -->
+  <g class="ink-stroke" stroke-width="1" fill="none" opacity="0.7">
+    <line x1="258" y1="155" x2="102" y2="155"/>  <!-- 2-6 -->
+    <line x1="258" y1="245" x2="102" y2="245"/>  <!-- 3-5 -->
+  </g>
+
+  <!-- Crossing edges -->
+  <g class="cross-stroke" stroke-width="1.6" fill="none">
+    <line x1="258" y1="155" x2="258" y2="245"/>  <!-- 2-3 -->
+    <line x1="102" y1="155" x2="102" y2="245"/>  <!-- 6-5 -->
+    <line x1="180" y1="110" x2="180" y2="290"/>  <!-- 1-4 -->
+  </g>
+
+  <!-- Edges in A (bold blue) -->
+  <g class="a-stroke" stroke-width="2.6" fill="none" stroke-linecap="round">
+    <line x1="180" y1="110" x2="258" y2="155"/>  <!-- 1-2 -->
+    <line x1="180" y1="110" x2="102" y2="155"/>  <!-- 1-6 -->
+    <line x1="258" y1="245" x2="180" y2="290"/>  <!-- 3-4 -->
+    <line x1="180" y1="290" x2="102" y2="245"/>  <!-- 4-5 -->
+  </g>
+
+  <!-- Nodes -->
+  <g class="node-fill ink-stroke" stroke-width="0.8">
+    <circle cx="180" cy="110" r="16"/>
+    <circle cx="258" cy="155" r="16"/>
+    <circle cx="258" cy="245" r="16"/>
+    <circle cx="180" cy="290" r="16"/>
+    <circle cx="102" cy="245" r="16"/>
+    <circle cx="102" cy="155" r="16"/>
+  </g>
+  <g class="ink-fill" font-size="13" text-anchor="middle" dominant-baseline="central">
+    <text x="180" y="110">1</text>
+    <text x="258" y="155">2</text>
+    <text x="258" y="245">3</text>
+    <text x="180" y="290">4</text>
+    <text x="102" y="245">5</text>
+    <text x="102" y="155">6</text>
+  </g>
+
+  <!-- Divider arrow between panels -->
+  <g class="ink-stroke" stroke-width="1" opacity="0.75">
+    <line x1="330" y1="200" x2="395" y2="200"/>
+    <polygon points="395,196 405,200 395,204" class="ink-stroke muted-fill"/>
+  </g>
+  <text x="367" y="190" class="muted-fill" font-size="11" text-anchor="middle" font-style="italic">re-view</text>
+
+  <!-- ============ RIGHT PANEL ============ -->
+
+  <!-- S region -->
+  <ellipse cx="490" cy="210" rx="56" ry="115"
+           class="s-region s-stroke" stroke-width="1.2"
+           stroke-dasharray="5 4" opacity="0.7"/>
+  <text x="490" y="78" class="s-fill" font-size="14" font-weight="600" text-anchor="middle">S</text>
+
+  <!-- V\S region -->
+  <ellipse cx="640" cy="210" rx="56" ry="115"
+           class="vs-region vs-stroke" stroke-width="1.2"
+           stroke-dasharray="5 4" opacity="0.7"/>
+  <text x="640" y="78" class="vs-fill" font-size="14" font-weight="600" text-anchor="middle">V \ S</text>
+
+  <!-- Internal non-A edges -->
+  <g class="ink-stroke" stroke-width="1" fill="none" opacity="0.7">
+    <line x1="520" y1="210" x2="490" y2="290"/>  <!-- 2-6 -->
+    <line x1="640" y1="130" x2="640" y2="290"/>  <!-- 3-5 -->
+  </g>
+
+  <!-- Crossing edges -->
+  <g class="cross-stroke" stroke-width="1.6" fill="none">
+    <line x1="520" y1="210" x2="640" y2="130"/>  <!-- 2-3 -->
+    <line x1="490" y1="290" x2="640" y2="290"/>  <!-- 6-5 -->
+    <line x1="490" y1="130" x2="610" y2="210"/>  <!-- 1-4 -->
+  </g>
+
+  <!-- Edges in A -->
+  <g class="a-stroke" stroke-width="2.6" fill="none" stroke-linecap="round">
+    <line x1="490" y1="130" x2="520" y2="210"/>  <!-- 1-2 -->
+    <line x1="490" y1="130" x2="490" y2="290"/>  <!-- 1-6 -->
+    <line x1="640" y1="130" x2="610" y2="210"/>  <!-- 3-4 -->
+    <line x1="610" y1="210" x2="640" y2="290"/>  <!-- 4-5 -->
+  </g>
+
+  <!-- Nodes in S -->
+  <g class="node-fill s-stroke" stroke-width="1.1">
+    <circle cx="490" cy="130" r="16"/>
+    <circle cx="520" cy="210" r="16"/>
+    <circle cx="490" cy="290" r="16"/>
+  </g>
+  <g class="ink-fill" font-size="13" text-anchor="middle" dominant-baseline="central">
+    <text x="490" y="130">1</text>
+    <text x="520" y="210">2</text>
+    <text x="490" y="290">6</text>
+  </g>
+
+  <!-- Nodes in V\S -->
+  <g class="node-fill vs-stroke" stroke-width="1.1">
+    <circle cx="640" cy="130" r="16"/>
+    <circle cx="610" cy="210" r="16"/>
+    <circle cx="640" cy="290" r="16"/>
+  </g>
+  <g class="ink-fill" font-size="13" text-anchor="middle" dominant-baseline="central">
+    <text x="640" y="130">3</text>
+    <text x="610" y="210">4</text>
+    <text x="640" y="290">5</text>
+  </g>
+
+  <!-- Legend -->
+  <g font-size="11" dominant-baseline="central">
+    <line x1="100" y1="385" x2="130" y2="385" class="a-stroke" stroke-width="2.6" stroke-linecap="round"/>
+    <text x="138" y="385" class="ink-fill">edge in A</text>
+
+    <line x1="280" y1="385" x2="310" y2="385" class="cross-stroke" stroke-width="1.6"/>
+    <text x="318" y="385" class="ink-fill">crossing edge</text>
+
+    <line x1="475" y1="385" x2="505" y2="385" class="ink-stroke" stroke-width="1" opacity="0.7"/>
+    <text x="513" y="385" class="ink-fill">internal, not in A</text>
+  </g>
+
+  <!-- Caption -->
+  <text x="380" y="418" class="muted-fill" font-size="12" text-anchor="middle">
+    Every edge of A lies inside S or inside V \ S; none crosses the partition. The cut respects A.
+  </text>
+</svg>
