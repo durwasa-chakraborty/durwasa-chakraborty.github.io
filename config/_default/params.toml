@@ -57,6 +57,18 @@ fingerprintAlgorithm = "sha512"
   groupByYear = true
   cardView = false
 
+[giscus]
+  repo = "durwasa-chakraborty/durwasa-chakraborty.github.io"
+  repoId = "R_kgDOK9k6Xg"
+  category = "Announcements"
+  categoryId = "DIC_kwDOK9k6Xs4C-rmB"
+  mapping = "pathname"
+  strict = "1"
+  reactionsEnabled = "1"
+  emitMetadata = "0"
+  inputPosition = "top"
+  lang = "en"
+
 [sitemap]
   excludedKinds = ["taxonomy", "term"]
 

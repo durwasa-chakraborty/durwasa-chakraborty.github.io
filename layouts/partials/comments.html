@@ -1,2 +1,41 @@
-{{- /* Disqus comments. Shortname comes from services.disqus.shortname in hugo.toml. */ -}}
-{{ template "_internal/disqus.html" . }}
+{{- /* giscus comments (GitHub Discussions). Config: site.Params.giscus in params.toml. Ad-free, replaces Disqus. */ -}}
+{{- with site.Params.giscus }}
+<div class="giscus"></div>
+<script>
+  (function () {
+    function giscusTheme() {
+      return document.documentElement.classList.contains("dark") ? "dark" : "light";
+    }
+
+    var s = document.createElement("script");
+    s.src = "https://giscus.app/client.js";
+    s.async = true;
+    s.crossOrigin = "anonymous";
+    s.setAttribute("data-repo", {{ .repo }});
+    s.setAttribute("data-repo-id", {{ .repoId }});
+    s.setAttribute("data-category", {{ .category }});
+    s.setAttribute("data-category-id", {{ .categoryId }});
+    s.setAttribute("data-mapping", {{ .mapping | default "pathname" }});
+    s.setAttribute("data-strict", {{ .strict | default "1" }});
+    s.setAttribute("data-reactions-enabled", {{ .reactionsEnabled | default "1" }});
+    s.setAttribute("data-emit-metadata", {{ .emitMetadata | default "0" }});
+    s.setAttribute("data-input-position", {{ .inputPosition | default "top" }});
+    s.setAttribute("data-lang", {{ .lang | default "en" }});
+    s.setAttribute("data-theme", giscusTheme());
+    document.querySelector(".giscus").appendChild(s);
+
+    // Keep giscus in sync with Blowfish's light/dark appearance switcher.
+    var observer = new MutationObserver(function () {
+      var frame = document.querySelector("iframe.giscus-frame");
+      if (!frame) return;
+      frame.contentWindow.postMessage(
+        { giscus: { setConfig: { theme: giscusTheme() } } },
+        "https://giscus.app"
+      );
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+  })();
+</script>
+{{- else }}
+{{- warnf "[comments] giscus is not configured in site params." }}
+{{- end }}
