@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 600" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" role="img" aria-labelledby="ttl">
+  <title id="ttl">How OCaml learns a type inside a match branch, and how Java cannot</title>
+  <style>
+    .txt   { fill: #1f2328; }
+    .muted { fill: #57606a; }
+    .card  { fill: #f6f8fa; stroke: #d0d7de; }
+    .green { fill: #1a7f37; }
+    .greenstroke { stroke: #1a7f37; }
+    .red   { fill: #cf222e; }
+    .redstroke { stroke: #cf222e; }
+    .cardgreen { fill: #ddf4e4; stroke: #1a7f37; }
+    .cardred   { fill: #ffebe9; stroke: #cf222e; }
+    @media (prefers-color-scheme: dark) {
+      .txt   { fill: #e6edf3; }
+      .muted { fill: #8b949e; }
+      .card  { fill: #161b22; stroke: #30363d; }
+      .green { fill: #3fb950; }
+      .greenstroke { stroke: #3fb950; }
+      .red   { fill: #f85149; }
+      .redstroke { stroke: #f85149; }
+      .cardgreen { fill: #12261b; stroke: #3fb950; }
+      .cardred   { fill: #2d1112; stroke: #f85149; }
+    }
+    .eq      { animation: pulse 2.4s ease-in-out infinite; }
+    .flow    { stroke-dasharray: 6 6; animation: dash 1.6s linear infinite; }
+    @keyframes pulse { 0%,100% { opacity: .45; } 50% { opacity: 1; } }
+    @keyframes dash  { to { stroke-dashoffset: -24; } }
+    text { font-size: 15px; }
+    .h  { font-size: 17px; font-weight: 700; }
+    .sm { font-size: 12.5px; }
+  </style>
+
+  <!-- ===================== OCaml side ===================== -->
+  <text x="40" y="38" class="h green">OCaml — the constructor carries a type equation</text>
+
+  <!-- the value -->
+  <rect x="40" y="58" width="360" height="56" rx="8" class="card"/>
+  <text x="60" y="83" class="txt">Add (Int 4, Int 3)</text>
+  <text x="60" y="103" class="muted sm">value, statically typed as  int expr</text>
+
+  <!-- arrow down to match -->
+  <line x1="220" y1="114" x2="220" y2="146" class="greenstroke" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="232" y="138" class="muted sm">match e with …</text>
+
+  <!-- the branch -->
+  <rect x="40" y="150" width="360" height="120" rx="8" class="card"/>
+  <text x="60" y="178" class="txt">| Int n -&gt;</text>
+
+  <!-- the hidden equation, animated -->
+  <rect x="74" y="192" width="300" height="34" rx="6" class="cardgreen eq"/>
+  <text x="90" y="214" class="green eq">a = int   (Leibniz witness, Refl)</text>
+  <text x="60" y="252" class="muted sm">compiler adds this equation to THIS branch only</text>
+
+  <!-- constructor box feeding the equation -->
+  <rect x="40" y="296" width="360" height="74" rx="8" class="card"/>
+  <text x="60" y="322" class="txt sm">constructor signature:</text>
+  <text x="60" y="344" class="green">Int : int -&gt; int expr</text>
+  <text x="60" y="362" class="muted sm">the result type  int expr  pins  a := int</text>
+
+  <!-- flow line from constructor up into the branch equation -->
+  <path d="M 388 333 C 430 333 430 209 384 209" fill="none" class="greenstroke flow" stroke-width="2" marker-end="url(#arrowg)"/>
+
+  <!-- result -->
+  <line x1="220" y1="370" x2="220" y2="402" class="greenstroke" stroke-width="2" marker-end="url(#arrow)"/>
+  <rect x="40" y="406" width="360" height="50" rx="8" class="cardgreen"/>
+  <text x="60" y="436" class="green">n : a  is known to be  int  ✓ compile time</text>
+
+  <!-- ===================== Java side ===================== -->
+  <text x="470" y="38" class="h red">Java — the parameter is never refined</text>
+
+  <rect x="470" y="58" width="370" height="56" rx="8" class="card"/>
+  <text x="490" y="83" class="txt">eval(e)  where  e : Expr&lt;T&gt;</text>
+  <text x="490" y="103" class="muted sm">T is opaque; nothing connects it to a case</text>
+
+  <line x1="655" y1="114" x2="655" y2="146" class="redstroke" stroke-width="2" marker-end="url(#arrowr)"/>
+  <text x="667" y="138" class="muted sm">if (e instanceof IntLit i) …</text>
+
+  <rect x="470" y="150" width="370" height="120" rx="8" class="card"/>
+  <text x="490" y="178" class="txt sm">runtime check passes, but the type system</text>
+  <text x="490" y="198" class="txt sm">still has no idea that  T = Integer :</text>
+  <rect x="504" y="212" width="306" height="34" rx="6" class="cardred"/>
+  <text x="520" y="234" class="red">return i.v();  // error: int ≠ T</text>
+  <text x="490" y="262" class="muted sm">so you must reach for a cast…</text>
+
+  <rect x="470" y="296" width="370" height="74" rx="8" class="card"/>
+  <text x="490" y="322" class="txt sm">your only escape hatch:</text>
+  <text x="490" y="344" class="red">return (T) Integer.valueOf(i.v());</text>
+  <text x="490" y="362" class="muted sm">@SuppressWarnings("unchecked") — a promise</text>
+
+  <line x1="655" y1="370" x2="655" y2="402" class="redstroke" stroke-width="2" marker-end="url(#arrowr)"/>
+  <rect x="470" y="406" width="370" height="50" rx="8" class="cardred"/>
+  <text x="490" y="436" class="red">unchecked: may throw ClassCastException ✗ runtime</text>
+
+  <!-- footer caption -->
+  <text x="40" y="500" class="muted sm">OCaml: matching a GADT constructor injects a local type equality (a = int), so the result type is recovered statically.</text>
+  <text x="40" y="520" class="muted sm">Java: instanceof discriminates at runtime; the generic parameter T is erased and never narrowed, so the cast is an unverified promise.</text>
+  <text x="40" y="556" class="green sm">compile-time safety</text>
+  <text x="220" y="556" class="muted sm">vs</text>
+  <text x="250" y="556" class="red sm">runtime hope</text>
+
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" class="green"/>
+    </marker>
+    <marker id="arrowg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" class="green"/>
+    </marker>
+    <marker id="arrowr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" class="red"/>
+    </marker>
+  </defs>
+</svg>

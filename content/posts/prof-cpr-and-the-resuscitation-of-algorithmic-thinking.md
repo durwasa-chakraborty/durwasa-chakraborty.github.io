@@ -1,5 +1,5 @@
 +++
-title = 'Prof CPR and the Resuscitation of Algorithmic Thinking'
+title = 'Prof. CPR and the Resuscitation of Algorithmic Thinking'
 date = 2026-05-09T01:06:10+05:30
 draft = false
 author = 'durwasa'
