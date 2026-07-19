@@ -25,6 +25,9 @@ every generation, without fail, produces men who would have called Jatin Das
 names while he starved and, probably, some of the very same men who would
 garland his portrait fifty years later.
 
+> This article is entirely my own. I only used AI tools for grammar and
+> proofreading. Grammarly and Gemini estimate that about 5% of it is
+> AI-generated.
 
 ## Nations are real. That is precisely why protest matters.
 
