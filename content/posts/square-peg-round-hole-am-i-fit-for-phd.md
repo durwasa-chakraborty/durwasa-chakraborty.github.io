@@ -8,8 +8,7 @@ tags = ['essays', 'academia', 'phd']
 +++
 
 ![Left page: a beta-reduction proving 1 + 2 = 3 in the untyped lambda calculus. Right page: the handwritten first draft of this essay.](/images/square-peg-round-hole.jpg)
-*Two pages, one evening. On the left, Church numerals earning the number three.
-On the right, the first draft of what you are about to read.*
+*[&#8595; More about this photograph](#a-note-on-the-photograph), at the end of the essay.*
 
 > *"Before you start some work, always ask yourself three questions ::
 > Why am I doing it? What might the results be? Will I be successful?"*
