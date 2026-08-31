@@ -5,7 +5,7 @@ draft = false
 author = 'durwasa' 
 math = true 
 comments = true 
-tags = ['programming', 'lean', 'formal-methods', 'hackathon'] 
+tags = ['programming', 'lean', 'formal-methods', 'hackathon', 'fpl'] 
 +++
 
 

@@ -5,7 +5,7 @@ draft = false
 author = 'durwasa'
 math = true
 comments = true
-tags = ['programming', 'type-systems', 'functional-programming', 'gadts']
+tags = ['programming', 'type-systems', 'functional-programming', 'gadts', 'fpl']
 +++
 
 ![Tree : An algebraic data type](/images/gadt.jpg)

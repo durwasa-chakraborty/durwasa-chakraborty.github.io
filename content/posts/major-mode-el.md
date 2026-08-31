@@ -2,7 +2,7 @@
 title = 'Major Mode El'
 date = 2024-01-06T18:08:54+05:30
 author = 'durwasa'
-tags = ['programming']
+tags = ['programming', 'fpl']
 +++
 
 

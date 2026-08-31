@@ -3,7 +3,7 @@ title = 'Language Semantics'
 date = 2023-03-24T11:07:52+05:30
 draft = false
 author = 'durwasa'
-tags = ['programming', 'essays', 'language']
+tags = ['programming', 'essays', 'language', 'fpl']
 +++
 
 **Happy Birthday to Me: Musings on Language and Code**
