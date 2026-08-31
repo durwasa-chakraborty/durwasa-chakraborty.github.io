@@ -259,4 +259,9 @@ written, badly, and then repaired.
 So if the temptation arises to file this under AI slop :: the notebook is right
 there in the photograph. Go on, read it. The sentences are worse than the ones
 above ; the handwriting is not. That is the one thing on this page I refuse to
-be modest about. Both of them are mine.
+be modest about. My Class VI crush once walked up to me and said, *btw you have
+an amazing handwriting*, and I have worn that sentence like a badge of honour
+ever since. Every other claim in this essay I have audited half to death. That
+one compliment I have never once put through review.
+
+Both of them are mine.
