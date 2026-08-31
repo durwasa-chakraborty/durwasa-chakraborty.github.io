@@ -22,17 +22,17 @@ tags = ['essays', 'academia', 'phd']
 > into paragraphs a stranger could survive.
 
 Ideally I should have asked the question in the title a long, long time ago.
-Around 2023, say, while I was still packing.
+Around 2023, say, while I was still packing for a grand exit but here we are.
 
 Here is the ledger, since a ledger is the honest way to open this. On one side:
-a paycheque with a comma in a pleasant place, an apartment in downtown Seattle
+a paycheck with a comma in a pleasant place, an apartment in downtown Seattle
 and then in Burnaby, a porch, and a piano that arrived under the listing's
-casual heading of *well furnished*. A Nissan Rogue in the parking spot. On the
-other side: a room in Mahanadi hostel with no fan, and a RockRider bicycle.
+casual heading of *well furnished* and a nice red cherry Nissan Rogue in the parking spot. On the
+other side: a room in Mahanadi hostel inner wing, that on a bad day makes me respect thermal power plant workers, and a Rockrider cycle.
 
-I signed that deal voluntarily. Nobody made me. I told myself, and anyone at the
-farewell who asked, that I was trading money for intellectual freedom, and I
-meant it. Then I got into the PhD program, sat my comprehensive exam, performed
+I signed that deal voluntarily. Nobody made me. It doesn't need to read as I am doing a lot sacrifices for someone, I did it by my own volition, and anyone at the
+I was trading money for intellectual freedom, and I
+own it. Then I got into the PhD program, sat my comprehensive exam, performed
 badly, sat it again, performed badly again, and the question that should have
 been asked while the boxes were still open came and sat on my chest at 2 a.m.
 
@@ -42,8 +42,8 @@ been asked while the boxes were still open came and sat on my chest at 2 a.m.
 
 ## Industry lets you reason lazily
 
-Amazon has a leadership principle called *Dive Deep*. I can recite it. I can
-also tell you that in five years I mostly did not do it, and that the system
+Amazon has a leadership principle called *Dive Deep*. I can recite it along with other LPs. I can
+also tell you that I mostly did not do it, and that the system
 around me was engineered so that not doing it was the correct professional
 choice.
 
@@ -54,10 +54,27 @@ are handed an interface, a runbook, an escalation path, and a firefighter access
 credential that expires in four hours; and the whole apparatus is tuned to
 convert a question into a ticket before the question can become a curiosity.
 
-And where, genuinely, is the time? There is on-call. There is the escalation.
+And where is the time? - Like, genuinely.  There is on-call. There is the escalation.
 There is the postmortem for the escalation, and the action items from the
 postmortem, and the sprint that absorbs the action items. Depth is not forbidden
 in industry. It is simply never the thing on fire.
+
+Which is not to say it never happens. When it does happen it goes further than
+any seminar room I have ever sat in ; it just has to be underwritten first. Put
+a price on a *why* and watch the company fund it without blinking. If your
+binary answers in eight milliseconds and the competitor's answers in twelve,
+and those four milliseconds are worth a contract, you will be handed a quarter
+and a mandate to go find them. And you will go *down*. Through the profiler,
+into the allocator, past the cache line, down to the memory controller, until
+you are very nearly asking whether the electron responsible for flipping that
+one bit is sitting exactly where the datasheet promised it would sit.
+
+That is *Dive Deep* in its fullest sense, and it is a beautiful thing to watch.
+But notice what licensed it. The question was never "why does this happen." The
+question was "can we extract money from knowing why this happens", and wherever
+the answer is no, the question gets closed before anybody thinks to ask it.
+Curiosity in industry is not banned. It is capitalised. For five years I
+mistook a funded curiosity for my own.
 
 The strange part is that back then, I was confident I would make a good PhD
 student. My reasoning was: I am curious about everything, and everything
