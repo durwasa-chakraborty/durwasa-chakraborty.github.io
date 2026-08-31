@@ -62,19 +62,25 @@ in industry. It is simply never the thing on fire.
 Which is not to say it never happens. When it does happen it goes further than
 any seminar room I have ever sat in ; it just has to be underwritten first. Put
 a price on a *why* and watch the company fund it without blinking. If your
-binary answers in eight milliseconds and the competitor's answers in twelve,
+binary answers in eight milliseconds and the competitor's answers in four,
 and those four milliseconds are worth a contract, you will be handed a quarter
-and a mandate to go find them. And you will go *down*. Through the profiler,
-into the allocator, past the cache line, down to the memory controller, until
-you are very nearly asking whether the electron responsible for flipping that
-one bit is sitting exactly where the datasheet promised it would sit.
+and a mandate to go find them. And you will go *down*. Through the code to the
+the exact electron responsible for flipping that one bit sitting exactly where 
+the datasheet wants it.
 
 That is *Dive Deep* in its fullest sense, and it is a beautiful thing to watch.
 But notice what licensed it. The question was never "why does this happen." The
 question was "can we extract money from knowing why this happens", and wherever
 the answer is no, the question gets closed before anybody thinks to ask it.
-Curiosity in industry is not banned. It is capitalised. For five years I
-mistook a funded curiosity for my own.
+Curiosity in industry is not banned. It is capitalised. And why not :: it is
+somebody else's money. Nobody is paying you to feel intellectually alive at
+eleven in the morning ; they are paying you to do a job, and that arrangement
+is written down in the offer letter in a font everybody can read. I have no
+complaint against it, and anyone who takes the salary and then sneers at the
+terms is being dishonest about which half of the bargain they enjoyed.
+
+The complaint is against myself. For five years I mistook a funded curiosity
+for my own, and never once noticed the difference while the funding held.
 
 The strange part is that back then, I was confident I would make a good PhD
 student. My reasoning was: I am curious about everything, and everything
