@@ -10,8 +10,10 @@ tags = ['essays', 'academia', 'phd']
 ![Left page: a beta-reduction proving 1 + 2 = 3 in the untyped lambda calculus. Right page: the handwritten first draft of this essay.](/images/square-peg-round-hole.jpg)
 *[&#8595; More about this photograph](#a-note-on-the-photograph), at the end of the essay.*
 
-> *"Before you start some work, always ask yourself three questions ::
-> Why am I doing it? What might the results be? Will I be successful?"*
+> *"Before you start any work, ask yourself three questions ::
+> Why am I doing it? What might the results be? And am I capable of
+> succeeding at it? Only when you have thought deeply and found
+> satisfactory answers, go ahead."*
 > attributed to Chanakya, and quoted to me by
 > {{< mention "Anup Mishra" "https://www.linkedin.com/in/anupm5999/" >}}
 
