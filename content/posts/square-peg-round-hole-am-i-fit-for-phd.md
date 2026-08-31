@@ -92,9 +92,17 @@ person who wants the explanation. That felt like the whole job description.
 I am a religious person, and I have never been able to make atheism sit still in
 my head as a purely scientific position.
 
-Osho, who is from {{< mention "Jabalpur" "https://en.wikipedia.org/wiki/Jabalpur" >}}
-just as I am, argues that belief and ritual are a waste of a life, and everyone
-adores Osho for saying it. Richard Dawkins puts it more precisely
+Osho was not born in {{< mention "Jabalpur" "https://en.wikipedia.org/wiki/Jabalpur" >}},
+but he took his degree there and then taught philosophy at the university in my
+town for the better part of a decade, which is to say he was a lecturer long
+before he was a guru. He puts the case against people like me about as sharply
+as it can be put ::
+
+> *"Belief is a barrier. Trust is a bridge."*
+> Osho, *From Death to Deathlessness*, chapter 3, 4 August 1985
+
+Everyone adores him for lines like that, and I understand why ; it is a very
+good line. Richard Dawkins puts the same instinct more arithmetically
 {{< mention "in conversation" "https://www.youtube.com/watch?v=U0Xn60Zw03A" >}}
 :: the probability of God is on the order of the probability of leprechauns or
 werewolves. Non-zero. Just very, very unlikely.
