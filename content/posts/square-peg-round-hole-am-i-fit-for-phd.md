@@ -256,5 +256,6 @@ whether I would publish any of it. Nothing in here was generated. It was
 written, badly, and then repaired.
 
 So if the temptation arises to file this under AI slop :: the notebook is right
-there in the photograph. Read the handwriting. It is worse than the essay, and
-it is mine.
+there in the photograph. Go on, read it. The sentences are worse than the ones
+above ; the handwriting is not. That is the one thing on this page I refuse to
+be modest about. Both of them are mine.
