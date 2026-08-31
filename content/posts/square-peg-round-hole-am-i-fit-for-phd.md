@@ -28,11 +28,15 @@ Here is the ledger, since a ledger is the honest way to open this. On one side:
 a paycheck with a comma in a pleasant place, an apartment in downtown Seattle
 and then in Burnaby, a porch, and a piano that arrived under the listing's
 casual heading of *well furnished* and a nice red cherry Nissan Rogue in the parking spot. On the
-other side: a room in Mahanadi hostel inner wing, that on a bad day makes me respect thermal power plant workers, and a Rockrider cycle.
+other side: a room in the inner wing of Mahanadi hostel, which on a bad
+afternoon does a convincing impression of the floor of a thermal power plant,
+and a Rockrider cycle. I have acquired, entirely involuntarily, a great deal of
+respect for the men who work beside those boilers for a living.
 
-I signed that deal voluntarily. Nobody made me. It doesn't need to read as I am doing a lot sacrifices for someone, I did it by my own volition, and anyone at the
-I was trading money for intellectual freedom, and I
-own it. Then I got into the PhD program, sat my comprehensive exam, performed
+I signed that deal voluntarily, and I would like that read correctly :: this is
+not a man laying out his sacrifices for somebody else to admire. Nobody made me
+do any of it. I traded the money for intellectual freedom because I wanted to,
+by my own volition, and I own the trade. Then I got into the PhD program, sat my comprehensive exam, performed
 badly, sat it again, performed badly again, and the question that should have
 been asked while the boxes were still open came and sat on my chest at 2 a.m.
 
