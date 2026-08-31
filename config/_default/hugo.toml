@@ -19,6 +19,10 @@ buildFuture = false
   author = "authors"
   series = "series"
 
+[services]
+  [services.rss]
+    limit = 1
+
 [sitemap]
   changefreq = "weekly"
   filename = "sitemap.xml"
