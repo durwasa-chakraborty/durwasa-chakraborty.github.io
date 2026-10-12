@@ -8,12 +8,14 @@ comments = true
 tags = ['programming', 'formal-methods', 'invariants', 'fpl']
 +++
 
+Writing invariants gets treated as an art form, which is a polite way of saying nobody can explain how they do it. "Art is long and life is short," said Hippocrates, a man who never had to read a 2,000-word post on formal methods. So I've tried to keep this one short.
+
 ![Bare, branching trees dissolving into thick fog, in black and white, with a few silhouetted figures along the bottom edge.](/images/kodaikanal-fog.jpg)
 
 Kodaikanal, 26 January 2024 · Fujifilm X-T3 · XF 33mm f/1.4 · 1/8000 s · ISO 160
 {.photo-caption}
 
-Writing invariants gets treated as an art form, which is a polite way of saying nobody can explain how they do it. "Art is long and life is short," said Hippocrates, a man who never had to read a 2,000-word post on formal methods. So I've tried to keep this one short.
+
 
 The title could have gone anywhere. It could have been a heartfelt review of [*Dorothy*](https://en.wikipedia.org/wiki/Dorothy_(film)), the last Tamizh movie I watched, a beautiful film that is still running in theatres as I write this ( please go and watch it). Instead, it's a formal verification blog. Criticizing cinema, cricket and politics is easy, and everyone with a phone is already doing it, so I will resort to something genuinely difficult: making you care about invariants. 
 
