@@ -1,0 +1,156 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 326" role="img" aria-labelledby="ttl desc" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif">
+  <title id="ttl">Enq and Deq on a three-slot queue</title>
+  <desc id="desc">Animated. A three-slot array starts empty with back at 0. Enq(1) first claims slot 0 by moving back to 1, then writes 1 into it. Enq(2) claims slot 1 and writes 2. Deq scans from the front, finds 1 in slot 0, nulls it and returns it; back stays at 2. Underneath, a row of states builds up after each whole operation: back=0 with all slots null, back=1 with 1 in slot 0, back=2 with 1 and 2, back=2 with only 2 in slot 1.</desc>
+    <style>
+    .ink    { fill: #1f2328; }
+    .muted  { fill: #57606a; }
+    .card   { fill: #f6f8fa; stroke: #d0d7de; }
+    .bg     { fill: #ffffff; }
+    .rule   { stroke: #d0d7de; }
+    .inkst  { stroke: #1f2328; }
+    .mutedst{ stroke: #57606a; }
+
+    .red    { fill: #cf222e; }  .redst    { stroke: #cf222e; }
+    .green  { fill: #1a7f37; }  .greenst  { stroke: #1a7f37; }
+    .blue   { fill: #0969da; }  .bluest   { stroke: #0969da; }
+    .yellow { fill: #9a6700; }  .yellowst { stroke: #9a6700; }
+    .purple { fill: #8250df; }  .purplest { stroke: #8250df; }
+
+    .redbg    { fill: #ffebe9; stroke: #cf222e; }
+    .greenbg  { fill: #ddf4e4; stroke: #1a7f37; }
+    .bluebg   { fill: #ddf4ff; stroke: #0969da; }
+    .yellowbg { fill: #fff8c5; stroke: #9a6700; }
+    .purplebg { fill: #fbefff; stroke: #8250df; }
+    .greybg   { fill: #eaeef2; stroke: #8c959f; }
+
+    @media (prefers-color-scheme: dark) {
+      .ink    { fill: #e6edf3; }
+      .muted  { fill: #8b949e; }
+      .card   { fill: #161b22; stroke: #30363d; }
+      .bg     { fill: #0d1117; }
+      .rule   { stroke: #30363d; }
+      .inkst  { stroke: #e6edf3; }
+      .mutedst{ stroke: #8b949e; }
+
+      .red    { fill: #f85149; }  .redst    { stroke: #f85149; }
+      .green  { fill: #3fb950; }  .greenst  { stroke: #3fb950; }
+      .blue   { fill: #58a6ff; }  .bluest   { stroke: #58a6ff; }
+      .yellow { fill: #d29922; }  .yellowst { stroke: #d29922; }
+      .purple { fill: #a371f7; }  .purplest { stroke: #a371f7; }
+
+      .redbg    { fill: #2d1112; stroke: #f85149; }
+      .greenbg  { fill: #12261b; stroke: #3fb950; }
+      .bluebg   { fill: #0d2b4e; stroke: #58a6ff; }
+      .yellowbg { fill: #2e2a10; stroke: #d29922; }
+      .purplebg { fill: #21173a; stroke: #a371f7; }
+      .greybg   { fill: #21262d; stroke: #6e7681; }
+    }
+
+    text  { font-size: 15px; }
+    .h    { font-size: 17px; font-weight: 700; }
+    .sm   { font-size: 12.5px; }
+    .xs   { font-size: 11px; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    .b    { font-weight: 700; }
+  
+    @keyframes w1 { 0% { opacity: 1; } 8.438% { opacity: 1; } 9.375% { opacity: 0; } 100% { opacity: 0; } }
+    .w1 { animation: w1 16.0s linear infinite; }
+    @keyframes w2 { 0% { opacity: 0; } 9.375% { opacity: 0; } 10.312% { opacity: 1; } 20.938% { opacity: 1; } 21.875% { opacity: 0; } 100% { opacity: 0; } }
+    .w2 { animation: w2 16.0s linear infinite; }
+    @keyframes w3 { 0% { opacity: 0; } 21.875% { opacity: 0; } 22.812% { opacity: 1; } 33.438% { opacity: 1; } 34.375% { opacity: 0; } 100% { opacity: 0; } }
+    .w3 { animation: w3 16.0s linear infinite; }
+    @keyframes w4 { 0% { opacity: 0; } 34.375% { opacity: 0; } 35.312% { opacity: 1; } 45.938% { opacity: 1; } 46.875% { opacity: 0; } 100% { opacity: 0; } }
+    .w4 { animation: w4 16.0s linear infinite; }
+    @keyframes w5 { 0% { opacity: 0; } 46.875% { opacity: 0; } 47.812% { opacity: 1; } 58.438% { opacity: 1; } 59.375% { opacity: 0; } 100% { opacity: 0; } }
+    .w5 { animation: w5 16.0s linear infinite; }
+    @keyframes w6 { 0% { opacity: 0; } 59.375% { opacity: 0; } 60.312% { opacity: 1; } 64.688% { opacity: 1; } 65.625% { opacity: 0; } 100% { opacity: 0; } }
+    .w6 { animation: w6 16.0s linear infinite; }
+    @keyframes w7 { 0% { opacity: 0; } 65.625% { opacity: 0; } 66.562% { opacity: 1; } 80.312% { opacity: 1; } 81.250% { opacity: 0; } 100% { opacity: 0; } }
+    .w7 { animation: w7 16.0s linear infinite; }
+    @keyframes w8 { 0% { opacity: 0; } 81.250% { opacity: 0; } 82.188% { opacity: 1; } 100% { opacity: 1; } }
+    .w8 { animation: w8 16.0s linear infinite; }
+    @keyframes w9 { 0% { opacity: 0; } 12.500% { opacity: 0; } 13.438% { opacity: 1; } 20.938% { opacity: 1; } 21.875% { opacity: 0; } 100% { opacity: 0; } }
+    .w9 { animation: w9 16.0s linear infinite; }
+    @keyframes w10 { 0% { opacity: 0; } 12.500% { opacity: 0; } 13.438% { opacity: 1; } 20.938% { opacity: 1; } 21.875% { opacity: 0; } 100% { opacity: 0; } }
+    .w10 { animation: w10 16.0s linear infinite; }
+    @keyframes w11 { 0% { opacity: 0; } 37.500% { opacity: 0; } 38.438% { opacity: 1; } 45.938% { opacity: 1; } 46.875% { opacity: 0; } 100% { opacity: 0; } }
+    .w11 { animation: w11 16.0s linear infinite; }
+    @keyframes w12 { 0% { opacity: 0; } 37.500% { opacity: 0; } 38.438% { opacity: 1; } 45.938% { opacity: 1; } 46.875% { opacity: 0; } 100% { opacity: 0; } }
+    .w12 { animation: w12 16.0s linear infinite; }
+    @keyframes w13 { 0% { opacity: 0; } 59.375% { opacity: 0; } 60.312% { opacity: 1; } 67.812% { opacity: 1; } 68.750% { opacity: 0; } 100% { opacity: 0; } }
+    .w13 { animation: w13 16.0s linear infinite; }
+    @keyframes w14 { 0% { opacity: 1; } 20.938% { opacity: 1; } 21.875% { opacity: 0; } 100% { opacity: 0; } }
+    .w14 { animation: w14 16.0s linear infinite; }
+    @keyframes w15 { 0% { opacity: 0; } 21.875% { opacity: 0; } 22.812% { opacity: 1; } 64.688% { opacity: 1; } 65.625% { opacity: 0; } 100% { opacity: 0; } }
+    .w15 { animation: w15 16.0s linear infinite; }
+    @keyframes w16 { 0% { opacity: 0; } 65.625% { opacity: 0; } 66.562% { opacity: 1; } 100% { opacity: 1; } }
+    .w16 { animation: w16 16.0s linear infinite; }
+    @keyframes w17 { 0% { opacity: 1; } 45.938% { opacity: 1; } 46.875% { opacity: 0; } 100% { opacity: 0; } }
+    .w17 { animation: w17 16.0s linear infinite; }
+    @keyframes w18 { 0% { opacity: 0; } 46.875% { opacity: 0; } 47.812% { opacity: 1; } 100% { opacity: 1; } }
+    .w18 { animation: w18 16.0s linear infinite; }
+    @keyframes w19 { 0% { opacity: 0; } 65.625% { opacity: 0; } 66.562% { opacity: 1; } 100% { opacity: 1; } }
+    .w19 { animation: w19 16.0s linear infinite; }
+    @keyframes mv { 0% { transform: translateX(0px); } 9.375% { transform: translateX(0px); } 12.500% { transform: translateX(80px); } 34.375% { transform: translateX(80px); } 37.500% { transform: translateX(160px); } 100% { transform: translateX(160px); } }
+    .mv { animation: mv 16.0s ease-in-out infinite; }
+    @keyframes w20 { 0% { opacity: 1; } 100% { opacity: 1; } }
+    .w20 { animation: w20 16.0s linear infinite; }
+    @keyframes w21 { 0% { opacity: 0; } 25.000% { opacity: 0; } 25.938% { opacity: 1; } 100% { opacity: 1; } }
+    .w21 { animation: w21 16.0s linear infinite; }
+    @keyframes w22 { 0% { opacity: 0; } 25.000% { opacity: 0; } 25.938% { opacity: 1; } 100% { opacity: 1; } }
+    .w22 { animation: w22 16.0s linear infinite; }
+    @keyframes w23 { 0% { opacity: 0; } 50.000% { opacity: 0; } 50.938% { opacity: 1; } 100% { opacity: 1; } }
+    .w23 { animation: w23 16.0s linear infinite; }
+    @keyframes w24 { 0% { opacity: 0; } 50.000% { opacity: 0; } 50.938% { opacity: 1; } 100% { opacity: 1; } }
+    .w24 { animation: w24 16.0s linear infinite; }
+    @keyframes w25 { 0% { opacity: 0; } 68.750% { opacity: 0; } 69.688% { opacity: 1; } 100% { opacity: 1; } }
+    .w25 { animation: w25 16.0s linear infinite; }
+    @keyframes w26 { 0% { opacity: 0; } 68.750% { opacity: 0; } 69.688% { opacity: 1; } 100% { opacity: 1; } }
+    .w26 { animation: w26 16.0s linear infinite; }
+    @keyframes fade { 0% { opacity: 0; } 2.5% { opacity: 1; } 96% { opacity: 1; } 100% { opacity: 0; } }
+    .fade { animation: fade 16.0s linear infinite; }
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+  </style>
+
+  <defs>
+    <marker id="ar-m" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="muted"/>
+    </marker>
+  </defs>
+  <rect width="900" height="326" class="bg"/>
+  <text x="40" y="34" class="h ink">Enq and Deq, one step at a time</text>
+<g class="fade"><text class="sm muted w1" x="40" y="62" opacity="0">Empty: back = 0, every slot null.</text>
+<text class="sm muted w2" x="40" y="62" opacity="0">Enq(1) · i := back;  back := back + 1   — slot 0 is claimed</text>
+<text class="sm muted w3" x="40" y="62" opacity="0">Enq(1) · items[0] := 1</text>
+<text class="sm muted w4" x="40" y="62" opacity="0">Enq(2) · i := back;  back := back + 1   — slot 1 is claimed</text>
+<text class="sm muted w5" x="40" y="62" opacity="0">Enq(2) · items[1] := 2</text>
+<text class="sm muted w6" x="40" y="62" opacity="0">Deq() · scan from the front for the first non-null slot</text>
+<text class="sm muted w7" x="40" y="62" opacity="0">Deq() · null it out and return it. back does not move.</text>
+<text class="sm muted w8" x="40" y="62" opacity="1">Each green box is a state. The row of them is one run.</text>
+<rect x="330" y="112" width="70" height="56" rx="6" class="card" stroke-width="1.4"/>
+<rect x="410" y="112" width="70" height="56" rx="6" class="card" stroke-width="1.4"/>
+<rect x="490" y="112" width="70" height="56" rx="6" class="card" stroke-width="1.4"/>
+<rect x="570" y="112" width="70" height="56" rx="6" fill="none" class="mutedst" stroke-width="1.2" stroke-dasharray="4 4" opacity="0.6"/>
+<text x="365.0" y="188" text-anchor="middle" class="xs muted mono">0</text>
+<text x="445.0" y="188" text-anchor="middle" class="xs muted mono">1</text>
+<text x="525.0" y="188" text-anchor="middle" class="xs muted mono">2</text>
+<text x="605.0" y="188" text-anchor="middle" class="xs muted mono">3</text>
+<text x="655.0" y="148" class="h muted">…</text>
+<text x="310" y="146" text-anchor="end" class="sm muted mono">items</text>
+<rect class="yellowst w9" x="327" y="109" width="76" height="62" rx="8" fill="none" stroke-width="2.4" stroke-dasharray="6 4" opacity="0"/><text class="xs yellow w10" x="365.0" y="208" text-anchor="middle" opacity="0">claimed, still null</text>
+<rect class="yellowst w11" x="407" y="109" width="76" height="62" rx="8" fill="none" stroke-width="2.4" stroke-dasharray="6 4" opacity="0"/><text class="xs yellow w12" x="445.0" y="208" text-anchor="middle" opacity="0">claimed, still null</text>
+<rect class="bluest w13" x="326" y="108" width="78" height="64" rx="9" fill="none" stroke-width="3" opacity="0"/>
+<text class="sm muted mono w14" x="365.0" y="145" text-anchor="middle" opacity="0">NULL</text>
+<text class="h ink mono w15" x="365.0" y="148" text-anchor="middle" opacity="0">1</text>
+<text class="sm muted mono w16" x="365.0" y="145" text-anchor="middle" opacity="1">NULL</text>
+<text class="sm muted mono w17" x="445.0" y="145" text-anchor="middle" opacity="0">NULL</text>
+<text class="h ink mono w18" x="445.0" y="148" text-anchor="middle" opacity="1">2</text>
+<text x="525.0" y="145" text-anchor="middle" class="sm muted mono" opacity="1">NULL</text>
+<text class="sm blue mono b w19" x="310" y="208" text-anchor="end" opacity="1">Deq() → 1</text>
+<g class="mv" style="transform: translateX(160px)"><path d="M 358.0 96 L 372.0 96 L 365.0 106 z" class="red"/><text x="365.0" y="90" text-anchor="middle" class="sm red mono b">back</text></g>
+<text x="40" y="248" class="xs muted">the run so far — one state after each whole operation</text>
+<g class="w20" opacity="1"><rect x="40" y="262" width="170" height="40" rx="6" class="greenbg" stroke-width="1.2"/><text x="125" y="287" text-anchor="middle" class="xs ink mono">back=0 [NULL NULL NULL]</text></g>
+<line class="mutedst w22" x1="216" y1="282" x2="244" y2="282" stroke-width="1.6" marker-end="url(#ar-m)" opacity="1"/><g class="w21" opacity="1"><rect x="250" y="262" width="170" height="40" rx="6" class="greenbg" stroke-width="1.2"/><text x="335" y="287" text-anchor="middle" class="xs ink mono">back=1 [1 NULL NULL]</text></g>
+<line class="mutedst w24" x1="426" y1="282" x2="454" y2="282" stroke-width="1.6" marker-end="url(#ar-m)" opacity="1"/><g class="w23" opacity="1"><rect x="460" y="262" width="170" height="40" rx="6" class="greenbg" stroke-width="1.2"/><text x="545" y="287" text-anchor="middle" class="xs ink mono">back=2 [1 2 NULL]</text></g>
+<line class="mutedst w26" x1="636" y1="282" x2="664" y2="282" stroke-width="1.6" marker-end="url(#ar-m)" opacity="1"/><g class="w25" opacity="1"><rect x="670" y="262" width="170" height="40" rx="6" class="greenbg" stroke-width="1.2"/><text x="755" y="287" text-anchor="middle" class="xs ink mono">back=2 [NULL 2 NULL]</text></g></g>
+</svg>
