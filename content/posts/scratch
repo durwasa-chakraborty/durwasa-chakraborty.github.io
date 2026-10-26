@@ -1,0 +1,17 @@
+Okay, it seems that I am trying to tell that its a computation problem, check 40 instead of 108 - actually I am not.
+And while reading this if you have this idea then here we could count because the queue has three slots, given an unbounded array there is nothing left to count,
+so we want to make a claim that 'every run stays inside the 40 (or whatever astronomical number)' holds.
+
+We dont want to check it state by state.
+
+So inductively,
+
+- the empty queue is in the 40
+- if you are in the 40 do one Enq or Deq and you are still in the 40
+
+and now you can have any sequence of Enq Deq
+
+wait! so how does it amtter if its 40 or 108 or a billion
+
+- the empty queue is in the 108
+- if you are in the 108 do one Enq or Deq and you are still in the 108

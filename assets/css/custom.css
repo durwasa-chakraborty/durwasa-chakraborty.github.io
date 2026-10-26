@@ -1,23 +1,66 @@
-/* Inline mentions with auto-numbered sidenote-style margin references.
-   Used by layouts/shortcodes/mention.html. */
+/* Inline mentions with auto-numbered references.
+   Markup comes from layouts/shortcodes/mention.html.
+
+   Wide screens   :: the reference floats into the right margin as a sidenote,
+                     always visible.
+   Narrow screens :: the superscript number becomes a tap target; tapping it
+                     expands the reference inline underneath. A visually hidden
+                     checkbox drives it, so there is no JavaScript to fail and
+                     it works with the keyboard too.
+
+   Colours use Blowfish's convention: the scheme files define
+   `--color-primary-600: 37, 99, 235`, an RGB triplet, so it has to be wrapped
+   in rgb()/rgba(). Passing it straight to `color:` silently yields an invalid
+   value and the text falls back to whatever it inherited. */
 
 .article-content { counter-reset: mention; }
 .mention { counter-increment: mention; }
 
+/* Screen-reader-only text. */
+.mention-sr {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* The checkbox driving the narrow-screen disclosure. Visually gone, still
+   focusable, so space toggles it for keyboard users. */
+.mention-toggle {
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: 0;
+  opacity: 0;
+  pointer-events: none;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+/* The superscript marker. */
 .mention-ref::before {
   content: counter(mention);
   vertical-align: super;
   font-size: 0.7em;
   font-weight: 600;
-  color: var(--color-primary-600, #2563eb);
+  color: rgb(var(--color-primary-600, 37, 99, 235));
   margin-left: 0.1em;
 }
 .dark .mention-ref::before {
-  color: var(--color-primary-400, #60a5fa);
+  color: rgb(var(--color-primary-400, 96, 165, 250));
 }
 
+/* The name is only needed when the note is detached from its marker, which is
+   the narrow-screen case. */
+.mention-note-name { display: none; }
+
+/* ======================== wide :: margin sidenotes ======================== */
 @media (min-width: 1024px) {
-  .mention-link {
+  .mention-ref { cursor: default; pointer-events: none; }
+
+  .mention-note {
     float: right;
     clear: right;
     width: 14rem;
@@ -26,38 +69,106 @@
     margin-left: 1rem;
     font-size: 0.8em;
     line-height: 1.4;
+  }
+  .mention-note::before {
+    content: counter(mention) ". ";
+    font-weight: 600;
+    color: rgb(var(--color-primary-600, 37, 99, 235));
+    margin-right: 0.15em;
+  }
+  .mention-link {
     overflow-wrap: anywhere;
-    color: var(--color-neutral-500, #737373);
+    color: rgb(var(--color-neutral-500, 115, 115, 115));
     text-decoration: none;
     border-bottom: 1px dotted currentColor;
   }
-  .mention-link::before {
+  .mention-link:hover { color: rgb(var(--color-primary-500, 59, 130, 246)); }
+
+  .dark .mention-note::before { color: rgb(var(--color-primary-400, 96, 165, 250)); }
+  .dark .mention-link { color: rgb(var(--color-neutral-400, 163, 163, 163)); }
+}
+
+/* ===================== narrow :: tap to open a sidenote ==================== */
+@media (max-width: 1023px) {
+  /* A 0.7em digit is not a tap target. Give it a chip. */
+  .mention-ref {
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .mention-ref::before {
+    display: inline-block;
+    min-width: 1.3em;
+    padding: 0.2em 0.35em;
+    margin-left: 0.15em;
+    border-radius: 0.4em;
+    text-align: center;
+    vertical-align: baseline;
+    font-size: 0.7em;
+    line-height: 1.1;
+    background: rgba(var(--color-primary-600, 37, 99, 235), 0.12);
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .mention-ref:active::before {
+    background: rgba(var(--color-primary-600, 37, 99, 235), 0.26);
+  }
+  .dark .mention-ref::before {
+    background: rgba(var(--color-primary-400, 96, 165, 250), 0.22);
+  }
+
+  /* Closed by default. */
+  .mention-note { display: none; }
+
+  /* Open. */
+  .mention-toggle:checked ~ .mention-note {
+    display: block;
+    margin: 0.7em 0;
+    padding: 0.6em 0.85em;
+    border-left: 3px solid rgb(var(--color-primary-500, 59, 130, 246));
+    border-radius: 0 0.35em 0.35em 0;
+    background: rgba(var(--color-primary-600, 37, 99, 235), 0.07);
+    font-size: 0.875em;
+    line-height: 1.5;
+  }
+  .mention-toggle:checked ~ .mention-note .mention-note-name::before {
     content: counter(mention) ". ";
-    font-weight: 600;
-    color: var(--color-primary-600, #2563eb);
-    margin-right: 0.15em;
+    color: rgb(var(--color-primary-600, 37, 99, 235));
   }
-  .mention-link:hover {
-    color: var(--color-primary-500, #3b82f6);
+  .mention-note-name { display: block; font-weight: 600; }
+  .mention-link {
+    display: block;
+    width: fit-content;
+    max-width: 100%;
+    margin-top: 0.15em;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    font-size: 0.95em;
+    color: rgb(var(--color-primary-600, 37, 99, 235));
+    text-decoration: none;
+    border-bottom: 1px dotted currentColor;
   }
-  .dark .mention-link {
-    color: var(--color-neutral-400, #a3a3a3);
+
+  /* Mark the chip as open, so it is obvious what closes it. */
+  .mention-toggle:checked ~ .mention-ref::before {
+    background: rgb(var(--color-primary-600, 37, 99, 235));
+    color: #fff;
   }
-  .dark .mention-link::before {
-    color: var(--color-primary-400, #60a5fa);
+
+  .dark .mention-toggle:checked ~ .mention-note {
+    border-left-color: rgb(var(--color-primary-400, 96, 165, 250));
+    background: rgba(var(--color-primary-400, 96, 165, 250), 0.1);
+  }
+  .dark .mention-toggle:checked ~ .mention-note::before,
+  .dark .mention-link { color: rgb(var(--color-primary-400, 96, 165, 250)); }
+  .dark .mention-toggle:checked ~ .mention-ref::before {
+    background: rgb(var(--color-primary-400, 96, 165, 250));
+    color: rgb(var(--color-neutral-800, 38, 38, 38));
   }
 }
 
-@media (max-width: 1023px) {
-  .mention-link {
-    color: var(--color-primary-600, #2563eb);
-    text-decoration: underline;
-  }
-  .mention-link::before { content: " ("; }
-  .mention-link::after  { content: ")"; }
-  .dark .mention-link {
-    color: var(--color-primary-400, #60a5fa);
-  }
+/* Keyboard focus, both layouts. */
+.mention-toggle:focus-visible ~ .mention-ref::before {
+  outline: 2px solid rgb(var(--color-primary-500, 59, 130, 246));
+  outline-offset: 2px;
 }
 
 /* Post titles: quieter than the theme's extrabold 4xl. */
@@ -76,4 +187,23 @@ article header h1.text-4xl {
   letter-spacing: 0.02em;
   text-align: center;
   color: rgb(var(--color-neutral-500));
+}
+
+/* Redacted text :: a black marker bar over placeholder words. The words only
+   set the width of the bar; colour matches the background of the bar so they
+   cannot be read, and selection is blocked so copy-paste does not leak them.
+   In dark mode the bar flips to a light marker so it stays visible. */
+.redacted {
+  background: #111;
+  color: #111;
+  border-radius: 2px;
+  padding: 0 0.15em;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.dark .redacted {
+  background: #e5e5e5;
+  color: #e5e5e5;
 }

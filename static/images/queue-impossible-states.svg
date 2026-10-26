@@ -1,0 +1,127 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 262" role="img" aria-labelledby="ttl desc" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif">
+  <title id="ttl">Three states the queue can never be in</title>
+  <desc id="desc">Three three-slot queue snapshots, each with a red back marker and one slot ringed in red. First: back is 0 but slot 0 holds a 1, so nothing was enqueued yet it is not null. Second: back is 2 but slot 2 holds a 2, past the marker. Third: back is 3 with slots holding 1, null, 2, a hole in the middle, which cannot happen because Deq empties the front first. The footer notes 68 states put a value at or past the marker and the other 14 leave a hole in the middle.</desc>
+  <style>
+    .ink    { fill: #1f2328; }
+    .muted  { fill: #57606a; }
+    .card   { fill: #f6f8fa; stroke: #d0d7de; }
+    .bg     { fill: #ffffff; }
+    .rule   { stroke: #d0d7de; }
+    .inkst  { stroke: #1f2328; }
+    .mutedst{ stroke: #57606a; }
+
+    .red    { fill: #cf222e; }  .redst    { stroke: #cf222e; }
+    .green  { fill: #1a7f37; }  .greenst  { stroke: #1a7f37; }
+    .blue   { fill: #0969da; }  .bluest   { stroke: #0969da; }
+    .yellow { fill: #9a6700; }  .yellowst { stroke: #9a6700; }
+    .purple { fill: #8250df; }  .purplest { stroke: #8250df; }
+
+    .redbg    { fill: #ffebe9; stroke: #cf222e; }
+    .greenbg  { fill: #ddf4e4; stroke: #1a7f37; }
+    .bluebg   { fill: #ddf4ff; stroke: #0969da; }
+    .yellowbg { fill: #fff8c5; stroke: #9a6700; }
+    .purplebg { fill: #fbefff; stroke: #8250df; }
+    .greybg   { fill: #eaeef2; stroke: #8c959f; }
+
+    @media (prefers-color-scheme: dark) {
+      .ink    { fill: #e6edf3; }
+      .muted  { fill: #8b949e; }
+      .card   { fill: #161b22; stroke: #30363d; }
+      .bg     { fill: #0d1117; }
+      .rule   { stroke: #30363d; }
+      .inkst  { stroke: #e6edf3; }
+      .mutedst{ stroke: #8b949e; }
+
+      .red    { fill: #f85149; }  .redst    { stroke: #f85149; }
+      .green  { fill: #3fb950; }  .greenst  { stroke: #3fb950; }
+      .blue   { fill: #58a6ff; }  .bluest   { stroke: #58a6ff; }
+      .yellow { fill: #d29922; }  .yellowst { stroke: #d29922; }
+      .purple { fill: #a371f7; }  .purplest { stroke: #a371f7; }
+
+      .redbg    { fill: #2d1112; stroke: #f85149; }
+      .greenbg  { fill: #12261b; stroke: #3fb950; }
+      .bluebg   { fill: #0d2b4e; stroke: #58a6ff; }
+      .yellowbg { fill: #2e2a10; stroke: #d29922; }
+      .purplebg { fill: #21173a; stroke: #a371f7; }
+      .greybg   { fill: #21262d; stroke: #6e7681; }
+    }
+
+    text  { font-size: 15px; }
+    .h    { font-size: 17px; font-weight: 700; }
+    .sm   { font-size: 12.5px; }
+    .xs   { font-size: 11px; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    .b    { font-weight: 700; }
+  </style>
+
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7"
+            markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="ink"/>
+    </marker>
+    <marker id="ar-m" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7"
+            markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="muted"/>
+    </marker>
+    <marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7"
+            markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="purple"/>
+    </marker>
+    <marker id="ar-b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7"
+            markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="blue"/>
+    </marker>
+    <marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7"
+            markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="green"/>
+    </marker>
+    <marker id="ar-r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7"
+            markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="red"/>
+    </marker>
+    <pattern id="nope" width="8" height="8" patternTransform="rotate(45)"
+             patternUnits="userSpaceOnUse">
+      <line x1="0" y1="0" x2="0" y2="8" class="redst" stroke-width="1.6"/>
+    </pattern>
+  </defs>
+
+  <rect width="900" height="262" class="bg"/>
+  <text x="40" y="34" class="h ink">Three of the 82 states this queue can never be in</text>
+  <text x="40" y="56" class="sm muted">The ringed slot is the one that gives it away.</text>
+  <path d="M 69.5 80 L 80.5 80 L 75.0 90 z" class="red"/>
+  <text x="85.0" y="79" class="xs red mono">back=0</text>
+  <rect x="56" y="96" width="35" height="38" rx="4" class="card"/>
+  <text x="73.5" y="121" text-anchor="middle" class="sm ink b mono">1</text>
+  <rect x="53" y="93" width="41" height="44" rx="7" fill="none" class="redst" stroke-width="2.4" stroke-dasharray="5 3"/>
+  <rect x="94" y="96" width="35" height="38" rx="4" class="card"/>
+  <text x="111.5" y="121" text-anchor="middle" class="sm muted mono">·</text>
+  <rect x="132" y="96" width="35" height="38" rx="4" class="card"/>
+  <text x="149.5" y="121" text-anchor="middle" class="sm muted mono">·</text>
+  <text x="56" y="164" class="sm red">nothing has been enqueued,</text>
+  <text x="56" y="182" class="sm red">so slot 0 cannot hold a 1</text>
+  <path d="M 433.5 80 L 444.5 80 L 439.0 90 z" class="red"/>
+  <text x="449.0" y="79" class="xs red mono">back=2</text>
+  <rect x="344" y="96" width="35" height="38" rx="4" class="card"/>
+  <text x="361.5" y="121" text-anchor="middle" class="sm muted mono">·</text>
+  <rect x="382" y="96" width="35" height="38" rx="4" class="card"/>
+  <text x="399.5" y="121" text-anchor="middle" class="sm muted mono">·</text>
+  <rect x="420" y="96" width="35" height="38" rx="4" class="card"/>
+  <text x="437.5" y="121" text-anchor="middle" class="sm ink b mono">2</text>
+  <rect x="417" y="93" width="41" height="44" rx="7" fill="none" class="redst" stroke-width="2.4" stroke-dasharray="5 3"/>
+  <text x="344" y="164" class="sm red">back says two elements,</text>
+  <text x="344" y="182" class="sm red">so slot 2 must still be null</text>
+  <path d="M 751.5 80 L 762.5 80 L 757 90 z" class="red"/>
+  <text x="767" y="79" class="xs red mono">back=3</text>
+  <rect x="632" y="96" width="35" height="38" rx="4" class="card"/>
+  <text x="649.5" y="121" text-anchor="middle" class="sm ink b mono">1</text>
+  <rect x="670" y="96" width="35" height="38" rx="4" class="card"/>
+  <text x="687.5" y="121" text-anchor="middle" class="sm muted mono">·</text>
+  <rect x="667" y="93" width="41" height="44" rx="7" fill="none" class="redst" stroke-width="2.4" stroke-dasharray="5 3"/>
+  <rect x="708" y="96" width="35" height="38" rx="4" class="card"/>
+  <text x="725.5" y="121" text-anchor="middle" class="sm ink b mono">2</text>
+  <text x="632" y="164" class="sm red">a hole in the middle — Deq</text>
+  <text x="632" y="182" class="sm red">empties the front, never the middle</text>
+  <line x1="40" y1="214" x2="860" y2="214" class="rule" stroke-width="1"/>
+  <text x="40" y="236" class="sm ink">68 of them put a value at or past the marker. The other 14 leave a hole in the middle.</text>
+  <text x="40" y="254" class="xs muted">Both kinds are perfectly writable as arrays. Neither is reachable by any sequence of Enq and Deq.</text>
+</svg>

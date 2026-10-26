@@ -1,7 +1,25 @@
-{{- $name  := .Get 0 -}}
-{{- $url   := .Get 1 -}}
-{{- $label := .Get 2 | default $url -}}
+{{- /* Inline mention with an auto-numbered reference.
+
+     Wide screens  :: the reference sits in the right margin as a sidenote,
+                      always visible, exactly as before.
+     Narrow screens:: the superscript number becomes a tap target; tapping it
+                      expands the reference inline underneath. No JavaScript —
+                      a visually hidden checkbox drives it, so it works with
+                      keyboard, with JS off, and inside RSS-safe markup.
+
+     Usage :: {{< mention "Name" "https://example.com" >}}
+              {{< mention "Name" "https://example.com" "custom label" >}}
+*/ -}}
+{{- $name := .Get 0 -}}
+{{- $url  := .Get 1 -}}
 {{- if or (not $name) (not $url) -}}
   {{- errorf "mention shortcode in %q requires a name and URL: {{< mention \"Name\" \"https://...\" >}}" .Page.File.Path -}}
 {{- end -}}
-<span class="mention">{{- $name -}}<sup class="mention-ref"></sup><a class="mention-link" href="{{ $url | safeURL }}" target="_blank" rel="noopener noreferrer">{{ $label }}</a></span>
+{{- /* Default label is a short, readable reference rather than the raw URL —
+       a bare LinkedIn URL inline was the thing that looked broken on phones. */ -}}
+{{- $u := urls.Parse $url -}}
+{{- $host := strings.TrimPrefix "www." $u.Host -}}
+{{- $path := strings.TrimSuffix "/" $u.Path -}}
+{{- $label := .Get 2 | default (printf "%s%s" $host $path) -}}
+{{- $id := printf "mn-%s-%d" (substr (sha1 .Page.RelPermalink) 0 8) .Ordinal -}}
+{{- printf `<span class="mention">%s<input type="checkbox" id="%s" class="mention-toggle"><label class="mention-ref" for="%s"><span class="mention-sr">reference for %s</span></label><span class="mention-note"><span class="mention-note-name">%s</span><a class="mention-link" href="%s" target="_blank" rel="noopener noreferrer">%s</a></span></span>` $name $id $id $name $name ($url | safeURL) $label | safeHTML -}}

@@ -1,0 +1,305 @@
+#+title: Time, Events and Their Periodicity
+#+date: 2026-10-23
+#+author: durwasa
+#+filetags: :programming:foss:conferences:
+
+In 2014, while I was doing my BE at Jabalpur Engineering College, my senior
+[[TODO-linkedin-url][Mayank Kumar Sharma]] said we should be going to conferences like PyCon,
+which was happening in Bangalore at the NIMHANS Convention Centre. Back then going to
+Bangalore was royalty. There was exactly one train. And to be honest, Mayank Sir's idea
+was simply to go and see what else was running in the world apart from /Let Us C/ by
+Yashavant Kanetkar.
+
+I did not know anything about Python. I had installed the Python REPL a week before. But it
+was a great experience.
+
+Let me hang some really dirty clothes out to dry. Before PyCon, my idea was that competitive
+coding was the only way to make a career in software engineering. If you finished 9000th in
+the CodeChef monthly long challenge, you basically sucked. Please go write GATE, CAT, UPSC or
+Bank PO, or hope that Infosys Mysore takes you in, puts you up in an exotic hostel and runs
+you through six months of disaster management.
+
+Fair. Sounds like a good deal. But what is open source? I remember opening a codebase in C,
+because C was the only thing I knew back then. It was Mozilla Firefox, the Gecko project, and
+I swear to the Almighty (and I am a very theist guy) that code did not look like C.
+
+So Mayank Sir said: explore the world. There are other levels of abstraction. Software
+engineering is a very different thing from competitive coding.
+
+Great. So Vipul Sharma and I took a train from Jabalpur to Bangalore. I am still bemused that
+the first time we went to Bangalore we had to get down at Kundalahalli (which, for the
+uninitiated, is very different from Kundalahalli Gate) and stay at Apoorv Anand Sir's
+apartment. He was working at $\mu\sigma$ back then.
+
+Fast forward twelve years. Same venue, NIMHANS. Still hoping to give a talk at PyCon or some
+language conference someday, but this time I started with IndiaFOSS. Day one, I run into
+Apoorv Anand Sir, and the circle closes nicely.
+
+So here is a blog about my time in Bangalore at IndiaFOSS and some of the interesting talks I
+attended.
+
+* The Programming Languages and Systems devroom
+
+My talk was scheduled in the [[https://fossunited.org/indiafoss/2026/devrooms/compilers][Programming Languages and Systems devroom]]. The whole devroom is on
+[[https://www.youtube.com/watch?v=rb1ZALRGFjw][YouTube]] with chapters for every talk.
+
+The devroom managers were from LLVM Social Bangalore: Pradeep and Ashutosh. They are /the/
+people right now. They even got a shoutout from Google (not that we need Western validation to
+appreciate great work, but yeah, it is kind of a big deal).
+
+A disclaimer before we start: some of these ideas are not captured verbatim. That is entirely
+down to my inability to have a sumptuous lunch and then not doze off while the NIMHANS AC runs
+at full capacity.
+
+** Semantic Quantization in KV Cache Eviction
+
+The first talk, as per my notes. GiGi described an experiment in evicting KV cache entries.
+The motivation is running open models on a laptop. Laptops are small, and without an efficient
+KV cache you will hit OOM. There are well-known eviction policies like H2O and SnapKV, which
+probably deserve a blog post of their own.
+
+The idea is to score tokens using only the key and value tensors already sitting in the cache.
+Whenever I hear the word "tensor", my ability to visualise the engineering design takes a hit.
+But I could follow up to that point, and especially the overall theme, which was JPEG: you
+lose the fine detail but keep what the image means.
+
+Glad I attended. I learned a few cool words like PyTorch SDPA and PagedAttention, both of
+which are now on my reading list.
+
+** Bend, Don't Break: Strongly Typed Functional Programming
+
+The next talk was by Anupam Jain, and this was more up my alley because it was about strongly
+typed functional programming. I could see some strong head nods in the audience. Haskell
+folks, I tell you!
+
+It was a good introduction to what a "rich type system" even means. Anyone with industry
+experience has this complaint: if I change type =x= to =xButCooler=, I have to change it
+everywhere, and that is not cool. There were some jabs at Rust here and there, but overall the
+talk was very informative. He used the classic division example (ask for a =NonZeroInt=
+instead of returning a =Maybe=) to show how types turn the argument around. It is a different
+way of doing the same thing, and the whole game of languages is being able to say precisely
+what you want to do.
+
+A very nice video if you are getting started with functional programming and types. It is
+timestamped, so [[https://www.youtube.com/watch?v=rb1ZALRGFjw&t=1037s][please watch it here]].
+
+** Databases in Ethereum Nodes
+
+Obviously ETH is still a huge interest of mine. It is Turing complete, and it is also the
+reason I fill in a different tax document every year for owning a very insignificant amount
+of ETH.
+
+Sudeep (Erigon) explained how Erigon stores Ethereum data and why it uses a custom storage
+engine instead of an off-the-shelf database. An Erigon archive node takes about 8 TB, against
+roughly 20 TB for less efficient clients, and it syncs in hours rather than days. That makes
+it the usual choice for RPC providers and analytics.
+
+The detail that caught my attention was the monotonically increasing transaction number.
+Ethereum's spec points to a moment in history with a pair, (block number, transaction index
+within the block), which is cumbersome to work with. Erigon flattens that pair into a single
+integer that only ever goes up across blocks. That sounds like bookkeeping, but it is what
+makes the rest work. To find "the balance of this account three years ago", you keep, for each
+account, the sorted list of txNums at which it changed, and look up the first change after
+your query point. A sorted list of increasing integers is about the most compressible thing
+there is, so Erigon stores it with an Elias–Fano-style encoding that is close to optimal. One
+boring integer turns a temporal query into a successor search. As someone who just wrote a
+whole post about invariants, I have to love an invariant that pays rent.
+
+** PeerDAS: Erasure Coding When You Can't Trust the Storage
+
+Some Reed–Solomon-style coding, presented by someone from Nimbus, the Ethereum consensus
+client written in Nim. Understanding the bit parity was way above my pay grade. I did get the
+opening: scratched CDs and half-torn UPI QR codes still work, and so should a peer-to-peer
+network where peers lie or hide data.
+
+Honestly, both ETH talks went over my head, the way a cover drive goes over a fielder who was
+busy checking his phone. But "how do you store the history of a world computer" and "how do
+you know the data exists without downloading all of it" are exactly the two questions I want
+to go and read about. Consider them bookmarked.
+
+** Benchmarking Can Be Hard, Here's Why We're Still Creating a New One for OCaml
+
+Then came the star talk, and the first from FP Launchpad. It was like Horatio's introduction
+in /Hamlet/: the friend who shows up in the first scene and sets the tone for everything after.
+
+Navaneeth (FP Launchpad, IIT Madras) gave the talk in two halves: why benchmarking is hard,
+and what the OCaml community is building to deal with it.
+
+For the first half he used a long-running Java PDF pipeline. Run it several times and the
+numbers drift: JIT warm-up, GC behaviour, P-cores versus E-cores, thermal and power
+throttling, ASLR, background updates, even the season (February runs cooler than July). Some
+noise is periodic and some is random. His points: performance is a distribution, not a
+number. Control what you can and collect evidence for the rest. Sometimes you throw
+everything out and start again.
+
+The second half covered OCaml 5, which added multicore parallelism and effect-based
+concurrency. The old benchmark suite had drifted away from real workloads. The compiler and
+runtime got tuned for the benchmarks, while production code, Jane Street's adoption of OCaml 5
+for example, did not get faster.
+
+The payoff is upstreaming GC and compaction work with confidence. In the Q&A he mentioned his
+own automatic-compaction PR. The tooling showed that his machine was the problem, it exposed
+alignment effects that he fixed with compiler flags, and it showed that compaction causes no
+slowdown beyond the error bounds.
+
+** What LLVM Does Differently When the Target Is CPU vs GPU
+
+Bhuvan (Point Blank, ACM SIGPLAN mentee) walked through what LLVM does differently when the
+target is a GPU. He started with a plain =if= on =threadIdx=. On a CPU each thread takes one
+branch. On a GPU a warp (32 threads, or a wavefront on AMD) executes in lockstep, so a
+divergent branch effectively runs both sides, one after the other.
+
+Anyone taking a GPU course at undergrad or grad level /must/ hear this talk. It assumes you
+know what a pass is, but beyond that there is a lot of information packed into 15 minutes.
+
+** PythonBPF: Now with Loops, Custom Funcs, and More Maps!
+
+Pragyansh (FP Launchpad, Canonical) and Varun (IIT Roorkee, BPF kernel contributor) gave an
+update on PythonBPF, which compiles ordinary decorated Python to eBPF through LLVM IR. They
+compared it with the alternatives: restricted C, BCC (awkward inline C), Aya (needs Rust,
+slow for quick experiments) and bpftrace (yet another DSL to learn). The pitch is that BPF
+work is mostly about producing data, and Python is where you end up analysing and plotting it
+anyway, with Jupyter and LSP support for free. The pipeline builds a Python =vmlinux= module
+from bpftool's C header, picks out the BPF chunks, runs allocation passes and emits LLVM IR for
+the BPF backend.
+
+This was definitely my favourite talk. It has FOSS smeared all over it: the modus operandi and
+even the way things were discussed felt very SIG-like (as the k8s folks would say). The demo
+was Snake running inside the kernel, "the only snake game that needs sudo". Of course, I am
+also trying to stay in the good books of a Canonical developer who shares my space-time
+continuum (he literally sits next to the lab), but credit where it is due: great presentation
+skills by Varun.
+
+Also, after the event, Vipul and Varun had a great conversation about .................. (redacted) :lol:
+
+** LGTM Is Not a Theorem
+
+The next talk was by yours truly and... well, meh. Difficult to top that. But I would really
+appreciate it if you [[https://www.youtube.com/watch?v=rb1ZALRGFjw&t=7348s][watched the YouTube video]].
+
+** One Language, All GPU: How Julia Targets Different GPU Backends from a Single Kernel
+
+A beautiful talk by Shreyas Hegde, who did GSoC with Julia. I remember the Julia folks from MIT
+holding nice community gatherings in Boston cafés. I have worked at MATLAB, and Julia is also a
+language for the scientific community. But this talk too was very much in the spirit of FOSS.
+
+Shreyas (JuliaGPU, GSoC contributor, compiler research intern at IIT Kanpur) explained how one
+Julia kernel compiles to CUDA, AMD ROCm, Intel oneAPI and Apple Metal. The framing was a firm
+that cannot afford Nvidia and an intern called "Dumbo" who assumes one programming model covers
+every GPU. JuliaGPU tries to make that assumption hold with close to vendor-level performance.
+
+The stack:
+- *AcceleratedKernels.jl*: portable parallel algorithms (sort, reduce, mapreduce, accumulate,
+  foreachindex) with target-specific tuning. Most of his GSoC work went here. He walked through
+  accumulate (a prefix scan): a local-memory scan per work group, then a block-level scan, then
+  a final pass.
+- *KernelInterface*: device facts such as the maximum work-group size (1024 on CUDA, 256 on
+  Metal). This was the bit I (a) could follow along with, (b) found made so much sense, and
+  (c) think would make a very good LLVM poster. To quote Shreyas: "portable does not mean
+  hardware-blind".
+- *GPUCompiler.jl*: lowers Julia typed IR to LLVM IR, and from there to PTX, AMDGCN/HSA or
+  SPIR-V.
+- *Backend packages* (CUDA.jl, AMDGPU.jl, oneAPI.jl, Metal.jl) handle what cannot be
+  abstracted, such as native memory fences.
+
+A very nice and neat design. For first-year students who want to get into a programming
+language and see what a community builds, I would highly suggest the Julia community. The
+community is very nice, and it makes sense to get involved with a language that has stronger
+types and stronger principles, where feature requests are not driven by popularity but by a
+real scientific pull.
+
+It also seems that squeezing out optimisation by making a language GPU-friendly might be how
+the next generation of languages gets designed. That is really an argument in favour of GPU
+lowering and LLVM, and I do not know that field well enough to push it. It feels like we are in
+a dot-com-bubble moment where FOMO decides what everyone learns. Nonetheless, as a language
+enthusiast, it is more academically rewarding to be part of Julia, and well, OCaml, than, say,
+JavaScript or Python or... C.
+
+** Rust Is Not an HDL, So I Built a Tiny One
+
+There was also a talk on building a tiny HDL in Rust. I do not understand much Rust, which
+seems like blasphemy in this day and age when everyone says the borrow checker is the new cool.
+
+* So what was my talk about?
+
+It was about program verification. The title was /LGTM Is Not a Theorem: Pragmatic
+Verification and the Economics of Software Confidence/, and the [[https://anachronisticmonk.github.io/indiafoss/deck.html][slides are here]].
+
+The talk followed a single refund function through a bad week. On Tuesday we refund only
+charges that have =SETTLED=. On Wednesday a ticket comes in: same-day cancellations are still
+=CAPTURED=, so let's refund those too. You copy the test, change one word, and the build goes
+green at 100% coverage. Ship it. Thursday, 02:14, Sev-2: the gateway times out, the job
+retries, and the customer gets paid twice. So you add an =if charge.refunded: return= guard,
+add a test for it, coverage is back to 100%, and the incident is closed. Properly fixed.
+
+Except it is not. Two workers can both read =refunded = false=, both call the gateway, and both
+set the flag afterwards. No timeout needed, and no test will catch it, because a test has to
+pick one interleaving and there are exponentially many. So stop guessing the schedule. Write
+down one sentence that must stay true, "the flag and the money agree" (at most one payout, and
+no payout while the flag is down), and prove that every step preserves it. The moment you try
+that in Lean, the proof obligation for "gateway returned, flag still false" turns into
+=1 = 0=. The goal itself hands you the bug, along with every other route to it that you never
+imagined. The fix is a compare-and-swap, which in Django is one atomic
+=filter(refunded=False).update(refunded=True)= that reads and writes the flag in the same move.
+The Lean model gets the same single step, and the theorem goes through for any number of
+workers in any order.
+
+The second example was a handful of lines in Django's =Paginator=. I mutated them nine ways
+(off-by-ones, flipped comparisons, a dropped =orphans=) and the suite caught every one. The
+suite is good. Then I read the rest of the file: Django had shipped for years without anyone
+writing down that =orphans= must be smaller than =per_page=. =Paginator(rows, per_page=2,
+orphans=20)= happily gave you one page of 22 rows, and the =ValueError= only arrives in Django
+7.0. In Lean, the theorem "every page has fewer than =2 * per_page= rows" builds fine with the
+hypothesis =o < k=. Delete that hypothesis and =omega= hands you the counterexample. The
+precondition Django found the hard way falls straight out of the proof attempt.
+
+Then the honest part: if the maths is this good, why are any of us still writing tests?
+Because software has economics. You spend something, you get something, and it has to pay for
+itself. My argument was that the price has moved. The steep part used to be /producing/ the
+proof, and that is increasingly something you can hand over to a machine, because a checked
+proof is a proof no matter who or what wrote it. That is not true of generated code. What is
+left for us is coming up with the theorem, reading the statement, and deciding whether it says
+enough. Start at the boundary, where your state meets something you do not control: a gateway
+that retries, a client that parses your JSON, a queue that delivers twice. And you do not even
+have to start with a proof. =pip install hypothesis= makes you write the contract down without
+making you discharge it, which gets you most of the value for a fraction of the price, this
+afternoon.
+
+LGTM is a vote. A theorem is a receipt.
+
+** What I actually learned
+
+I used to have every question that someone without a verification background has today. Isn't
+this what tests are for? We have 100% coverage, code review, staging, canaries. Who writes
+proofs for a refund function? Isn't this something for aerospace and academics with too much
+time on their hands?
+
+Five years in the industry, at IBM, MathWorks and AWS, gave me the material to answer those
+questions. I just did not know it at the time. I have been the person who copied the test and
+changed one word. I have been on the call at 2 a.m. where every dashboard was green and the
+money was still leaving. I have reviewed pull requests, typed LGTM, and meant "I could not
+find anything wrong", which is a very different statement from "nothing is wrong". Coverage
+tells you which lines ran, not which states are reachable. Tests sample the behaviour of a
+program. They do not characterise it. Every postmortem I sat through was, in hindsight, a
+missing invariant that nobody had written down.
+
+That experience is exactly what makes the case for verification click for me. When I see an
+invariant, I do not see a Greek letter; I see the Sev-2 that it would have prevented. And when
+I see a proof attempt fail, I read the stuck goal the way I used to read a stack trace.
+Industry teaches you /where/ software breaks: at the boundaries, under retries, under
+concurrency, at the edge of a precondition nobody wrote down. Verification gives you a
+language to say /why/ it cannot break there.
+
+The bigger realisation, now that I am on the PhD side, is that doing serious programming
+languages work means generating proofs, or at least having some semblance of one. You cannot
+claim a type system is sound, an optimisation is correct, or a transformation preserves
+meaning because it passed the examples you tried. "It worked on my examples" is the PL
+equivalent of LGTM. The field asks for receipts, and I have come to think the rest of software
+engineering should too, at least at the boundaries where it matters and now that the receipts
+have become cheap.
+
+* PS
+
+At IndiaFOSS I met someone who told me they read my blog. In fact, a student group had shared my
+post on [[file:content/posts/how-agentic-llms-almost-destroyed-my-academic-career.md][how agentic LLMs almost destroyed my academic career]], and it went around widely in that
+group.

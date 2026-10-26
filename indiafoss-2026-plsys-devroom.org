@@ -1,0 +1,851 @@
+#+title: IndiaFOSS 2026: Programming Languages and Systems devroom
+#+date: 2026-10-19
+#+startup: overview
+
+Source: [[https://www.youtube.com/watch?v=rb1ZALRGFjw][livestream recording]] (2:58:25). Devroom page: https://fossunited.org/indiafoss/2026/devrooms/compilers
+
+Transcripts started from YouTube's auto-captions. They were cleaned up (filler words removed, technical terms fixed, punctuation added) but not checked against the audio. =[?]= marks a guess and =[inaudible]= marks a gap. Timestamps are positions in the livestream.
+
+* Devroom opening
+:PROPERTIES:
+:START: 0:00:10
+:END:
+[[https://www.youtube.com/watch?v=rb1ZALRGFjw&t=10s][0:00:10]]
+
+** Summary
+The devroom managers from LLVM Social Bangalore (Pradeep and Ashutosh, names guessed from the captions [?]) introduced the meetup group. It was started in 2019 by Aditya Kumar and Rajesh Sharma [?], meets roughly monthly and has about 3,500 members on meetup.com. Its first meetup was at AMD in 2019 and its most recent one was at Nvidia, on CUDA Oxide (Rust for CUDA). They also plugged their workshop-style compilers conference at IISc the following weekend (compilertech.org [?]) and thanked FP Launchpad (IIT Madras), which had three speakers in the room. The day had 10 talks, some of them lightning talks.
+
+** Notes
+
+** Transcript (raw auto-captions)
+[0:00:15] All right. Uh the live stream is on. Uh so sorry to give you waiting. Um uh we can start. Uh so welcome to the compilers programming languages uh and systems dev room. Uh I'm Praep and this is Ashto. Uh we'll we'll be the dev room managers for the event. Um yeah please put your phone on mute so you don't interrupt the speaker. And uh yeah just before we start the dev room we have a an uh like an introduction to our uh team. So uh we are from the LVM social Bangalore meetup group. Uh we are one of the largest compiler meetup groups in the world and we have like 3,500 people on meetup.com. You can just uh search for lmocial Bangalore then uh sign up to us. Um we are uh open like we welcome anyone who's interested in compilers to join the meetup. We organize meetups uh on a monthly basis like almost uh so yeah please do check out on meetup.com um and we also have a YouTube page called lm social Bangalore so you can sign up and uh subscribe and uh watch our talk uh the previous event talks um
+
+[0:01:15] this was our first LM social Bangalore meetup in Bangalore um and this happened at the AMD office back in 2019 okay I forgot to mention LM social Bangalore was started by Aditya Kumar and Raish Sharma back in 2019 with the aim of building a kapala community in India Yeah. No. Um and because of them we have a fairly uh large compiler community and uh yeah and this was our last meet up that happened at the Nvidia office. It was on CUDA oxide uh which is Rust CUDA Um yeah and we also host Yeah, think you can take over. &gt;&gt; Yeah. So we're also hosting our own conference. uh it's a workshop format and it's uh next week it's on Friday and Saturday at IASC Bangalore. So it's a solely compilers and programming languages focused uh event and if you want to attend it that's the link for it right there. So uh this is a picture from last year's ICT. Uh it's held at uh the Indian Institute of Science.
+
+[0:02:16] So yeah one second. Yeah that that comp it's uh compil.org/ org/registrations. Yeah. So, uh welcome to the compilers, programming languages and systems dev room. So, we have 10 talks scheduled for today to which some are uh lightning talks also. Uh shout out to FP launchpad there an initiative from IT Madras and there are three speakers from there who'll be talking on various aspects of functional programming and lean. So uh and there are several other talks also covering various compilers and programming languages. So yeah let's let's begin.
+
+[0:03:17] just one second.
+
+* Semantic Quantization in KV Cache Eviction
+:PROPERTIES:
+:SPEAKER: GiGi Koneti
+:START: 0:03:43
+:CFP: https://fossunited.org/c/indiafoss/2026/cfp/381kk089so
+:END:
+[[https://www.youtube.com/watch?v=rb1ZALRGFjw&t=223s][0:03:43]] · GiGi Koneti
+
+** Summary
+GiGi described an experiment in evicting KV cache entries without ever looking at the attention matrix. The motivation is running open models on a laptop: the weights take up VRAM, the KV cache grows with every token, and you hit OOM. Well-known eviction policies like H2O and SnapKV choose which tokens to keep using attention scores. That needs the full n×n attention matrix, and modern kernels such as FlashAttention, PyTorch SDPA and vLLM's PagedAttention never write that matrix out.
+
+The idea is to score tokens using only the key and value tensors already in the cache. A small key norm tends to mean the token gets more attention after the softmax, and a large value norm means the token contributes more to the next token. That gives a "value-weighted norm score" per token, with a γ weighting term and an ε to avoid dividing by zero. It's paired with a layer-level policy, LARA (Layer-Adaptive Recency Allocation). Early layers and recent layers matter, middle layers are mostly redundant, so the middle layers can be compressed harder. The talk also included a bug story: chunked sweeps over a 32k context kept overwriting earlier chunks until a cyclic tracking scheme was added.
+
+Results came from an 8 GB RTX 5060 laptop. H2O and SnapKV crashed on downstream QA. The attentionless policy ("EntropyKV") was reported as about 32× faster, and with 50% of the KV cache evicted it still found the needle in a needle-in-a-haystack test. The analogy he used was JPEG: you lose fine detail but keep what the image means.
+
+** Notes
+
+** Transcript
+[0:03:43] Hi everyone. I am GiGi Koneti. I'm a member of Point Blank and also currently working as an R&D intern at Craftify [?], where we deal with GPU runtimes, vision pipelines, and also firmware generation and FPGA automation. So for today's talk I will consider keeping it brief, not going in depth, but give you an overall idea of a recent experiment which I did a few months back. So the topic name: semantic quantization in KV cache.
+
+[0:03:43] So basically semantic quantization is nothing but: if you have a context and you need to preserve it without losing its semantics, but also you need to reduce its size for the LLM inference, right? So basically... excuse me, how can I change this?
+
+[0:04:53] Okay. So the main problem for running open models on a laptop is the weights plus the KV cache, which generates for every token, and for every new token you will get key-value pairs and you need to allocate VRAM to that specific memory, right? So if you consider this very small LLM, like a Qwen2 [?] model, it has approximately 3 GB of weights, and on top of that, when we check its inference over time, we add upon the key values and we compute the next token, right? So generally, to do those things, we lose a lot of that VRAM and we have these OOM errors.
+
+[0:04:53] So I tried to understand how this inference works, like how these key values and how modern attention frameworks work. So generally, now in recent times we have FlashAttention
+
+[0:05:53] and PyTorch SDPA and vLLM's PagedAttention. These all do not write the overall end-to-end attention matrix to the VRAM; they just compute it. They are very much optimized for the hardware. So they don't write this full n×n attention matrix to the VRAM. But to do KV caching we need to understand the geometry of that specific space, that attention space and the KV cache space, what's actually being stored and how to evict. So I worked on this eviction policy for that.
+
+[0:05:53] So existing eviction policies do require this specific matrix to understand which specific token has the most attention, so that we can just evict based on the attention score. So for example, when you speak about H2O, the academic eviction, this is the baseline version which is very much famous, H2O
+
+[0:06:53] and SnapKV. So what these policies do is they consider understanding the overall n×n attention matrix, and on top, after understanding these specific relationships, they will understand which specific token has the higher attended score. So based on that, the high attention score tokens will be retained and the remaining tokens will be evicted. But it is not compatible with the modern FlashAttention or PyTorch SDPA, right, because they do not write the n×n matrix.
+
+[0:06:53] So I was wondering: the KV cache is already there locally, I mean in VRAM, so why shouldn't we make a policy which is purely attentionless? So without touching the attention matrix and computing it again, why not just use
+
+[0:07:53] the information in the key-value pairs? So key-value pairs have their own mathematical space. So we need to understand the mathematical space of key-value pairs. Basically they are tensors, right? So in the KV cache all the key-value pairs are stored in tensors. So these have certain vector properties. So I have studied the interpretability and the inner geometry of the KV cache and attention matrix, and I found very fascinating characteristics of these specific tensors.
+
+[0:07:53] So yeah, these specific tensors have two very prominent characteristics. One is key norm values, and, I mean, if I term it in a good way, I should say key norm geometry and value norm geometry. So key norm geometry is basically the length of that specific tensor. So in that specific mathematical space, if the length is very high, it
+
+[0:08:53] should go through the attention dot product, softmax computation, right, in the attention. So once this passes through that, the larger vector will be penalized very heavily. So if the key norm of that specific token is less, it has higher attention. And when I speak about the value norm geometry, it is like how much proportion it is contributing to the next token. So the information is contained in the value. So that will tell us how worth keeping that token is.
+
+[0:08:53] So these two are mathematical functions. So this value norm will tell us how important the specific token is, and the first one, key norm geometry, will make us understand how this specific tensor is aligned and what its magnitude is and how frequently it is attended to for the inference. So I have... yeah, I think, yeah,
+
+[0:09:54] so the first trick which I have formalized is value-weighted norm scoring. So value-weighted norm scoring, you can see the formula where I have said it. So basically, when you take these two characteristics: key norm geometry, if it is less, then it is worth retaining, otherwise it should be evicted. When you speak about the value vector, it gives the overall proportion of how much it contributes to the next token. So if it is very high, then it is worth keeping, and if it is less, we need to discard that. So based on these two specific characteristics I have formulated this specific thing. You can see the formula and the hyperparameter: gamma is a kind of value weighting thing, and the epsilon in the denominator will have a value within the range of 10^-7 to 10^-9, which will avoid the zero division error. So
+
+[0:10:54] this specific policy will make you understand how much a token is worth without touching the matrix, by just looking at its key-value pairs.
+
+[0:10:54] So the next policy which I have included is how important tokens are with respect to their layer. As we all go through this prompt engineering, we see the structure of a prompt. If you understand what all things are there in a prompt, like the structure, and how the ending is, how the conclusion is, what is contained in the body part, you'll observe that the first specific layers have the table of contents and introduction part of the information, in a prompt as well as in the KV cache and as well as in the whole transformer architecture. So in the later, the recent layers will contain how the
+
+[0:11:54] output should be, the formatting and everything. So the recent window will have what is just being rendered in a transformer, and the initial few layers contain what the topic is about, and the middle layers are mostly semantic and redundant. So we can do heavy compression in the middle layers.
+
+[0:11:54] So basically, when you speak about such policies which do not take this layer-wise importance factor into account, they just kind of neglect some kind of information. So the early layers and the late layers are very much important, and the middle layers are redundant and can be compressed. So this is the specific recency window formula, where this specific window will allow us to understand the importance of that specific window in a specific layer. So this
+
+[0:12:54] specific policy is for layers. So the layer-wise policy is LARA, Layer-Adaptive Recency Allocation, and the first one which I spoke about is at the token level. So with the combination of these two policies we have achieved certain average marks [?].
+
+[0:12:54] So while I was performing this specific experiment, I went through a very difficult bug to decode. I used a lot of LLMs to decode it, but it is a very simple parameter kind of thing. So when I was doing these sweeps, the overall 32k context was there, and I took like 248 [?] tokens in each chunk, and every time I was giving a new chunk, it was overwriting the old chunk, and I didn't observe the specific PyTorch function. And after that I allocated a cyclic tracking system. So next time when I introduced a new chunk, it was profiling very
+
+[0:13:54] well, and the sweeps were running smoothly, and there were no exclamatory [?] errors in the profiling. So this was a small bug which took me a few weeks to understand why it was.
+
+[0:13:54] And yeah, the benchmarks which I had: I did every experiment on my consumer laptop, a 5060 with 8 GB VRAM. So the baseline policies, H2O and SnapKV, were crashing on downstream QA because they need that specific n×n matrix to understand which tokens should be evicted. But this specific EntropyKV, it is purely O(1), in the O(1) space; it just takes two specific tensors and does the calculations. So yeah, that's it. So this is the benchmark, which is 32 times faster, and it is within the VRAM
+
+[0:14:54] limit. And yeah, so overall the result was: with 50% eviction of the KV cache, we still have that semantic understanding. So when I did the needle-in-a-haystack benchmark, I got the exact semantic needle in that. So you can see the numbers 2026 and 2023 are different; apart from that, everything is the same.
+
+[0:14:54] So what I'm trying to say is: take an overall HD image, and when you compress that, you will lose certain features, like fine-grained details, but the semantics of that specific image is stored in that JPG image. In the same way, if you want the overall semantics of the KV cache to be retained, there are these specific attentionless KV eviction policies. There are pretty many other formulas, like policies, but this is one which I made a few months back.
+
+[0:15:55] And yeah, that's it. If you have any questions, I can take them for a few minutes. Otherwise, you can catch up.
+
+[0:15:55] Host: You have to drag it, right? Yeah. So, in the interest of time, we can take questions later. Next up we have a talk from Anupam Jain, who is a UI architect at Arista Networks. He's also one of the leaders of the Functional Programming India community, and it's a talk on "Bend, Don't Break: Modern Techniques for Flexibility in Strongly Typed Functional Programming Languages". So yeah, over to
+
+* Bend, don't Break. Modern Techniques for Flexibility in Strongly Typed Functional Programming
+:PROPERTIES:
+:SPEAKER: Anupam Jain
+:START: 0:17:17
+:CFP: https://fossunited.org/c/indiafoss/2026/cfp/d8b9uvdntg
+:END:
+[[https://www.youtube.com/watch?v=rb1ZALRGFjw&t=1037s][0:17:17]] · Anupam Jain
+
+** Summary
+Anupam (Arista Networks, Functional Programming India) opened with a promise: by the end of the talk you'd love strong static types. He organised the talk around the two usual complaints, that types are rigid ("how do I tell the compiler what I already know?") and brittle ("one change ripples into a hundred places"). His answer was to make types stronger rather than looser. A rich type system and a strict compiler go together. You declare a type once and use it many times, so the compiler does the bookkeeping for you. He also took a jab at Rust's borrow checker, calling the lifetime annotations a sign that the type system isn't expressive enough.
+
+The techniques, in Haskell and PureScript:
+- Make invalid states unrepresentable. A record with a =Maybe= warning and a =Maybe= result allows "neither", which can't actually happen. The =These a b= sum type allows only this, that, or both. Its =Applicative= instance, with warnings collected through a =Semigroup=, lets you combine a port check and a host check with no boilerplate.
+- Parse, don't validate. A function's output should carry more structure than its input: =NonEmpty= instead of checking for empty again, a set after deduplicating, a sorted array after sorting. Functions can also ask for structure up front, as in =divide :: Int -> NonZeroInt -> Int=.
+- Phantom types and provenance. Use =Map r k a= with keys tagged by the same =r=, so a lookup can't fail and there's no runtime cost. He pointed to /Ghosts of Departed Proofs/ for the general form (for example, proving that two sorted lists were sorted with the same comparator before merging them).
+- Ways to build stronger types: structural tricks (a non-empty array is a head plus a tail), smart constructors with the raw constructor hidden, and phantom types.
+- Structural flexibility: PureScript row types (with constraints like =Lacks "createdAt"=), polymorphic variants for open error sets, and optics (=view=, =over=, =set=) to get rid of hand-written pattern matching.
+
+In Q&A he said these patterns can be copied in C or JavaScript through discipline, but nothing enforces them. On AI, he argued that strong types suit generate-until-it-compiles loops. Rust is currently easier for LLMs to produce than readable Haskell, though.
+
+** Notes
+
+** Transcript
+[0:17:17] Hi everyone. All right. How many people here are familiar with functional programming, or have at least heard of it? Okay. How many people understand strong static types? How many people like it? Not bad. How many people love it? Okay. So for those of you who did not raise your hands, this talk has this goal. I have only 20 minutes, so I'm going to just hit the strong points, take you through some techniques, but the aim, this is what I'm shooting for, may not happen for all of you, but you should love strong static types at the end of it. Right? So that's the goal.
+
+[0:17:17] I'm Anupam Jain. I've already been introduced, I'm not going to take too much time. I work at Arista Networks. We build purely functional user interfaces using PureScript and Haskell.
+
+[0:18:17] Okay. All right. So how are we going to do this? How are we going to convert the non-believers in strong static typing? The first step is that I'm going to give you techniques to cope with it. Right. So what is the first thing that comes to your mind when you look at strong static types? That it's going to be restrictive, right? It's too constraining. If I'm just making a P [?], how do I actually use strong static types to guide my code, or how do I just escape from the, you know, escape room? So I'm going to give you some techniques on how to cope with it, and then I'm going to give you some examples, and this is going to be intermixed, so I'm not going to tell you which is which, where you will love and you will see the power of strong static typing. Some of those things you cannot do unless you have strong static types. So watch out for those.
+
+[0:18:17] All right. How do you cope with rigidity? There are two specific ways. First is that you're trying to make a change and the compiler says you can't do that. Right? So what the compiler is saying at this point is that you're trying to do something which may be unsafe. You're trying to do something which does not look like good code. So fix your code. Right?
+
+[0:19:17] But you know as a programmer that what you're doing probably makes sense, right? So how do you tell the compiler what you already know? That you've done some stuff, you know that this is going to be safe, the value that you're getting is not going to be a null string, for example, it's going to have some values in it. How do you do those things? So that's the first technique. And then, and this is very important, you're trying to write some functional code which has lots of types. How do you make the types powerful, strong, but yet not brittle, so you can change some things without impacting other things? It should not be that you change one thing and now I have to change a hundred different places. Right? So these are the two most common complaints. I'm going to tell you how to do those.
+
+[0:19:17] What I'm not going to tell you is how to loosen your types. We're going to go the opposite way. We're not going to make things more dynamically typed. We're going to make things more strongly typed. And you will realize that making things stronger actually helps you. It actually makes your code easier to read. It actually makes your code easier to modify.
+
+[0:20:17] So, I mean, how does that happen, right? The way that happens is that, one, you tell your compiler that this is a strong type, and then the compiler knows that throughout the rest of the program. You create types a lot less than you actually use them. Once you've told the compiler that I have a value that's strong, the compiler will help you use it everywhere else. Right? So don't let those bad decisions accumulate, using a dynamic type for something and then paying the price everywhere you use it. Don't do that. Develop good habits. And the second very important point here is that if you use a language like Haskell or PureScript, the compiler is not just strict, it's very powerful. So it's giving you a lot of tools to write good code, right? So a rich type system and a strict compiler go hand in hand.
+
+[0:21:17] How many people know Rust here? Rust is wonderful, right? Rust has brought a lot of those strong static types into the mainstream. But you know what I don't like about Rust is the borrow checker. And I thought about it a lot, trying to figure out why I don't like it. I mean, it's all good, right? It's again strong, statically typed. It helps me not write invalid code. Because the type system is not powerful enough to help me use the borrow checker effectively, I have to tag lifetimes everywhere. I have to work around things. Don't you feel like you're working around things when you're using the borrow checker, right? So you don't want to do that. And Haskell's type system, for whatever reason, I feel is better designed in that sense. I mean, maybe a hot take, but yeah.
+
+[0:21:17] All right. So, worth pointing it out again. If you take one thing from this talk, it is that a rich type system goes hand in hand with a strict compiler. It may not be true in the age of AI, you may be writing code and not reading it, but you need to write code that you can read, right? So you need to use rich types, and that's what the talk is about.
+
+[0:22:17] Okay. So the first technique, and this is really the essence of strong typing, is that you use types which make invalid states unrepresentable, right? So for example, this is a very common... How many people can read this syntax? I mean, even if you don't read Haskell well, you can still understand what's happening here. This is basically a record, right? So consider it as the result of an operation you performed, and the operation can generate some warning. So there is a warning, and =Maybe= means it's an optional thing. So it's not necessary that the warning is generated. And then the function may return a result. It may not return a result if the warning is really an error. Right? So I'm not covering the error case here, but it can either generate a warning, or it can generate a result, or it can generate both also.
+
+[0:23:18] So that's why the standard thing that you would go for is this record type with a warning field and a result field. The problem here is that this now allows one case that will never happen. You call an operation, it does not give you any results, and there are no warnings also. Right? We're talking about pure functions here. So why did you call that function if it didn't do anything? There was nothing wrong, so there is no warning, and it did not even give you a result. Right? So we don't want to allow this. So how do you prevent that? You use sum types. How many people know sum types here? Okay, a few. I see maybe 30% of people. So that's good. So sum types are the dual of records, right? So you have a record which has 10 fields. A sum type says that I have only one field, but it's one of these 10, right? So it's the difference between sums and products.
+
+[0:24:18] So wherever you feel that there is this friction, that you can't make something unrepresentable, use sum types. In this case we have exactly three legal states. So we have =a= and =b= types: either something is type =a=, or something is type =b=, or something is both, it has both =a= and =b=. But there's no case that it has neither =a= nor =b=, right? So we represent this with a type called =These=, and this is in a library in Haskell, but you can define this yourself. This is literally the definition that you would do, and if you can read this, it says =These= has two types, =a= and =b=: either pick =a=, or =b=, or both, right, =a= and =b=. And then the result type, you realize, is exactly the =These= type.
+
+[0:24:18] But what did it get us? If you try to use this in your code, what benefit do you get out of it? If people have tried using something like this, the thought that you would have is that in the earlier thing, when I had a record or an object, I could just say =object.warning= and get the warning out. Here I have to do a pattern match, get this out, figure out whether it's =a= or =b= or both, right? What is it getting me? It's not really helping me in any case.
+
+[0:25:18] So, I will take you through this specific example. It helps because following the types, like I said earlier, helps the compiler do work for you, and that's what you should be aiming for. So the library type =These= comes with something called an =Applicative= instance, where =w= is a =Monoid=. How many people's eyes just glazed over? [laughter] Okay. So this slide is very, very optional, but I'm going to tell you how this works. Right. So if you have a check, you're parsing a port. This is an example of using the result type. If you're parsing a port, then either the port can be out of range, or the port can generate a warning that says you must be sudo to use a port from 0 to 1024, or it can just say the port is valid. Right?
+
+[0:26:19] So this is a check for a port. And then you can have a check for a host, which says that if you do not pass me a host, then I'll just use localhost. Right? So this is again a simple check for a host. Otherwise it just uses whatever you passed it. How do you combine them? This is another lesson with functional programming: you can combine different operations in a very simple way, without boilerplate. So this is how you would combine them using Haskell, right? It has funny letters here, funny squigglies and, you know, funny operators. But like I said, if you use Haskell, you would be very familiar with these. These come with the language. They are very easy to use. But see how easy it is to combine those two checks. Did I have to manually get a warning out and combine it with something else? I did not have to do that. I just said parse host, parse port, put them in the config. That's what these funny symbols mean, right? So typing allows you to do that. And if we had more than 20 minutes, I would have taken you through how this works.
+
+[0:27:19] But an important thing here is to see how warnings are combined. Warnings are combined because we have a =Semigroup= instance. A semigroup is a mathematical structure that says values can be combined together. Like numbers can be added together, strings can be appended together. So arrays can be combined together, concatenated together. So this allows us to combine warnings. Note, I did not specify how to combine the warnings. It automatically knows, because it's an array, which is a semigroup. So I don't need to specify that here. I don't need to manually concat. So it saves you work, using strong types.
+
+[0:27:19] All right. The next principle here is "parse, don't validate". This is, I feel, one of the best answers to the question "does Haskell have design patterns?", right? How do you structure a large Haskell program? And what this means is that if you have a function that takes in some input and returns an output, and these are again pure inputs and outputs, then the output should have more structure than the input. Otherwise, what is the function doing?
+
+[0:28:19] So don't write a function that checks if an array is non-empty and returns an error if it is. Instead, if the array that was passed was non-empty, add that information to the array, so that every time it's passed somewhere else, that function does not have to check again. Right? So I'm going to skip over this. So for example, if I am greeting someone, I first do the check of the name that was passed, and if it's non-empty, then I'm calling =welcome=. Note that =welcome= did not have to check if the string was empty. Right? This code would otherwise fail if the string was empty. But because we made the type stronger by saying non-empty, =welcome= did not have to do that check again. Right? So that's what you get. You define it once, you add structure to the type, and then you can reuse it without having to do more with that structure. So this is a general principle. This is just an example.
+
+[0:28:19] More examples. If you have a bag, a bag is an unordered set of values where there could be duplicates. So if you're deduping something, if you're removing all the duplicates, then return a set. Don't return the bag again, because you lost the information that this has no values that are duplicates. If you're sorting something, sorting an array, don't return the array back after sorting it. Return a sorted array. Now, what is a sorted array, right? I have a big example on it, I don't know if we'll have time, but return a sorted array, right? So add structure to whatever you're returning.
+
+[0:29:20] You can also do it the other way. A function can demand structure. So let's say you have a divide. Look at the second line here in the code. If you have a divide function that takes two integers and divides the first by the second, the error that could happen here is that the second one could be zero, right? What would happen in that case? You would return a =Maybe=, perhaps. Well, what happens when you return a =Maybe=? Then everywhere this function is called, someone has to do pattern matching on the =Maybe= and see whether the value got returned or not, or was it an error, right?
+
+[0:30:20] You want to avoid such boilerplate. So you can push back. You can say that to call this function, you need to give me a =NonZeroInt=. And again, the type has changed, the type has guided us. The type says: I will take an integer, which could be zero, I will take a non-zero integer, and I will give you an integer which is the first divided by the second, right? So that's what divide means. You can push back on contracts.
+
+[0:30:20] The first line is a more complicated example. It says that if I'm given a lookup into a map, right, I have a map and I have to do a lookup inside it, the key has to come from the map. Because what would happen if the key does not come from the map? Then I will not have that value inside the map. So I'm saying I will look up a value for you inside the map, but it will always return a value. So the return type, you will see, is =a=, right? It's not =Maybe a=. There is no possibility of failure here, because I pushed the failure back up. So if you're calling this, you basically are ensuring that the key has come from this map that has been passed.
+
+[0:31:20] And how am I doing it? If you can read this, there is a =Map r k a=. =k= is the key, =a= is the value, so those parameters make sense. What is =r=? =r= is kind of a provenance, right? So =r= defines where the map came from, and it says now the key also has the same =r=. It's saying that the key has come from the same place that the map has come from. Sorry. Right. So how does that work? So =r= here is a phantom type. Does anyone know what phantom types are? Okay. So =r= is something that has no runtime cost. That's the important thing. This is compile-time only. Your programs are going to be just as fast. But it proves that this is what happens.
+
+[0:31:20] Now, how do you define these stronger types? So I have some examples. Sometimes it's a trick. So a non-empty array is just an array with at least one value. So here I've said a non-empty array is an =a= and the rest of the values. The rest of the array can be empty, but it has at least one, because that's a part of the record. Right?
+
+[0:32:20] Sometimes it's a smart constructor. The second example, =NonZeroInt=. I'm not exposing the constructor for =NonZeroInt=. So there's no way for a value to be created except by calling this =nonZero= function, which checks and returns a =Maybe=. Right? So it's a smart constructor. This is the only way to create values, and you hide the constructor otherwise. And then you have the phantom types, right? So I'm going to ignore this, going to move on. Okay, I feel I should move.
+
+[0:32:20] So what did that map thing give us? This is a callback. So this says that once I've checked the map with =member=, I've said that the key is a member of the map, and when I did the lookup, I did not need to check it again, right? So that's the invariant it gave me. I did not need to keep on checking that the key was a part of the map.
+
+[0:33:21] All right. I'm going to skip over a lot of things, but I'm going to give you the name so that you can look it up. There is a general-purpose way to describe proofs called Ghosts of Departed Proofs. It's a paper that describes how to write this in normal Haskell, right? So this is a library that you can write. It's not something that comes with Haskell, but it prevents things like: I sort two arrays and then I merge them. How do I make sure that the two arrays that were merged were sorted by the same comparator, right? So I did not reverse one of them. So you can do proofs like this. And again, the code has to be simple when you do this. I'm going to skip over all of this because we don't have time [?].
+
+[0:33:21] Okay. This should be interesting. How do you deal with data whose structure is not known? So we have structural types. So Haskell has records, and I'm using PureScript here because that has ergonomic records. But you can define things that don't have a defined structure. So a person has a name, or let's say a building has a name. Both have a name property. That's what we can specify: that there's a name and an age tag assigned to it.
+
+[0:34:21] But then again, it's Haskell, right? So you can do operations on this. So you can say that I'm creating an object and I'm assigning a timestamp to it. What I can do is ensure that the value that was passed to this function did not already have a timestamp. So this constraint, =Lacks "createdAt"=, is saying that this object does not have this field =createdAt=. Right? So you would use this if you want to use row types.
+
+[0:34:21] And then what is the opposite of records? You have sum types and product types; records are products. What is the opposite of a record? It's a variant. Not many languages have this, but for some that do, I think it offers a lot of flexibility. So what this allows you to do: you ever have this situation where you have an operation that can do multiple things, and there are multiple different error types, and the problem is that you don't want to combine them together into a sum type and have to manipulate that? So this is the way you would do that. You can use structural variants for that.
+
+[0:35:21] Okay, move ahead. Yeah. And then finally I want to take you over this. This is a library in Haskell called optics. This is basically generalized getters and setters. So if earlier you had the question of how do you get a result or a warning out of a result type, you can create an optic for it, and that is like supercharged getters and setters. So I have an optic for address, I have an optic for city, and then =view= is how you get values out, =over= is how you map an operation on top of the value, and =set= is how you set values in, and there are other operations that you can do.
+
+[0:36:21] But look how easy and simple that code is. It's saying view the address city from user, right? Or over address city, convert it to uppercase in the user, right? So you can do things like that, that basically are easier to do. You don't have to do manipulation with data types. In fact, the mark of at least a mid-level Haskell programmer is how much case and pattern matching they have to do. You don't have to do it, right? You should use these functions that have been given to you.
+
+[0:36:21] All right. So I have lots of content, but I'm not going to go through it. I hope this gives you some idea of what is possible. This was a very beginner-level talk. If you have questions about how to take these techniques further, you can ask me questions later on. Just come and meet me. I also run the Functional Programming India group. So you can join those meetups and we can explore more advanced techniques together. Right. Okay. Thank you.
+
+*Q&A*
+
+[0:36:21] Host: Sure. Yeah. If anyone has a question.
+
+[0:37:22] Q: [inaudible]
+
+[0:37:22] A: Yes. So this is a smart constructor. So the question is about =NonZeroInt=: how does the compiler ensure that it's non-zero? So this is a smart constructor. You can only get that type out of a smart constructor. So if you've called the smart constructor, you've essentially proved that the value is non-zero, and then you can use that type everywhere and it will not lead to an error. But that only has to be proven once. That's the whole point of a smart constructor. I hope that answers your question.
+
+[0:37:22] Q: Yeah, I have a question. So in a language like C or Rust, that's rather low-level and doesn't have this elaborate type system, do you have any tips in that regard about defining types to hold more information?
+
+[0:37:22] A: Rust actually has a great type system. So Rust is probably not a good example. If you're familiar with Rust, then you probably know how to fight with the compiler and get it to do what you want. But C, for example, or, I'll give you the example of JavaScript, because I've done that a lot. A lot of these techniques are possible to replicate in untyped code also. It just requires a little bit more discipline. And you can bend those things to do types. But the only problem with those is that these are not enforced, obviously. So it's more user discipline than the compiler helping you.
+
+[0:38:22] Q: Thank you.
+
+[0:38:22] Host: Yeah. One question here. Front row, first row.
+
+[0:38:22] Q: Okay. Yeah, languages give a lot of features, and if you see the high-level languages, there are many. So, getting into the intricacies, at a time when AI is generating code, does AI generate optimized code, or, if it learned the wrong code, [0:39:22] it'll write wrong code? What is it?
+
+[0:39:22] A: So if I understand your question correctly: how does AI impact these strong static types, right? So one, this is great for AI generation, because the motto is: if your code compiles, it's correct, right? And to what degree it is correct depends on how many invariants you've encoded into your types, how strong the types are. So it's great for AI generation. Generated AI [?] will fail, so you have to have a loop, right? Keep on generating the code until it compiles and does what you want it to do, and then you can have a fairly high certainty that it will do what you want it to do. So it's great for that. That said, languages like Rust are easier for AI to generate, because it does not need a very strong type system that helps the user. The code does not have to look readable. So you can generate Rust a lot easier than you can generate Haskell, for example. And also Rust has more data for training available online. But any typed language is great for AI use.
+
+[0:40:22] Q: No, my point is, if AI is generating it, and if it compiles it is good code, then we choose Haskell, and then we don't need to learn all the details, right?
+
+[0:40:22] A: You do, but you will still need to... So AI will not do a great job at readable code generation with Haskell currently. So yes, it will be bug-free, but is it... [inaudible] Right, so you will see that after some time it'll just keep on looping and not give you a great result. So you have to guide it a little. You need some [inaudible].
+
+[0:40:22] Host: All right, thank you everyone. Thank you for the talk. So today with us we also have Priya [?], who's the third organizer of LLVM Social. So she's here all the way from Pune. Hello.
+
+* Databases in Ethereum Nodes
+:PROPERTIES:
+:SPEAKER: M Sudeep Kumar
+:START: 0:41:11
+:CFP: https://fossunited.org/c/indiafoss/2026/cfp/3ni2uq8bkg
+:END:
+[[https://www.youtube.com/watch?v=rb1ZALRGFjw&t=2471s][0:41:11]] · M Sudeep Kumar
+
+** Summary
+Sudeep (Erigon) explained how Erigon stores Ethereum data, and why it uses a custom storage engine instead of an off-the-shelf database. An Erigon archive node takes about 8 TB, against roughly 20 TB for less efficient clients, and syncs in hours rather than days. That makes it the usual choice for RPC providers and analytics.
+
+The data model starts with blocks and transactions, then accounts (balance, plus optional code and storage, using USDC as the example). State changes over time, so the API has to answer "what was this account at block N?". Data near the chain tip isn't finalized yet and can be unwound; older data is frozen. That split drives the design. ErigonDB is LSM-like. Level 0 is MDBX, an LMDB fork: a transactional, mmap-based KV store for the mutable, unfinalized part. Levels 1 and up are immutable snapshot files. Both use mmap, so the OS page cache does the caching.
+
+For history, Erigon uses a monotonically increasing "transaction number" in place of (block, tx-index) pairs. An inverted index maps each account to the txNums at which it changed. A lookup works like this: a RecSplit minimal perfect hash (about 1.56 bits per key, no stored keys, no updates) gives an offset into an Elias-Fano-style encoded list of txNums. The low bits are stored raw and the high bits are compressed, which is close to optimal. The latest state uses a sparse B-tree that keeps only the top levels, then interpolation search over the KV file. That works because Ethereum keys are uniformly random, and it avoids the page faults a binary search would cause.
+
+Two reasons for the custom format: fine-grained performance tuning, and deterministic byte-for-byte output. Snapshots are distributed over BitTorrent, which is content-addressed, so every node has to produce identical files. Operators can also put L0 and the latest state on NVMe and history on cheap HDDs.
+
+** Notes
+
+** Transcript
+[0:41:11] Our next talk is by M. Sudeep Kumar, who's a protocol engineer at Erigon Tech. So every so often, we usually use normal RDBMS or NoSQL databases for most applications. However, every so often there is an application that requires you to customize the database itself. So he'll be talking about databases in Ethereum nodes. Welcome. [inaudible]
+
+[0:41:11] Hello. Hello. Good afternoon. I'm Sudeep Kumar, and today I'm going to be talking about databases in Ethereum nodes, in particular an implementation that I've been working on for some time, called ErigonDB. So I work for a company called Erigon, which implements Ethereum nodes. We also participate in the spec development for the Ethereum protocol and evolve it over time. So there are different kinds of Ethereum nodes.
+
+[0:42:12] In particular, archive nodes are the biggest by node size. So they contain all the data, historical data, etc. So that's the biggest node by size. Inefficient implementations of archive nodes take up to 20 terabytes of disk space. Erigon manages to do it in 8 terabytes. The sync from scratch: so if you start a node from scratch, the amount of time it takes to get to the tip is hours instead of days. And typically Erigon is used for RPC providers and data analytics use cases, and just API providers. So for those reasons, it's interesting to look into Erigon and how the storage is done there.
+
+[0:42:12] Okay. So we're going to answer what data is stored in Erigon, what are the access patterns, and if there are any special requirements and properties that are coming through. So let's warm up with just blocks and transactions. So it's a blockchain. So you have
+
+[0:43:12] blocks getting added periodically, and they have transactions. So you have a one-to-many mapping between blocks and transactions. So you can just imagine simple getters on blocks and transactions, given some primary or secondary key. Ethereum also has complicated accounts. So they have a mandatory balance, which holds how much Ethereum the account has. It can also optionally have code and storage associated with it.
+
+[0:43:12] So let's look at an example. So this is a smart contract called USDC. USDC is a stablecoin which tracks the dollar. So one USDC token is equal to $1, and it has code associated with it. So it has a transfer function. So I as a user can initiate a transaction to this account, transferring my assets, my USDC, to someone else. Okay. If you look at line number 44, I'm not sure if it's clear,
+
+[0:44:12] there is also a map, which is a mapping from the address to the amount of USDC it holds. Okay. So this is an example of accounts having code and storage. All right. So, okay. Now we are getting at state, where again we have some getters on top, and we can iterate over storage for an account. So I'm just going to focus on accounts in this presentation.
+
+[0:44:12] Note that the state is also evolving over time. So accounts are doing transactions, they are receiving stuff, balance is going up, code is being changed, etc. So the state is evolving over time. So you can ask questions like: what was the balance of a particular account three years back, and how has it evolved over time? So basically the data is having a temporal aspect here. Okay. So we can extend the API and say, okay, what is the account value at a particular address at a particular block number in history? All right.
+
+[0:45:12] Another property of Ethereum which informs ErigonDB's design is the notion of finalized and unfinalized blocks. So unfinalized blocks are near the chain tip, and the consensus layer is still potentially undecided on what block should be there. There can be some unwinds and blocks being thrown out, etc. As you move away from the chain tip, the older blocks would be finalized. So those blocks cannot get [inaudible]. So this presents different design domains. So for the finalized blocks, where the data does not change, you need to basically balance between the space and query efficiency. Whereas for unfinalized blocks, you need to care about updates as well.
+
+[0:45:12] Okay. So ErigonDB is an LSM-like structure. So at level zero we use MDBX. I'm going to talk about that. That's where the unfinalized data
+
+[0:46:12] resides, and you can have updates there. As data gets finalized from level zero, it is frozen and moved to layer 1 onwards. So layer 1, layer 2 and onwards is snapshot files. They are flat, frozen files. That data cannot be changed. So we can essentially use different data structures for L0 and the rest of the layers.
+
+[0:46:12] Okay, so level zero, MDBX. So MDBX is a fork of LMDB. It's an open source project. It provides transactional semantics. It's a KV store. It's heavily based on mmaps. So for people who don't know mmaps, it's basically an alternative to doing file I/O using read and write APIs. So essentially the operating system maps the pages from the disk to the page cache. And a lot of databases use mmap because it allows you to get away from implementing a caching
+
+[0:47:12] layer in the DB, right? So the caching layer is provided by the operating system and page cache. So that's a nice trick, which we use both in MDBX and also the snapshot files. So throughout all the layers.
+
+[0:47:12] All right. So let's look at the temporal nature and ask some questions about the history of accounts. Okay. So to do that, we need to have a way to refer to a point in history. So how do we do that? The Ethereum specification allows you to point to a moment in history using block number and transaction index inside that block. But that is a pair, and that's cumbersome to work with. So what we have introduced is a notion of transaction number. It's simply an integer which is always increasing across the blocks. So just a convenient way to represent points in [inaudible].
+
+[0:47:12] Then we have an inverted index. So the inverted index is basically answering: okay, for this account,
+
+[0:48:13] what are the transaction numbers at which this account changed? And we're going to see how we use the inverted index for [inaudible].
+
+[0:48:13] Okay. So we have a query, which is: get some account for a transaction number. Note that the account might not have changed at that transaction number. So then we use the inverted index to find the transaction number T, such that T is greater than the query transaction number, at which the account changed, and then we can form a composite key to query the KV store. Okay. So this is a flow that we will go through in the next couple of slides.
+
+[0:48:13] So we have a query for an account at a particular transaction number. So the EFI index gives us the offset into the EF file. So the EF file is the inverted index. Okay. So let's look at how the EFI index works. What is there in those snapshot files? So we use something called RecSplit for the index. So RecSplit
+
+[0:49:13] is an algorithm to construct minimal perfect hash functions. So it has no collisions. So it basically gives you a bijective mapping between the input keys and the first non-negative integers. Okay. So why is RecSplit good? Because you don't need to store the keys. If you get collisions in your hashmap, you need to use buckets, and if you use buckets, then you need to store the keys. But with minimal perfect hash functions you don't need to store the keys. So it allows the index to be very small. It takes 1.56 bits per key.
+
+[0:49:13] Note that it also does not support update operations. So you need to have the set of keys initially ready, and there's no update. So this is where the dilemma and trilemma come in. So RecSplit is living in the dilemma space, where it doesn't need to care about updates.
+
+[0:49:13] So I'm just going to give an intuition about how RecSplit works. So we split the keys into buckets, and for each bucket
+
+[0:50:13] we construct a balanced binary split tree. So we start with the root, and a hash function is used for the whole construction. So we basically cycle through the seeds, and we find the seed at which the keys are split equally into the two sides. Okay. And then we recurse, and at the leaf there's a base case, where we just say, okay, whatever keys are there, we just need to brute force and find a bijective mapping. And essentially the RecSplit file then is just what are the seed values associated with the nodes. The query is then: again, you take the hash of the query key and the seed value associated with the node, and it tells you to go left or right, and this way you traverse the tree and you can get the value.
+
+[0:50:13] Okay, so you use the EFI index to get the offset, you seek into the inverted index file. So let's look at
+
+[0:51:13] what this inverted index file is. So essentially you're having a list of transaction numbers at which the account changed. Okay, so this is basically a list of transaction numbers where the account changed, and the problem statement is that you need to encode this in the minimum of bits, using small space, and you need to support these three operations: the access and successor [?].
+
+[0:51:13] All right, so the insight is very simple. You represent the numbers in binary and you split them at a point. The lower bits are going to be essentially random, so you cannot compress them any further. The higher bits are going to have two properties. So first of all, they're going to be sorted. Secondly, they don't change much from one to another. And you store them separately and you use different encodings for them. I'm not going to go into this much, but it turns out to be near optimal, which was very surprising when I came across it. It's actually quite a famous encoding. It's used in a lot
+
+[0:52:13] of inverted indexes in different databases.
+
+[0:52:13] All right. So I was talking about the historical state. There's also the latest state, where we use another index called the sparse B-tree index. So basically you have a KV data file, which is just appended key-values, and we build a sparse B-tree. So why is it sparse? Because you just store the first couple of layers of the B-tree, and when you query it you basically get a range where your key might reside, and then you need to search the range. So how do you search the range in the KV? You can do binary search, but binary search jumps around a lot, so you're doing a lot of seeks, and you might get a lot of major faults, so it ends up being slow. We use something called interpolation search. So because Ethereum keys are random, in a range the keys are distributed uniformly, and so you can predict where the query key lies in a range. So your probes are in a narrow [inaudible].
+
+[0:52:13] All right. So I
+
+[0:53:14] want to talk about distribution. Okay, the snapshot files are there, and why did we create our own format? First of all, because it allows us to have control over fine-tuning, so we can really fine-tune performance. Erigon is the most performant Ethereum node. And also, we distribute the snapshots via torrent, and torrent is a content-addressed system. So basically that means that on different nodes we want the same files to be produced. So we want control over what goes into the file. Okay. So if you use any off-the-shelf solution, you might get different bits on different machines, and that is problematic; that kind of breaks the torrent.
+
+[0:53:14] Another neat trick that we provide is storing different kinds of data in different directories. So we can store the L0 and the latest state, which is very performance critical if you want to keep up with the chain. Those go onto a fast disk, an SSD. It can be stored on NVMe,
+
+[0:54:14] whereas the history and inverted index and accessors can be stored on a cheap disk or hard disk. And this just allows the operators to run Ethereum nodes cheaply.
+
+[0:54:14] All right, that's the end. There's a QR code with some links and the slides. So are there any questions? We have a couple of minutes for it.
+
+*Q&A*
+
+[0:54:14] Host: Who has a question?
+
+[0:54:14] Q: Yeah. I think this is just about a very small part of the talk, that is, the torrent distribution part that you mentioned. Are you following any already well-known protocols, or did you develop something specifically for your project? Like, are you using something like BitTorrent?
+
+[0:54:14] A: We use BitTorrent. Yeah. So we don't need to reimplement things.
+
+[0:55:15] A: There was already a project which kind of tried to do what BitTorrent does, called IPFS, but we use BitTorrent. That's a mature technology that works well.
+
+* PeerDAS: Erasure Coding When You Can't Trust the Storage
+:PROPERTIES:
+:SPEAKER: Agnish Ghosh
+:START: 0:55:43
+:CFP: https://fossunited.org/c/indiafoss/2026/cfp/09lln6s8nq
+:END:
+[[https://www.youtube.com/watch?v=rb1ZALRGFjw&t=3343s][0:55:43]] · Agnish Ghosh
+
+** Summary
+Agnish (Nimbus, an Ethereum consensus client written in Nim) explained PeerDAS, which stands for Peer Data Availability Sampling. He started with familiar examples of erasure coding: scratched CDs and half-torn UPI QR codes that still scan. Ethereum does the same thing with Reed–Solomon-style coding. Data bytes become points on a polynomial over a prime field of about 2^255, the polynomial is evaluated at extra parity points, and any half of the extended points is enough to rebuild the original. His toy example encoded "FOSS".
+
+Peers in a P2P network can misbehave in two ways: they can lie (send fake data) or hide it (withhold data). Hashing doesn't help with the first, because garbage can be hashed too. Lying is handled with cryptographic commitments and proofs over the extended data, so a small piece can be checked against the commitment. Hiding is handled by sampling.
+
+Background: since 2024 Ethereum has carried "blobs", data posted by L2 rollups that want Ethereum's security. Demand grew from 6 blobs per block toward 14, which put pressure on every node's resources. PeerDAS extends each blob into 128 columns made of cells with proofs. An attacker has to withhold more than half the columns to make data unrecoverable, so a node that checks 8 random columns is fooled about 1 time in 256, 16 columns gives 1 in 65,536, and around 30 gives about 1 in a billion. Each node holds custody of at least 4 columns, chosen from its node ID, and fetches them over libp2p gossip subnets. Nodes that hold 64 or more columns reconstruct all 128 and re-gossip them.
+
+Effect: a sampling node stores 1/8 of the data (1/16 at minimum custody). With 14 blobs, bandwidth falls from about 1.8 MB to about 224 KB per slot, so a 15–20 Mbps line can run a node. The trade-off is that large institutional stakers end up doing most of the reconstruction. Future work splits data into smaller cells to remove the "need half the columns" threshold.
+
+** Notes
+
+** Transcript
+[0:55:43] Host: Up next we have Agnish Ghosh, who is an Ethereum core dev and Nim engineer. So this talk is about PeerDAS, erasure coding for when you can't trust the storage. So welcome.
+
+[0:55:43] (Setup exchange about the laptop, HDMI and the slides shared over WhatsApp.)
+
+[0:55:43] Hey. Hi, I'm Agnish. I work at the Nimbus team in Ethereum. It's basically one of the consensus clients [?]; we are basically making Ethereum nodes, and while we actually ship Ethereum on mainnet there are several problems, engineering problems etc., that come across, and this is basically one of those stories. Okay, so the topic is PeerDAS. That's the protocol, we have named it. But I think I'll probably just move into the slides and try to slowly build the background as to what it really does.
+
+[0:56:44] So, have you guys ever experienced things like scratched CDs [?], or maybe you shut down your PS5 right away and it says that, okay, it's rebuilding the state of the game, etc.? Or maybe, let's say, if you go to make a payment and the Google Pay QR code is a little bit, I don't know, torn apart, or portions of it are just worn out, and the QR still works.
+
+[0:57:44] Basically the essence is pretty similar, because since we are a peer-to-peer network, data is not always reliable. Data may not arrive in a timely way, and peers can just maybe overshare, not share, share fake data, and do all sorts of stuff on the network. So PeerDAS is effectively a mechanism of erasure coding. I would say we effectively use a variant of Reed-Solomon encoding, where what we do is we take the data, we extend it, and we kind of segregate them into smaller pieces and disseminate them in the peer-to-peer network in a systematic way.
+
+[0:58:45] So I can give you an example. Let's say FOSS. Okay, if we just take the character bytes and we add some extra parity numbers, what we can do is, even if I kind of eliminate, let's say, 79 and 83 etc., till a point where I have at least any half of the entire data set, I can kind of rebuild what the real data is, which is basically FOSS, right? So the question is how people actually go about it.
+
+[0:59:45] So what we actually do is we try to turn these data points into points on a curve. This is a very simple example: we just transform these character bytes into number points on the Cartesian coordinate, and we kind of try to make them pass through a curve. And depending on the size of the data, the degree of the curve can keep growing [?], right? So here is the thing: we can simply check whether it fits on the curve or not by just entering those coordinates and evaluating the equation, and we can check whether it's on the curve or not.
+
+[1:00:45] What's the fun part about being on the curve is we can have extra parity numbers or coordinates on the curve, such that in some sort of a network situation, if some of these coordinates are lost, some of the data is lost, using the remaining coordinates we can essentially rebuild the data from the very beginning. So we basically use a modulo, just to kind of not deal with the fractions or not deal with very large data sets. However, in Ethereum, in the mainnet, what we do is we take the modulo of a big large prime number, which is about 2^255, so that we can accommodate more and more data points in this massive curve that we're talking about.
+
+[1:01:45] But here is the real reason why we do it. So just like a disk can fail because of IO errors, or maybe a CD can have scratches on it, in a peer-to-peer network it's very, very much possible that the peers can just not share the right data with you, or delay, and basically cause the network to stall. So there are two separate problems. So the peers can lie: you ask for P7 and they send you something that's fake. Or the peers can hide, where you ask for all the data and they just send you some of the data.
+
+[1:02:45] So we need to basically deal with these two problems. So hashing doesn't really always work, because a publisher can always hash some of the data, and it'll just end up as garbage data, because it's not really passing through those coordinates. It's not really erasure-coded data. So you wouldn't be able to make too much use of, let's say, some garbage data which is hashed and looks very convincing, etc.
+
+[1:02:45] So the first thing we can think about is: what if the peers lie, right? So for this we have an interesting way; we call it cryptographic commitments. What we do is we extend the data and we generate a cryptographic commitment for that extension, along with a cryptographic proof, in such a way that a peer can just download a small piece, download the commitment, and just download the associated proof, and kind of say whether the entire integrity of all the data that was published within that time frame is legit or not.
+
+[1:03:46] So after 2024 we have something called blob transactions on Ethereum, and we very commonly just call it blobs. What blobs essentially does is: you can have any other blockchain network which might have some state of its own, and what you can essentially do is you can take that state, you can compress it in a way, and you can publish it in Ethereum mainnet. And in that way you can sort of use Ethereum's security and economic properties to say whether the state I have in some other chain is valid or not, using the Ethereum network. So we call it blobs.
+
+[1:04:46] So initially in 2024 we had something about six blobs for every block. And what essentially happened is the number of layer 2 chains, let's say Polygon was a layer 2, several other chains, they just kept spinning up and coming into the market, and they're like, okay, we need Ethereum's economic security, so we need blobs to go up, right?
+
+[1:05:46] So the blobs did go up, but effectively what happened is there was pretty much a lot of resource pressure on every Ethereum node in order to verify these blobs, and some way or the other needed to be figured out in order to scale these blobs and at the same time keep the resources of the average Ethereum staker pretty much unchanged, I would say. So what we did first is we tried to extend this blob, and we cut it into sort of 128 cells, where every cell has its own proof. And we sort of thought about a way in which we can kind of publish it in a systematic way, where every peer can sort of download a small sample and be able to tell whether all of the blob transactions happening at that slot are valid or not.
+
+[1:06:46] So coming to the second problem: what peers can actually do is they can withhold data. They can withhold blob data, and you won't be able to do much about it if you don't have sort of DAS. So here is the thing: the name PeerDAS actually stands for peer data availability sampling. And if the peers hide, you won't be able to tell much unless you have a good data availability sampling technique, which it is, actually.
+
+[1:07:47] Just like we had the situation where there were eight characters, and if we had just any four we'd be able to rebuild all the rest, here with 128 cells or columns, if we have about 64 we'll be able to restore the data integrity of the network. So an attacker can keep hiding, but at the same time it has to be a pretty strategic hide, in which you need to sort of obfuscate more than half of all the columns in a given slot, in a given blob transaction. So what a peer can actually do is just ask for eight random columns out of 128.
+
+[1:08:48] And there are basically some probabilistic calculations on how often this peer can get fooled. And it turns out if you just download about eight columns per peer, you'd be able to sort of validate that, okay, it's all fine, the blob transactions are going through. So if you have eight samples, there is almost one in 256 chances to get cheated by an attacker. If you have 16, that's 1 in 65,536. And if you have about 30, it's about one in a billion chances.
+
+[1:08:48] This is the last part, where we can discuss how peers share these columns. So just as I told you, they are dissected into columns, and each column has further cells and proofs, with which you can sort of again just reverify the entire state of the blob.
+
+[1:09:49] Every node has a node ID. It's a hash of, I think, the IP address and the ENR. ENR is sort of a unique ID for every Ethereum node, and several other things, with which the node is assigned custody of a few columns. Okay. And the lowest amount of custody that you can actually do is just about four columns. So for every node, the random set of four columns is totally changing with every restart as well.
+
+[1:09:49] Then we come to how we disseminate these columns. So we use the peer-to-peer network, obviously, and it's sort of based on BitTorrent. We call it libp2p. And in libp2p we kind of dissect this entire gossip channel into several subnets. And based on your node ID, you are assigned these columns and these subnets, via which you are sort of downloading these smaller samples of columns.
+
+[1:10:49] If you are sort of a bigger node runner who can afford to have about 64 columns, once you download just about 64 columns, the node tries to rebuild and recover all the 128 columns. I'll just take a little bit more time. And effectively they again disseminate all the excess columns that they rebuilt, so that the data integrity is always held together.
+
+[1:11:50] So this is pretty much the machine. This is blobs, and you extend it and you dissect it into cells and proofs, and one vertical is called a column. You assign custody and topics to nodes, and if the sample size is big enough per node, then the node actually tries to rebuild these columns and tries to restore the data integrity of the network.
+
+[1:11:50] So earlier, let's say that's one entire blob. After that, when columns happened, if you are doing the minimum amount of sampling, that's eight columns, you roughly store 12.5% of what you used to store, now. And if you have the least custody, which is four columns, you store about 6.25%. A sampling node basically now downloads 1/8 of the data and can still tell that all of it is available.
+
+[1:12:50] These are just some of the numbers. Six blobs is about 768 KB. 14 blobs is the time when all the L2s said that we need more blobs, and that's 1792 KB. And once we sort of upgraded the network to PeerDAS, a sampling node with 14 blobs just did about 224 KB, which is pretty good, because if you don't have a lot of columns to disseminate, you would be able to run an Ethereum node on just about a 15 to 20 Mbps connection, which is a very standard fiber connection. I don't know, I think it's 50 or 100.
+
+[1:13:50] But this is pretty much the situation. Your memory and disk requirements drop down to 1/16th, and your CPU, you just do a lot of batch computations, you make a lot of savings on CPU as well. So it's cheaper to join, and the network is harder to fool.
+
+[1:13:50] Now, these are just some of the trade-offs. We sampled based on the libp2p subscriptions. Some of the senders who are heavy node runners do most of the heavy lifting; most of them are institutional stakers, big banks who do Ethereum staking, people who run Ethereum ETFs.
+
+[1:13:50] This is some of the future work, where we have decided that we won't dissect the entire data into columns, because there is always a threshold case. We'd dissect the data further into smaller cells, where there would be no threshold restriction on reconstructing this data.
+
+[1:14:50] This is some of the research, that's some of the code which you can visit. These are some of the specs. That's pretty much about it. Do you have any questions?
+
+[1:14:50] Host: [inaudible]
+
+[1:14:50] Okay. Yeah, we can take it offline. Thanks. Thanks a lot.
+
+* Benchmarking can be hard, here's why we're still creating a new one for OCaml
+:PROPERTIES:
+:SPEAKER: Navaneeth Nambiar
+:START: 1:15:59
+:CFP: https://fossunited.org/c/indiafoss/2026/cfp/6aasju7noq
+:END:
+[[https://www.youtube.com/watch?v=rb1ZALRGFjw&t=4559s][1:15:59]] · Navaneeth Nambiar
+
+** Summary
+Navaneeth (FP Launchpad, IIT Madras) gave the talk in two halves: why benchmarking is hard, and what the OCaml community is building to deal with it.
+
+For the first half he used a long-running Java PDF pipeline. Run it several times and the numbers drift: JIT warm-up, GC behaviour, P-cores versus E-cores, thermal and power throttling, ASLR, background updates, even the season (February runs cooler than July). Some noise is periodic and some is random. His points were that performance is a distribution, not a number, that you control what you can and collect evidence for the rest, and that sometimes you throw everything out and start again.
+
+The second half covered OCaml 5, which added multicore parallelism and effect-based concurrency. The old benchmark suite drifted away from real workloads: the compiler and runtime got tuned for the benchmarks while production code, such as Jane Street's adoption of OCaml 5, didn't get faster. The new work has two parts:
+- A benchmarking service built on macro-benchmarks drawn from long-lived real programs (bioinformatics, parsers, static analysers). It uses a reproducible harness on perf/DTrace with opam sandboxes, so contributors can see improvements and regressions on their PRs.
+- An evaluation of the suite itself. They define experiments with an orchestrator and use PCA and k-means to check whether the benchmarks cover enough distinct behaviour, to trim redundant ones, and to spot gaps. That analysis found too few multi-domain and long-running workloads.
+
+The payoff is upstreaming GC and compaction work with confidence. In Q&A he mentioned his own automatic-compaction PR. The tooling showed his machine was the problem and exposed alignment effects, which he fixed with compiler flags, and it showed compaction causes no slowdown beyond error bounds.
+
+** Notes
+
+** Transcript
+[1:15:59] Host: Up next we have Navaneeth Nambiar from FP Launchpad. He is a research assistant at FP Launchpad and he'll be talking on "Benchmarking can be hard, here's why we're still creating a new one for OCaml". So Navaneeth, you're up next.
+
+[1:15:59] Hi, thanks for the intro. Yeah, I realize this is a big title. So first of all, it's just two things, if you're focusing on it: it's just "benchmarking can be hard", and then what we are doing for benchmarking for OCaml. So this talk is going to be about, we'll go with the first part, and then I'll briefly give you some insight on OCaml 5, just enough to go over and talk about what all we are doing for OCaml benchmarking. So before we start, I would like to thank KC [?], FP Launchpad, all my colleagues in the OCaml community who keep collaborating and building awesome stuff that we can use for benchmarking, and also improve for them. We have been growing, thriving, but we'll get on to that.
+
+[1:16:59] So yes, before we start, let's take a step back and try to go over... I'd like to ask a question. I don't know, because it's after lunch, how active you all are, but have you done benchmarking before? Raise your hand if you have done it. Do you know what your benchmarking means? Like, do you only look at the numbers and then do you just say, "Okay, yeah, looks good to me"? So this is exactly the kind of problems we are looking at.
+
+[1:16:59] So let's take a setup that is abstract enough and we can show some samples. So we'll go with a Java application, because that's easy, on a standard Ubuntu machine with a JDK, and this is some sort of batch processing protocol, some sort of PDF creation pipeline that just has to run for a long time. So typically in benchmarking, the first thing I would suggest is to run multiple iterations.
+
+[1:17:59] So let's do that. So let's say we start off with a slower value, and then as you run it multiple times you see that things are getting faster. And then of course you ask, what happens if I run this again? You'll see that, oh, there's something else changing. So why does this change? This can happen for multiple reasons. We can hypothesize: maybe there's something about the cache, something about the core. So then we'll try it again, and then you'll see that, okay, now the graph looks completely different, and you'll be like, it's slower at first, but if you had more data points you'll see that, okay, yeah, it's actually getting steadier, slower, but it just goes into a steady state, which is what we'd like. And then any other hypothesis that we looked at before would not actually have been contributing or going against our favor in this case. And this is the sort of thing that keeps occurring and occurring.
+
+[1:18:59] So what do these hypotheses look like? You can have different cores. Nowadays you have E-cores, you can have i7 processors, they call it Ultra 7 I guess these days, and these cores themselves can be throttled because of power. And then when you look at something like the JVM, you can run into JIT optimization kicking in or not kicking in, and then the garbage collection, it might work hard, it might just not interact at all. And then you can also run into issues with address space layout randomization. I'm not sure how many of you might have known of it. It's a security mechanism that is meant to make programs more secure and less attacker prone. And in that sense you also run into unintended software updates, background tasks that might be running. Your machine might be slow, it might be doing something else, it might be midnight and there's some vampire attacking. This has actually happened to a game once where on blue moons it would do that.
+
+[1:18:59] So what do those look like? It might be just periodic, in which case you can actually know what is happening, or it might be completely random. You might run it in February, it was colder in February, I don't know how that is here, and in July it is just hotter, and now you're seeing completely different data. So how do you account for all of those? Yeah, and these are the kind of things you have to keep dealing with.
+
+[1:19:59] So what do we do? Well, we have to understand that performance is just never a single number, and you have to keep understanding it as a distribution, and we say that, okay, in total we are actually seeing an improvement. And then there will be a lot of things to consider and tune, and we try to tune as many things as we can. Some of them we can control; for others we need to assure ourselves, we have to just collect data, that this isn't causing a problem at all. And then sometimes you just throw it all out, start again, see what new techniques you can do, and all that is possible.
+
+[1:20:59] So I hope that was all straightforward. Now I can move on to what we have been doing for OCaml. And of course I had to put this slide, because I don't know how many people know OCaml, but because of KC's talk in the morning I'll assume we have. There's also a couple of other talks that you can always watch on YouTube. This is from one of them, which goes over how general purpose and extensible an ecosystem we have with OCaml, and how good our tooling is, and how we have been constantly improving in the background and stuff like that. Highly recommend this talk.
+
+[1:20:59] And then, yeah, so what do we do here for this? I missed this. So what's our latest version? In the latest, OCaml 5, we have added concurrency primitives. This was a huge effort by KC's previous work, adding concurrency primitives and parallelism primitives to OCaml to enable taking advantage of multicore CPUs and doing more fine-grained concurrency, that is extensible enough that you can do things that are possible in C# or JavaScript or Rust, each of which have their own async models. All of them you can now do with OCaml, if you're interested.
+
+[1:21:59] So then how do you benchmark such a system? So let's go on to two ongoing approaches there. We have a new benchmarking suite that we're trying to build for OCaml, for improving OCaml. And then you might ask, "Hey, didn't you guys have one already, or wasn't there another one?" The answer is of course we did, but then we ran into issues with that, which happen to be things like: we have our benchmark suite, we have programs, and we optimized the codebase, the runtime and the compiler, towards that. But then there ended up being things that are not at all what production workloads or everyday users of OCaml actually tend to be relying on.
+
+[1:22:59] So production workloads still didn't perform faster, even though our benchmarks said that, hey, everything looks okay. And this has been documented and talked about in research contexts, in last year's talk. This is another talk, one of those, where Yaron Minsky from Jane Street goes over how OCaml 5 was adopted at Jane Street. Jane Street is an HFT firm, and they've been [inaudible].
+
+[1:22:59] So what we do now is we have a new set of tooling and benchmark suites available, which more closely track what people have used in everyday life. This is software that is used by researchers, or everyday programmers, or performance engineers, all that sort of thing. And we have a harness to actually be able to run these in time.
+
+[1:23:59] This has been ongoing work on creating a benchmarking service for OCaml. So now, any sort of change you want to adopt, and OCaml is an open source initiative, anyone is free to contribute code and suggest improvements. But we also want to provide a thing where they can look at the benchmarks and say that, oh, we have actually made an improvement, or there are some performance regressions that you're seeing here that could be of note, and you have to go back and fix those and investigate further.
+
+[1:23:59] So this is possible through two things. One of them is macro benchmarks. These are, as I said, benchmarks where we have looked at large programs which have been ongoing for multiple years, and these are used every day, in various aspects. We have some things in bioinformatics, some things in parsers [?], some things for static analyzers, all sorts of programs here and there.
+
+[1:25:00] And once you have those, you have to now figure out how you take these things and make a pipeline out of them that is easily reproducible. On Linux it will be perf, on FreeBSD it will be DTrace or whatever, and then using that you will use the opam frontend to further create sandbox environments, each of which you will run in sequence to see what those look like.
+
+[1:25:00] Now, what is the other approach? We want to make sure that the benchmarks we run actually do have meaning and provide enough info back to the developer to ensure that they are moving in the right direction. So what does that look like? With the new tool, our orchestrator, we can define experiments. These experiments give us data, and now we are looking at: is this data useful, or is there too much data,
+
+[1:26:00] and can we evaluate our benchmarks on the variance that we are seeing in the data? So is our data varied enough to capture different sorts of environments that are available, and instances that we are interested in? And then you can ask, can we now decrease the number of benchmarks we need to run and compress the amount of data, through techniques that have been popular in conventional machine learning, including principal component analysis and k-means clustering, to take simple examples? And then can we take these methods and say that these features are the important features and we are going in the right direction, not [?] lost in the forest, as they say.
+
+[1:26:00] And in fact, once you know those details, you can now go use those features to accurately measure your benchmarks and say that, okay, we are noticing variances that are in this pattern, but then we are missing things somewhere, and can we now go and build up and extend our suites with newer programs which actually target those.
+
+[1:27:00] An example of that is we don't have enough multi-domain workloads, and then we went on to investigate that and added those back. We didn't have enough programs that run for a long time, so now we'll investigate larger input sizes and see if we can have larger programs. So the answer to all of this, as I've mentioned, is yes. And this is the statement from previous work done for Java, on selecting benchmarks for a suite: "We use principal component analysis to quantify benchmark behavior differences with metrics that include static and dynamic code and data behavior."
+
+[1:27:00] So what does this mean? What does this let you do? We can upstream more features with better confidence. We can improve the GC. We can improve compaction for the runtime. We can do fancier things in the runtime. With the workloads and the tooling, we now have a feedback loop between them, which lets us improve the benchmarks and improve the evaluation.
+
+[1:28:00] And now this evaluation method can be extended onto other languages, and look at, say, okay, can we look at other benchmark suites and say, oh, are these performing well, can we reduce them, and help those developers save time and resources in running their benchmarks. So that's all I had. I had to go a bit fast because I had to compress my slides to fit into 15 minutes, but yeah, happy to take questions here or offline. Thank you.
+
+*Q&A*
+
+[1:28:00] Q: Thanks for the talk. Just wanted to ask, what does compaction mean? You mean compacting the freed memory from the GC so that it's contiguous [?], and when allocation happens it happens fast?
+
+[1:28:00] A: Yes, you can think of it like that. So this is purely from a GC aspect. This has just been something that I've been working on, so I put it in, but then I realized this might not be familiar to all people.
+
+[1:29:00] Q: Since launching [inaudible], was anyone able to upstream a perf improvement to the language?
+
+[1:29:00] A: So I am actually working on this automatic compaction PR. So this has helped me in figuring out that my machine was broken, and then I had to get a better machine. And then based on that we realized that we are running into alignment issues, and then improved that through compiler flags that say that we can fix alignment boundaries. And with that I have reasonably been able to show that... so, as you said, compaction should not in theory affect the runtime at all. So we shouldn't see any sort of slowdowns, and I have been able to reason that yes, we don't have any such slowdowns observed. It is within our error bounds. So yes, right now it's just that.
+
+[1:30:01] A: There are also other case studies, if you can find this paper, "Towards a Benchmarking Service for OCaml" [?]. We have case studies available which looked at past data and checked whether we can replicate that data and say that, okay, yeah, this actually would have been caught in this case. So those are the two kinds of things we can do with this. Thank you.
+
+[1:30:01] Host: Are there any other questions? Cool. Yeah, thank you. Okay, thank you. So up next...
+
+* What LLVM Does Differently When The Target Is CPU VS GPU
+:PROPERTIES:
+:SPEAKER: Bhuvan
+:START: 1:30:50
+:CFP: https://fossunited.org/c/indiafoss/2026/cfp/33ogils4n5
+:END:
+[[https://www.youtube.com/watch?v=rb1ZALRGFjw&t=5450s][1:30:50]] · Bhuvan
+
+** Summary
+Bhuvan (Point Blank, ACM SIGPLAN mentee) walked through what LLVM does differently when the target is a GPU. He started with a plain =if= on =threadIdx=. On a CPU each thread takes one branch. On a GPU a warp (32 threads, or a wavefront on AMD) executes in lockstep, so a divergent branch effectively runs both sides one after the other.
+
+Main points:
+- The middle end is shared, but the target decides. The pass manager asks =TargetTransformInfo= (TTI) whether an optimisation pays off for the target, so the same IR gets different treatment. For example, a SAXPY loop gets vectorised for x86.
+- Address spaces. GPUs expose global (HBM/VRAM), shared (on-die, low latency, managed by the programmer), local and constant memory. LLVM records this in the pointer type and uses it during instruction selection.
+- Uniformity/divergence analysis, developed over several years (2015, 2018, 2022). Values derived from per-lane IDs are tracked through data flow, control flow and phi nodes, and marked divergent or uniform. On x86 everything comes out uniform.
+- =StructurizeCFG= (AMDGPU) uses that analysis to restructure divergent control flow, so the hardware can mask lanes and run then-branch and else-branch one after the other with an explicit reconvergence point. For NVPTX, reconvergence is mostly left to =ptxas=.
+- Register allocation and occupancy. GPUs have tens of thousands of registers. The aim isn't keeping hot values in registers so much as leaving room for enough resident warps that the scheduler can hide latency.
+
+He closed by pointing out that Triton, CUDA (NVVM is an LLVM fork), HIP and Julia all build on LLVM, so learning LLVM's GPU path is the way into contributing to them.
+
+** Notes
+
+** Transcript
+[1:30:50] We have Bhuvan from the Point Blank team at DSCE [?], and he'll be giving a talk on what LLVM does differently when the target is GPU versus CPU. So this is essentially how different GPU compilation is from CPU compilation, and why those differences matter. So over to you, Bhuvan.
+
+[1:30:50] Hello everyone, I am Bhuvan. I am an ACM SIGPLAN mentee and open-source contributor. So today's topic is, as [?] mentioned, how LLVM works differently when you are targeting GPU versus CPU. So this idea came to me when I was actually studying about GPU architectures and how they are vastly different compared to CPUs. So for CPUs' assumptions, the GPU completely breaks them and rebuilds them to work on its own workloads. So in this case, I had this thought: what does the compiler actually do when you break its assumptions of working for a CPU and change the target to work for a GPU? So let's begin
+
+[1:31:50] this with an example: an if conditional statement. So this if statement, when we run it on a CPU, it does nothing, because a CPU has individual threads and they run independently; it would just choose one branch and then be done with it. But if we transform this for a GPU, we need to change the thread ID to work with =threadIdx=, which is actually derived from the device information at runtime from the GPU. And unlike a CPU, where you are launching the program to a single thread, in a GPU the program actually launches through a group of 32 threads called a warp, or wavefront in AMD. So then the thought comes: what happens in this case? A naive approach would be: a GPU is a graphics computer. It is known for being a parallel machine. So you have 32 threads, right? So maybe it splits them equally. 16 threads go through the then branch and the others [inaudible], etc. And then it
+
+[1:32:50] is lowered to any type of back end or machine code, into a binary, and run on that machine. Now, for our context of what a CPU and GPU do, the middle end, called IR, and the optimizer are actually shared between them, and it's the exact same. But what is actually different is a bit of a caveat, where when a pass or optimization actually runs, the pass manager has to decide if this optimization is worth it: is the optimization that transforms this IR worth it, and is the compilation time that it takes up worth it? So what happens is, when you are compiling code, the pass manager actually asks an interface called TargetTransformInfo, or TTI, to see if, for the specific target back end you have, this optimization is worth it or not: should I do this, or should I just skip it? So if you take this example of a loop of an addition and multiplication, or SAXPY, when we compile this to the x86 [?]
+
+[1:33:50] back end, the compiler sees that this is vectorizable code; it has loops, it can be vectorized, and [?] the RAM and the offload memory. Whereas in a GPU it's very different. We have the global, shared, local, constant, all these other address spaces that are actually on the die, on the chip with the GPU. This global address space is something that everyone is familiar with: it is the high bandwidth memory that everyone talks about and is always in the news. It's the VRAM of your GPU. Whereas this shared memory is actually on the die, is very close to the threads, and is very low latency, as seen in the graphs, and can be programmed by the programmer to decide what should be loaded onto it and what it should be used for. Whereas the normal L1/L2 caches are hardware dependent, and the compiler has no control over them. And this information of what address space is being used is actually stored in LLVM's pointer type, and is used during the lowering and transformation for the instruction selection
+
+[1:34:50] and pipelining, where it needs to decide what instructions to choose, how to choose them, how to actually handle the spilling and occupancy and all these [?]. The next part is uniformity analysis. This is one of the major things that LLVM actually has, and it has been developed over multiple years, with its first inception in 2015 and multiple advances in 2018 and 2022. This analysis pass is what actually decides what in your program is divergent and what is uniform. So coming back to the example of the if branch, we saw that the GPU makes some threads idle and some running. So this makes them into sequential code. To actually understand why this happens, we need to see what variables are actually being taken from =threadIdx=, the per-lane and per-thread information, as these cannot be
+
+[1:35:51] analyzed statically at compile time but are actually driven by the runtime device information. So this pass runs data-flow analysis [?] and control analysis to see what branches actually use these variables, how the phi nodes are being computed, what the dominator tree attached to them is, and then labels them, marks them as divergent or uniform, which is used in further passes in LLVM. As you can see, for the same program, if the target is changed to x86, it decides that all values are uniform, as x86 does not have the idea of multiple threads having the same shared memory; each thread computes its own values independently of each other. Now this information that has been marked through the uniformity analysis pass is actually used by the AMDGPU back end in the LLVM pass called StructurizeCFG, to
+
+[1:36:51] mask the divergence and the divergent branches. What AMD GPUs do is they run the same code twice, but each time they mask the lanes that are currently active and that are not active. So taking the example of our if branch, the GPU actually masks the then branch and runs only the else branch, and then repeats the computation, masking the else branch and running the then branch. This is how the StructurizeCFG pass actually handles that, by adding a Flow [?] computation in the middle, so that next, in the machine code instruction selection, this can be added as branches and can be masked easily by the GPU. [This slide] showcases the same branch in machine code, and how the divergence analysis works in the AMD GPU and NVPTX. In the case of NVPTX, the reconvergence and the analysis is actually offloaded to =ptxas= [?]. So it's not
+
+[1:37:51] handled by LLVM. Whereas for AMDGPU, the analysis, the divergence, the masking and the reconvergence are all handled by the LLVM back end for AMDGPU. Now all this information that we just derived is ultimately used for register allocation, and unlike a CPU, a GPU has something extra called occupancy. When you think of a CPU, we know that we have 16 registers, 32 registers, and that's it. So for register allocation, the main thing is we have to understand what are the most important variables and information that we can store near the chip, in the registers, and what can be spilled onto the stack. Whereas when we come to GPUs, they have a lot more, many, many times more registers. For example, 65,000-something registers. And in this case, the idea of keeping the most important values in registers is not as important as it is for a CPU. But in the GPU, unlike a CPU, we are
+
+[1:38:51] running parallel code. A GPU may be running thousands and thousands of calculations at the same time in all of its threads. So this requires something called latency [?]. If all of the threads are running at the same time, where is the next instruction being loaded to? If there are 32 warps and all of them are running the same instruction, the same computation, the next instruction is waiting in the warp scheduler, and then you see the latency in your ML workloads, in your models, in your shaders, and FPS drops, etc. So this is handled through something called occupancy. Occupancy is the idea that you have idle warps, or idle threads, that the warp scheduler can add the next instruction to, instead of waiting for the resident warps as they're computing whatever calculation. And this is actually how latency hiding works in GPUs, where you have multiple warps working in the foreground, whereas the next 20, 30 instructions are actually already offloaded to the resident warps in the background,
+
+[1:39:51] and all this information is required for how a GPU is analyzed and how LLVM actually works for a GPU back end. Now, coming to why this is even important to know. As everyone knows, LLVM is a major framework for compilers and is used throughout many languages, be it Rust, Fortran, C, C++, and hence even in the GPU space LLVM is used in places such as Triton, CUDA, HIP, and then even in the vendor-agnostic space, such as Julia; you have Naga. All these use LLVM as their core, or use some type of fork of LLVM. And hence, to actually contribute to LLVM, to open source, it is necessary to know how something works. So the idea of this talk is to let people know what the actual use of LLVM is, because most people think LLVM is a framework for CPU compilation. Whereas
+
+[1:40:52] it is also one of the major landmarks used in GPU compilation. And so anybody who is interested in this can go forward to actually contributing to GPU code bases, and also improve the community as a whole and be part of the community as an open-source team. And that's it. Any questions?
+
+*Q&A*
+
+[1:40:52] Q: Hi. I think this is just a more abstract or simple question. So you said that LLVM mainly
+
+[1:41:52] right now focuses on CPU-based compilation, right? But you never mentioned that it's not necessarily a hardware limitation, rather just that the back end does not support proper GPU compilation. So since the other ones that are already doing this are using LLVM as their base, do you think that the current community around LLVM is actually trying to improve GPU-based processing on their side itself, rather than somebody else using this as code to implement on top of?
+
+[1:41:52] A: So what is currently being done is, instead of having everything on LLVM's main branch, they fork it and build upon it. For example, Nvidia. Nvidia has something called NVVM, which is just a fork of LLVM. On top of it, they have their own GPU extensions. So the idea is, if you do not know what LLVM has currently, what it has in its current base, how will you know how to contribute to these
+
+[1:42:52] code bases that use LLVM as their base and build on top of that? So this talk is just to give you a foundation of what LLVM currently has and what is being used, so that you can explore more. Because with the focus of LLVM, you can't cover everything in one talk or one session, because how Nvidia handles it is different, how Julia handles it is different, and how SPIR-V [?] or anyone like Intel or Apple handles it is very different. So LLVM is like your base and foundation, on top of which all these GPU vendors and the new accelerators and startups that come up build their own pipelines and their own toolchains.
+
+[1:42:52] Q: Okay, I get what you mean. Thanks.
+
+[1:43:53] I hope it works.
+
+* PythonBPF - now with loops, custom funcs, and more maps!
+:PROPERTIES:
+:SPEAKER: Pragyansh Chaturvedi and Varun Mallya
+:START: 1:43:55
+:CFP: https://fossunited.org/c/indiafoss/2026/cfp/299lpkmuqh
+:END:
+[[https://www.youtube.com/watch?v=rb1ZALRGFjw&t=6235s][1:43:55]] · Pragyansh Chaturvedi and Varun Mallya
+
+** Summary
+Pragyansh (FP Launchpad, Canonical) and Varun (IIT Roorkee, BPF kernel contributor) gave an update on PythonBPF, which compiles ordinary decorated Python to eBPF through LLVM IR. They compared it to the alternatives: restricted C, BCC (awkward inline C), Aya (needs Rust, slow for quick experiments) and bpftrace (a new DSL to learn). The pitch for PythonBPF is that BPF work is mostly producing data, and Python is where you end up analysing and plotting it anyway, with Jupyter and LSP support for free. The pipeline builds a Python =vmlinux= module from bpftool's C header, picks out the BPF chunks, runs allocation passes and emits LLVM IR for the BPF backend.
+
+Updates since their last talks, each driven by reviewer feedback:
+- They now run the LLVM optimiser (=opt=). The eBPF stack is 512 bytes (just raised to 2 KB) and the verifier caps instruction count, while their raw IR was poor, so optimisation matters.
+- Kernel selftests as a benchmark against other tools. A classifier picks selftests that use features PythonBPF already supports, and LLMs port them. Of 823 selftests in the 7.3 kernel, 415 have been ported and about 350 pass.
+- BPF globals (variables in BSS), which unblocked many of the selftests.
+- A rewritten integer type system that now behaves like C. Previously everything defaulted to unsigned 64-bit, and widening 16-bit packet fields broke the verifier.
+- Bounded =for= and =while= loops that produce the same IR as Clang, plus array maps.
+
+The demo was Snake running entirely in the kernel. Game state and input live in BPF maps, the game ticks on a =getppid= hook, and the front end is either ASCII or Pygame. They called it "the only snake game that needs sudo". Next steps: using PythonBPF to teach (for example alongside xv6 assignments) and sched_ext schedulers. In Q&A they covered CO-RE portability across kernel versions and how the vmlinux header is generated.
+
+** Notes
+
+** Transcript
+[1:43:55] So now we have Varun and Pragyansh talking about PythonBPF updates. It's their own project, and I've had the pleasure of seeing this project grow over the years. So yeah, please go. It's supposed to... Yeah, it's just... Oh, it's fine. It's nice. It was beautiful while it lasted. It's working now. It's working now. Keep this.
+
+[1:45:04] You can switch. So hi, I am Pragyansh. I am affiliated with FPLaunchpad and Canonical.
+
+[1:45:04] And I'm Varun. I'm a student at IIT Roorkee. I contribute to the BPF subsystem of the Linux kernel.
+
+[1:45:04] And we are going to talk about the updates that have been made to the PythonBPF project here, based on the reviews that we got over our previous [talks]. So, a show of hands: how many people here have ever written eBPF programs? That's sizable. Okay. So this would be a quick primer on what is BPF. It's a kernel subsystem which allows you to write custom programs in the kernel space, provided they conform to the rules of the verifier in the kernel. And this helps you to extend the kernel in useful ways without using a kernel module or changing the kernel source.
+
+[1:45:04] Yeah, so the canonical way to write eBPF code is in plain restricted C. But there were a lot of alternatives that came along over the years. BCC is one such method that was meant to make writing eBPF easier, but it's incredibly horrendous to write due to the inline BPF code that's written in C.
+
+[1:46:05] Yeah, Aya in Rust is another alternative. It's surely used in production, but it suffers from the fact that you need to learn Rust to do this. Great that it exists, but it does not give a lot of ease, like a good ecosystem for data visualization and stuff, since a lot of BPF is data generation. Like, you have a lot of data that you generate, and then you have to ingest that, you have to process it, you have to show it out. So it's way better done in Python, in our opinion. And you'll probably do it in Python anyway: if you get data, like, directly put it into a file, you read the file in Python, you plot it directly in Python.
+
+[1:47:05] So you have to anyway do that. It also prevents you from creating quick experiments due to the verbosity of Rust.
+
+[1:47:05] Again, yeah, so this is bpftrace. It's very widely used. It's a DSL. It's used for interfacing with the BPF subsystem. Again, it's pretty short and efficient to write, but it still requires that you learn a new DSL to get this done. It's not the best method if you just want a quick prototype without learning all of bpftrace.
+
+[1:47:05] So this is PythonBPF. So it's just standard Python with decorators. There's nothing extra you have to learn apart from, I guess, how to write BPF code in general, like the context of how to write BPF code in general. And you benefit from the Python ecosystem, such as Jupyter notebook support and extensive visualization libraries and stuff. You also get, like, LSP support and stuff.
+
+[1:47:05] Yeah. So this is how PythonBPF works under the hood. We are not going to explain all of it. We just copied this slide from one of our previous talks. But mainly, we first create a vmlinux module, which is basically a collection of all the data structures and the struct definitions that the kernel already has, that can be used by your BPF programs. And then our compiler picks up the BPF chunks from your code. And then it would do the allocation passes, and if there are any kernel data structures that you use, they would be initialized, and then all of those chunks are then compiled down to LLVM [IR], which is then handed over to the LLVM back end to compile down to BPF.
+
+[1:48:05] Yeah. Yeah. So one of the first updates that we did to PythonBPF, like after the first few runs, was we added the LLVM optimizer. We didn't have this before, but now we do, since eBPF only has, like, a 512-byte stack. Not kilobytes, a 512-byte stack, which was increased to 2 kilobytes two days ago.
+
+[1:49:05] But apart from this, like, we need the optimizer. Like, we generate very bad LLVM, so the optimizer fixes that, and we get, like, very good results. We get good stack usage. It helps with reducing instruction count on BPF as well, which is pretty important, because the verifier has an instruction limit. If we have a lot of instructions, you can't process. And if a similar program in C and PythonBPF have different amounts of instructions, the better one is of course the one with fewer instructions. So =opt= is present on all machines where Clang is installed, so it helps with the accessibility as well.
+
+[1:49:05] So why would someone want to use PythonBPF? Because we think it's the easiest way to start writing BPF without learning a new language, and it shields you from a lot of the kernel verifier shenanigans that the ones who write eBPF programs here would be familiar with. It detects and handles some of the special cases internally. So it shields you from all of the horribleness that the kernel verifier already has.
+
+[1:50:05] And now let's come to the updates. We'll first discuss the reviews that we got and how we addressed them. But if you haven't watched the talks that we previously gave, I strongly urge you to do it after this, because we show some demos there that are quite cool and show you how PythonBPF can be used. This talk is based on the updates that we have since then. So it has only one demo, to be honest. But I think that those talks would get you quite interested in this project.
+
+[1:50:05] So picture a random reviewer that we found in one of the conferences we were talking to. So one of the reviews we got was that the demos we are showing are showcasing the things that we support, but there is no metric to show what is the difference between a bleeding-edge language, let's say Aya, which is in Rust, and us. So one of the suggestions was we should probably port the kernel selftests to our test suite in PythonBPF. And at the time it seemed like a very daunting task, because there are, like, hundreds of those tests. But then we made a selftest classifier, a classification script that takes whatever features we have in PythonBPF right now, and then goes through the selftests in the Linux kernel source tree, and finds out the candidates that can be ported to our project, and uses LLMs to port them.
+
+[1:51:05] So right now the 7.3 kernel has 823 BPF selftests, and out of those we have enriched our test suite with 415 different tests, out of which we are passing around 350 of them. The others are things that we still have to work [on].
+
+[1:52:05] Yeah. So one of the biggest gaps that we had recently was BPF globals. So BPF globals are just global variables that live in the BSS section. So those were needed by a lot of selftests, and we didn't have support for that until some time ago. We have added that support now, and we owe a lot of the kernel selftests passing, written in PythonBPF, to our BPF globals, because most of the other functionality that was needed was pretty much almost [there].
+
+[1:52:05] Another ghost from the past that haunted us while trying to port these tests was an inconsistent typing system. In PythonBPF, we are trying to take Python source code and compile it down to BPF, which is a strongly typed system. So we had a system to infer what the user really wanted. So you could... my previous talk at FOSDEM goes into detail on this... you could take an i64 pointer to a pointer and take an i64 pointer and add them, and it would infer that what you probably want is: dereference this once, dereference this twice, add the things, do the operation, and then store it into the result. And that result could be a pointer to a pointer to a pointer. So you need to have temporary variables in there.
+
+[1:53:06] But the thing was that all of the temporary variables that we were using here, and the base types we would do our operations in, would be unsigned 64-bit, and the signedness was all over the place in the codebase. So we had this general guideline of just using unsigned 64-bit as your default integer type, which does not go well for a lot of programs. Like, people want to use signed integers, people want to use different widths, and if you have data packets, they usually are 16-bit, and if we widen them to 64-bit, it causes a verifier issue.
+
+[1:54:06] So now we have a better type system. We overhauled the integer type system, which now practically behaves like C. These are examples from the selftests that were failing, which are now more C-like. So yep, and so I'd say for porting the selftests we actioned on this correctly.
+
+[1:54:06] And yeah, another feedback that we got was that we don't have many constructs that other languages usually have in PythonBPF, because we brought it up from nothing. Like, we had to basically rewrite everything apart from parsing in Python.
+
+[1:55:06] And we did it this way because there were features that eBPF itself actually lacked some time ago. Like, eBPF is very rapidly evolving. It's a very rapidly evolving subsystem. So there are things being added to it as we speak and stuff. So there was a lot of code that could work earlier without these constructs that cannot now. So now we couldn't ignore those constructs, such as loops and pseudo function calls, like tail calls and stuff. So it was suggested that demoing a working game using PythonBPF would be a testament to having a more practical eBPF language. So we went ahead to try and make the snake game in PythonBPF.
+
+[1:55:06] And the first feature that we had to add was looping constructs. The hard part about loops is that in BPF the programs need to be bounded, and that is the reason why BPF is not Turing complete, because you cannot have unbounded loops.
+
+[1:56:07] So we eventually got it to have the same IR as we have for Clang when we compile BPF with Clang. And we only support =for= and =while= looping constructs in Python for now. We don't support list and dictionary comprehensions. And this is the step function for our game loop, where you can see how the looping construct fits in. A small thing we also added was support for array maps, which we're using here. Previously the only lookup-type map we had was hash maps.
+
+[1:56:07] And yeah, so a high-level overview of how this demo works. So this is actually based on a stunt someone pulled two years ago by writing bpftrace for a snake game. The inputs are stored in a map. It's a shared data structure that BPF uses that transfers the data between kernel space and user space. It also stores game state. And how we tick the game is by using a hook. So the hook in this case is =getppid=.
+
+[1:57:07] So we'll show you the game, since we're running out of time. By the way, the only snake game that needs sudo. Yeah, it needs sudo because we are loading an eBPF program. This is pure ASCII, without the Pygame front end. And can we show the P[ygame one]?
+
+[1:57:07] Yeah, let me crash [it].
+
+[1:57:07] This is the Pygame front end. Basically, we are just using the game state and using the Pygame library to show whatever is going on. The game logic is completely in kernel space. So this is not useful in any way. It's just a...
+
+[1:58:10] Let's go back. So yeah, I think we did this as well. And now we think about the directions this project can go. And one obvious direction is to use it as a teaching aid for undergrad and grad students who really need to learn eBPF, probably as an extension to the xv6 OS assignments. There is this thing called sched_ext, which you can use along with eBPF to change the running scheduler of a kernel, and that's something we are focusing on.
+
+[1:58:10] And we give our thanks to Kumar Kartikeya Dwivedi [?], who guided us through the BPF subsystem along the development and the ongoing development of this project, and to Daniel and Alexei for their [inaudible]. And that's all for our presentation, and we are open to questions. Thank you for being patient enough.
+
+*Q&A*
+
+[1:59:22] Q: [inaudible]
+
+[1:59:22] A: No, no, no. So the game state is present in a map. That map is a shared data structure between kernel and user space. And you can read things from the map using a user space library, and then you can print it on the terminal. This was, like, the first thing we got working, and then we were like, okay, let's just add some more pizzazz to it. All of this is a single Python script. I think it's pushed, I guess. So you can check it out on the repository. I don't know how many lines it is, but without the Pygame stuff it's 120...
+
+[1:59:22] A: 134.
+
+[1:59:22] A: You can print it in the kernel, like, there's a way to do it. But we didn't want to show it here.
+
+[1:59:22] A: You can probably tail dmesg, the kernel message buffer, and probably it would... kernel ring buffer, and...
+
+[1:59:22] A: Yeah, the trace buffers, and you can send...
+
+[1:59:22] Q: Yeah, that's... you can put the ASCII codes for the terminal, right? So...
+
+[2:00:24] Host: Any other questions?
+
+[2:00:24] Q: So you mentioned that you use the kernel headers to compile, like, initially, right? You call the bpftool. So that is specific to the version of the kernel running on that machine, right? So how do you deal with, like, your code being deployed on different kernel versions and stuff?
+
+[2:00:24] A: So BPF has compile once, run everywhere (CO-RE). So if you have compiled BPF code on, say, kernel 6.x, or kernel X, then it will work on every kernel X + Y version. And I think there's no guarantee of backward compatibility if you're using kfuncs.
+
+[2:00:24] A: Yeah, if you're using kfuncs and some other, like, minor constructs. But you can generate it on whatever machine you want. Like, we prefer people generating it on the latest kernel, on their kernel, like, not only the latest.
+
+[2:00:24] Q: So, like, it's a Python module, right? So basically you would expect it to kind of compile it for the machine on which that Python interpreter is running, right?
+
+[2:01:24] A: Yeah, that's a step in our Makefile. So if you do =make= anything, the first thing we do is compile the vmlinux...
+
+[2:01:24] A: So you can see the first block over there. So bpftool gives you a C header. It doesn't give you a Python header. So we compile that into Python. We compile C code into Python, and then we do some replacements that we want, and that's a kernel-specific Python header for PythonBPF. All this is internal. You don't have to worry about all of this while you're writing PythonBPF. You can just directly write; everything will be handled for you.
+
+[2:01:24] Host: I think that's all. Thank you. Is Afnan here? If you're here, please come to the front, you're the speaker. Yeah, please, please, please.
+
+* TODO LGTM Is Not A Theorem
+:PROPERTIES:
+:SPEAKER: Durwasa Chakraborty
+:START: 2:02:28
+:CFP: https://fossunited.org/c/indiafoss/2026/cfp/8cbv4mpi6o
+:END:
+[[https://www.youtube.com/watch?v=rb1ZALRGFjw&t=7348s][2:02:28]]
+
+My own talk. Write this one up myself.
+
+* One Language, All GPU: How Julia Targets different GPU backends from a Single Kernel.
+:PROPERTIES:
+:SPEAKER: Shreyas Hegde
+:START: 2:20:04
+:CFP: https://fossunited.org/c/indiafoss/2026/cfp/3akfugngg7
+:END:
+[[https://www.youtube.com/watch?v=rb1ZALRGFjw&t=8404s][2:20:04]] · Shreyas Hegde
+
+** Summary
+Shreyas (JuliaGPU, GSoC contributor, compiler research intern at IIT Kanpur) explained how one Julia kernel compiles to CUDA, AMD ROCm, Intel oneAPI and Apple Metal. The framing was a firm that can't afford Nvidia and an intern called "Dumbo" who assumes one programming model covers every GPU. JuliaGPU tries to make that assumption hold with close to vendor-level performance.
+
+The stack:
+- AcceleratedKernels.jl: portable parallel algorithms (sort, reduce, mapreduce, accumulate, foreachindex) with target-specific tuning. Most of his GSoC work went here. He walked through accumulate (prefix scan): a local-memory scan per work group, then a block-level scan, then a final pass.
+- KernelAbstractions.jl: a portable kernel model. =@kernel=, =@index(Global/Local)=, =@localmem= and =@synchronize= lift vendor-specific primitives like =threadIdx= to a common level.
+- GPUArrays.jl: an abstract device array behind =CuArray=, =ROCArray= and the rest.
+- KernelInterface: device facts such as maximum work-group size (1024 on CUDA, 256 on Metal), because "portable does not mean hardware-blind".
+- GPUCompiler.jl: lowers Julia typed IR to LLVM IR and from there to PTX, AMDGCN/HSA or SPIR-V.
+- Backend packages (CUDA.jl, AMDGPU.jl, oneAPI.jl, Metal.jl) handle what can't be abstracted, such as native memory fences.
+
+Benchmarks on AMD: AcceleratedKernels' accumulate is within about 2–2.4% of rocThrust, and its reverse kernel is slightly faster. Trade-offs: the ecosystem is young (APIs and compiler internals still move), and hand-tuned vendor libraries start ahead. In Q&A he said, compared with Mojo, that the point is serving Julia's scientific-computing ecosystem, that mixed Nvidia/AMD clusters are possible, and that anything written in Julia, including a hypothetical JAX-like library, gets all four backends.
+
+** Notes
+
+** Transcript
+[2:20:04] Okay. So up next we have "One Language, All GPU: How Julia Targets Different GPU Backends from a Single Kernel" by Shreyas Hegde, who is a GSoC mentee with Julia, and he's also a core contributor, and he's also interned at IIT Kanpur under Professor A. [?]. So yeah, welcome.
+
+Hello. Hello. Is it okay?
+
+[2:21:05] The one before. Oh yeah. So hello folks. How many of you people know Julia here? Not the person you might be thinking about, but the programming language. Okay. So I guess some people thought about the person. Okay, never mind. So I am here talking about one kernel, all GPUs: basically how you can write just one single Julia GPU kernel and compile it to all four backends which are available right now.
+
+So it's already 4:30, so you guys need a reason to listen to me. So let me just tell you who I am. I am a member of JuliaGPU, and I have been contributing to Julia for a year right now, and along with that I did my GSoC with JuliaGPU,
+
+[2:22:05] the Julia language. I am also a compiler research intern at IIT Kanpur, and along with that I have contributed to several other projects. So let's dive into the talk straight away.
+
+Yeah. Now let us start with a story. Let us assume you are working at a scientific computing firm or mathematical computing firm, and let us say your firm has cheaped out on funds right now. So now you can't afford Nvidia's GPUs. You know GPU prices right now. So you go ahead and buy cheaper Intel GPUs, or let us say AMD GPUs, no offense. So now you need to write kernels for all of them. Your firm does not care about what GPU, what backends you have; they just need accelerators, and
+
+[2:23:05] they want you to write code for it. So you hired an unpaid intern who has written his first CUDA kernel like 2 months ago, and he comes today and he says, "Oh yeah, I know GPU programming." So probably the CUDA kernel he has written is using Claude [?] or something. Never mind. So yeah, what would you do in that case?
+
+Let us call that unpaid intern Dumbo. So Dumbo thinks that, okay, knowing just one programming construct can target all the GPU backends. But he doesn't know that his firm has cheaped out on graphics cards. So this "what if" can actually be true. So what if Dumbo is actually right? So this is what JuliaGPU does. JuliaGPU designs vendor-agnostic kernels which provide actual vendor-level performance, or let us say near vendor-level performance.
+
+[2:24:05] So I'll dive into how it works. This pitch deck looks like a hackathon pitch deck, but this is how it actually works. Let us say you have a high-level Julia GPU kernel, or high-level Julia kernel. It is designed using three different packages. The first one is AcceleratedKernels.jl. The second one is GPUArrays, and the third is KernelAbstractions. I'll come to what each does.
+
+So AcceleratedKernels is basically a library which contains parallel implementations of several different algorithms, let us say sort, accumulate or mapreduce or something like that. Then GPUArrays: it is an abstract implementation of device arrays. Like, we have =CuArray= or =ROCArray=, so GPUArrays is an abstract implementation of that. Then
+
+[2:25:05] we have KernelAbstractions.jl. This is basically a portable GPU programming model. It gives abstracted device primitives which we can use to write portable kernels.
+
+Then comes GPUCompiler.jl. This is the brainchild which does everything. GPUCompiler.jl takes Julia's typed IR and it lowers down to PTX, or to amdgcn and amdhsa, and for Intel it's SPIR-V or something like that. So that happens through LLVM. So taking the example of Nvidia's pipeline, let us say we have a Julia kernel. It is compiled to its typed IR. That typed IR is further compiled to LLVM IR through GPUCompiler.jl. Then we use NVPTX to emit
+
+[2:26:05] PTX so that it will work on Nvidia GPUs. So this is the high-level mechanism of how the JuliaGPU ecosystem works.
+
+So let us dive into these packages. I talked about AcceleratedKernels and everything; this is how it would work. We have high-level APIs, which let us say are a sort, a sum or an accumulate. AcceleratedKernels has the implementation of these high-level APIs. These high-level APIs are implemented using something called KernelAbstractions. Again, it is just the jargon which I'm working around, so please don't mix it up.
+
+So AcceleratedKernels contains parallel algorithms. What kind of parallel algorithms? I have listed some: sort, reduce, mapreduce, accumulate, foreachindex. And as a matter of fact, this is where
+
+[2:27:05] most of my Google Summer of Code work went: in designing these parallel algorithms and making them optimized so that it works best on all the backends. And target-specific tuning is also included in this. So this is how AcceleratedKernels is.
+
+Let us take an example and actually understand how it works. I'm taking the example of the accumulate kernel. So who here knows what accumulate is on GPU? Okay, nobody. Okay, fine. Accumulate is a basic prefix scan on GPU. This flowchart tells how it actually works. You delegate your accumulate using an abstract array, and this is split into multiple blocks, and these blocks are assigned to particular work groups. Now in work groups
+
+[2:28:05] there is a local memory scan and there is a block accumulation. After that we have a block-level scan, and after the block-level scan we have prefix block scans, and later on we have a final scan which gives you the accumulation of the whole array. So yeah, it is a bit tedious, but this is how it works.
+
+And on the code side you can see how the algorithm would actually be written. You can see an =@kernel= function. Wherever we have mentioned the at symbol, those are all device intrinsics. These are vendor-agnostic intrinsics. Taking the example of =@index(Local)=: that is basically the work item ID, the local ID. For something like CUDA, we would consider the thread ID or something like that. But
+
+[2:29:06] this is a higher-level, abstracted interface which just contains =@index= and it is mapped further on. Similarly we can see a =@synchronize= there. Synchronize basically means that up to that particular point the work items or work groups will be synchronized, and then later on they will proceed. So this is what an AcceleratedKernels kernel would look like.
+
+I was talking about KernelAbstractions, device primitives, blah blah blah. So what exactly are these abstractions? This is what the abstraction is. Let us say we have some global indexing or something. Again, CUDA has thread ID. We have ROCm; ROCm has its own indexing method. Intel has its own indexing method, and all. So writing a vendor-agnostic kernel with all of these different types of primitives is not possible. So what KernelAbstractions
+
+[2:30:06] actually does is it lifts them up to a certain level where it is vendor agnostic. So =@index(Global)= is a global indexing example. This is just an example of a simple addition kernel. So =@index= lifts it from thread ID or =threadIdx= or something like that.
+
+So what abstractions does KernelAbstractions actually bring? We have work groups, we have local shared memory, we have synchronizations, launch configurations. All of these are abstracted to a level which is vendor agnostic.
+
+Now, we were talking about vendor agnosticism and everything, but vendor agnostic does not mean, okay, fine, there is a CUDA kernel, I just straight-on translate it such that it will just work on AMD GPU. Of course, will it work? Probably. Is it efficient? Hell no.
+
+[2:31:06] To make it actually efficient, what things would we require? Device-specific data, let us say. So again, this is what this slide shows: portable does not mean hardware-blind. Bringing up portable primitives from KernelAbstractions: again, I mentioned =@index=, or =@localmem=. Localmem is basically your work-group shared memory, etc.
+
+Then we have something called KernelInterface. This provides some device-level information, for example the maximum size of a work group. Let us say CUDA supports 1024 elements in a work group, but Metal on the other hand will support only 256, because of discrete GPU versus iGPU. So there is a difference. We would require this device information. So KernelInterface brings up that device information from the compiler straight up to the level that
+
+[2:32:06] we can use it as an abstraction. But all of these primitives can't be abstracted. Let us take the example of the device fence. Does anybody here know what a device fence or memory fence is? Okay, one, two, very few people. So memory fencing is basically, I'll give an example: let us say locks in Linux. It's similar to that, but on GPUs, for memory. So device fences can't be abstracted to a level. We need to actually use native device fences.
+
+What Julia provides for this particular thing is specializations, or backend implementations, like CUDA.jl, AMDGPU.jl, oneAPI.jl and Metal.jl, which is basically
+
+[2:33:07] CUDA's implementation in Julia, which can be used as runtime libraries as well as for specializations. CUDA has its own native fences, AMD has its own native fences, and that is how we specialize on these primitives.
+
+Now, we were talking about performance and vendor agnosticism. Normally vendor agnosticism puts performance on a toss, right? But Julia does not do that. Maybe in certain circumstances, but mostly we try to make it as vendor-competitive as possible. So I'm taking two examples right here: an accumulate kernel and a reverse kernel. The lower the graph, the better it is. AK is the purple line: the AcceleratedKernels implementation is the purple line, and the green line is rocThrust. So this was an AMD
+
+[2:34:07] GPU, because I'm also cheaping out on GPUs, because I can't afford GPUs at this rate. So this is the AMD GPU's line. You can see there is around a 2 to 2.4% difference between the vendor implementation and our implementation. On the other hand, you can see there is a reverse kernel where our implementation, JuliaGPU's implementation, is actually better than rocThrust. So it's actually faster, by a very small margin.
+
+Now, vendor agnosticism, yeah, it seems very okay. So why not just use it everywhere? Vendor agnosticism of course has its trade-offs. Julia is a moving package, a moving language. Most of the people here don't know what Julia is. It is in the developing phase right now, so most of the packages are under development. Hence
+
+[2:35:07] there will be API changes, compiler infrastructure changes and all. And it's not as stable as other implementations, but yeah, it is stable. Then vendor implementations will of course have a head start, because we are comparing a hand-tuned library for a particular device to a vendor-agnostic library. So yes, there will be a difference. That is what all three points cover, basically, for vendor agnosticism.
+
+So these are some references. Special thanks to Tim and Valentin for designing JuliaGPU [?] as their MIT project. And you can scan this to actually go ahead and look around our codebase. We would love having some contributions on it. So thank you for listening to me. Any questions?
+
+*Q&A*
+
+Q: Hi. So I was just
+
+[2:36:07] wondering, I'm just curious, how is this different from Mojo, something which also, I think, promises vendor-agnostic kernels?
+
+A: Yeah. So this is majorly towards Julia's ecosystem: providing GPU implementations and providing vendor agnosticism in Julia's ecosystem. So the main key part here is that this is for Julia, because we are providing more of the acceleration for these scientific computing firms and all, where they would require this vendor agnosticism, because otherwise [inaudible]
+
+Q: Because Julia is used a lot in scientific domains, right. Cool. So with this library, is it possible to distribute GPU workload to a cluster which has both Nvidia and [inaudible]?
+
+A: Yes, it is possible. Yes, it is possible.
+
+Q: So
+
+[2:37:07] we can mix and match. Thank you.
+
+A: Oh, yeah.
+
+Q: Actually, my question was about the ML side. What we have basically is higher-level machine learning libraries like JAX or others; they basically compile down to lower-level CUDA, or basically hardware level. For example, JAX does not compile to Metal itself. So do you have plans to have some higher-level library around Julia for machine learning?
+
+A: If we have a JAX implementation written in Julia, then definitely we can compile it to Metal, because any kernel written in Julia, if it is a parallel kernel, we can run on all four GPU backends.
+
+Q: Yeah. Thank you.
+
+[2:38:10] So before going to the last talk for the day, we have an announcement. If you liked the talks on functional programming and OCaml today and want to see more of that, there's the Fun OCaml conference and workshops happening in Bangalore on January 25th and 26th, 2027. It's early in the year, and it's organized by IIT Madras and FP Launchpad. It's in Bangalore. So you can check out fun-ocaml.com. The call for papers is still open; it's open till 30th September. So if there are any OCaml programmers here, you can submit to the CFP or you can register to attend the event. So that's the announcement.
+
+* Rust Is Not an HDL, So I Built a Tiny One.
+:PROPERTIES:
+:SPEAKER: Afnan K Salal
+:START: 2:39:07
+:CFP: https://fossunited.org/c/indiafoss/2026/cfp/0p3ti1uq2b
+:END:
+[[https://www.youtube.com/watch?v=rb1ZALRGFjw&t=9547s][2:39:07]] · Afnan K Salal
+
+** Summary
+This was the closing talk. Afnan described himself as a BTech dropout and startup founder who came from AI and web development. A friend showed him Verilog, he decided to write his own and was promptly humbled, and Frag came out of that: a small Rust-based HDL compiler. He had forgotten his laptop and the borrowed one wouldn't connect over HDMI, so the talk ran without a demo.
+
+Main points:
+- Hardware compilers need a semantic analysis stage on top of parsing. Signal widths, clocks and timing matter, and in hardware everything happens at once, not step by step.
+- Frag's pipeline: a checker that rejects broken programs before any IR is built, then a typed netlist IR, then several backends. It can print truth tables (useful for someone who had to memorise them for an electronics degree), Mermaid dataflow diagrams, VCD waveforms, and Verilog that gets checked for validity.
+- The example was a half adder: sum = A XOR B, carry = A AND B, written as typed bits instead of Verilog =assign= statements. Conditions map to multiplexers.
+- Limitations: one module and one file at a time, no arrays or loops, signed values only, bits and booleans only ("arithmetic with extra steps"), and a hard-coded parser. It can handle basic sequential and combinational logic with clocks.
+- Lessons: he tried LLVM and then MLIR and found both far too big for this. RustHDL is the larger cousin he'd like to catch up with. The main takeaway was not to get overconfident when you're up against decades of accumulated work.
+
+In Q&A someone asked how Frag compares to Spade. He said Frag "can't even walk yet". He also confirmed that the Verilog backend outputs expressions without simplifying them. The repo is =afnanksalal/frag=.
+
+** Notes
+
+** Transcript
+[2:39:07] So, for the last talk for the day, we have "Rust Is Not an HDL, So I Built a Tiny One" by Afnan. So yeah, please go. That's great.
+
+[2:40:43] I don't know any number. Yeah, I think it's done.
+
+[2:42:48] Because it's hard to control this, unfortunately. Yeah, this is the setup right now. I can't control it like you. So, myself Afnan. Basically I'm a BTech dropout and a startup founder, and let me be honest: I didn't know anything about compilers till I managed to do something like this. I am an AI and web developer who got inspired by hardware when I met a friend. He introduced me to Verilog, and I was like, can I implement a version of Verilog myself? And then I got humbled, because I didn't know Verilog was a rabbit hole. And this is the story of how I learned how to make a compiler.
+
+[2:43:50] Like the cat, I was actually... I thought I could replace C++, I could replace everything. I thought I was God in the form of programming, but actually I wasn't. I tried to read the docs of Verilog. I couldn't even understand the first three pages, because it was like a book from Hogwarts, a magic book. So basically, unlike typical software compilers, hardware compilers have some different changes here and there. The major things are: typically there will be a source, tokens and an AST [?]. Usually there won't be semantics, basically for understanding if there is any difference from the source and the knowledge. For example, in normal programming we use the parser to
+
+[2:44:50] get the structure of the program; let's say the parser defines the... But when it comes to hardware, we have a thing called understanding the hardware, like the signal width or the clock type or the clock timing. For that we need a semantic analyzer, not only a parser. And then we move to the typed IR. It is not a multi-stage IR or anything, just a simple netlist type, which only does, by its name, make a netlist, a hardware list, and it's fully typed, so it can't do anything it can't. And then the backends. The backend is basically Verilog. Okay, so I tried to conquer Verilog, then I decided to add Verilog into this, because I know I can't capture it. And then there is some Mermaid graph output and simple truth tables. The slide says everything itself.
+
+[2:45:50] Software runs this, then that; meanwhile in hardware everything happens at once. You don't do one at a time, one at a time. It would take like a gazillion years to understand something of a hardware if it was sequential. So what is Frag today? It started as an evening project which I thought I would stop by the same day itself. I have been contributing to it myself for the past five months. I haven't pushed anything in the last three months because I obviously got busy with IMAS [?]. Then again I dropped out. Yeah, dropped out. So it's currently a compiler with a lot of backends. Yep. Like it says, it's not the Verilog; that is the best part. It's a semantic analyzer. Basically, let's say you have a half adder. I hope everyone knows what a half adder is: basically A XOR B, so
+
+[2:46:50] and then A AND B for the carry [?]. Usually for that, in Verilog, you have to assign something in the Verilog function. What I did is basically interpret everything in Rust. So you will first make A and B as a bit, then after that you do the sum, the carry formula, and then when you run Frag it basically generates the truth table first. So in college, my first degree was in electronics, so we had to study digital signal processing. There were a lot of truth tables I had to study and memorize, which I can't, because I've got a tiny brain. So what this does is that you just give it code and it outputs the truth table itself. And the second stage is that, let's say instead of a sequential circuit you have a combinational circuit. It can have branches, it can have a lot of combinations, which is very hard to understand
+
+[2:47:51] from a CS standpoint. We have a data flow diagram. So basically this second backend converts the code into a tree-type system. Basically it shows the input, the output, every parameter in between as a neat diagram. And then after that there is Verilog. It analyzes the Verilog and then compiles and checks if the actual program is healthy. So it's a simple half adder circuit. Currently Frag can only do one module at a time. It can't do multi-module. It can't do multi-file. Its extension itself is =.frag=. It has a long way to go. It can't do arrays. It can't do loops. It can't even do unsigned operations. It can only do signed operations, signed widths, and it can only do bit and boolean. So basically it's like an arithmetic
+
+[2:48:51] operation with extra steps. So basically Frag has multiple stages. The first is the Frag run check. Like the typical Rust, I decided to implement a program checker which first checks the circuit, I mean the Frag program, before it converts to an IR, because what's the point in having a broken IR if the code itself is broken? So it just checks first if it's working. Then after that it runs the IR, the netlist typed IR, which converts to the truth table and everything, which we can hook to a backend. And then finally it's run as either a signal, which you can export and use in waveform viewing software, or you can use the truth table and design the circuit yourself. The exports, like I said, are Verilog, diagrams, Mermaid,
+
+[2:49:52] VCD [?], like actual waveforms, actual diagrams, etc. So what stuff did I manage to copy, what stuff did I manage to fail? I actually failed everything. So I first went with LLVM, then I got humbled, because LLVM mostly is about CPUs, GPUs, all types of software compilation. Then I went to MLIR, which is a multi-stage IR. Again, it was developed by Google, then became part of LLVM. Right now my IR is basically like a two-year-old baby compared to MLIR. Still, I got a lot of knowledge of what not to do: don't get overconfident about your skills if you are competing with something with around 30 years of accumulated skills, which again takes time. Like somebody said, in the economics of software, time is also an economic value. Then RustHDL is like the super brother of my HDL, which I'm trying to
+
+[2:50:52] compete with, but I'm not there yet. So yeah, from the concepts I learned, I got a ridiculous, crazy ambition, like I can capture the moon. Then I got humbled. Then I got humbled again, like five times at least. Then it became Frag. I wanted to give a demonstration, but my minimalistic behavior taught me something else. I packed my bag; I am a minimalist dude. I forgot to pack my own laptop. I tried to present with my friend's laptop, but the HDMI is not connecting. So yeah, if anyone wants to try it, kindly go to =afnanksalal/frag= and you can try it out. The README has all kinds of diagrams, and there is an example which basically stress-tests everything Frag can do, around 300 lines of code. Yeah. Thank you. Any questions?
+
+*Q&A*
+
+[2:51:57] Q: Excuse me. So, how does Frag compare to Spade?
+
+A: If I try to compare Frag to anything right now, it's like ABCD to... I will be honest, Frag can't even walk right now, let alone [inaudible].
+
+Q: Yeah, but let's say based on the similarity to how you construct HDL programs in Frag compared to Spade, for example.
+
+A: I didn't go deep enough into Spade, but I guess Spade's parsing has its own compilation. Currently Frag's compilation, or Frag's parsing, is basically hardcoded.
+
+Q: Okay.
+
+[2:52:59] Q: Hey, so can you tell me what Frag can do today? Can it run clocks? Can it have [inaudible]
+
+A: Yeah, it can do clocks. It can do basic sequential and combinational.
+
+Q: Okay.
+
+A: It can't do anything which comes with a proper loop, like complete combinations, but it can do the minimal stuff, like breadboard level if you compare it to a PCB. And it can also do booleans, it can do arithmetic operations, and of course it can convert to Verilog and simplify the program, because in Verilog you have to assign everything.
+
+Q: Mhm.
+
+A: In Frag you don't have to assign; you just do a colon, bit, something like that. Meanwhile in Verilog you have to assign the mux or something. Oh, and by the way, Frag supports conditions, which basically are multiplexers. And yeah, so that level of stuff.
+
+Q: Okay, so do you simplify the expressions, or do you just pass it off when you dump Verilog? When you're dumping to Verilog, when your backend is
+
+[2:53:59] Verilog, do you simplify your expressions or do you just dump it?
+
+A: Currently it just passes, because I don't want any complex symbols. Like I said, the parsing is basically hardcoded if-else-if. So basically I don't want any hard-level circuit or anything going into it right now, because it's a standalone developed project which is not even a beta right now. It's been five months and it's not even in a [inaudible].
+
+Q: Okay. Yeah. Good first try then. So,
+
+* Devroom close
+[[https://www.youtube.com/watch?v=rb1ZALRGFjw&t=10473s][2:54:33]]
+
+** Transcript (raw auto-captions)
+[2:54:33] thank you everyone for attending. We ended at 180 minutes on the dot. So, uh we're on time. Uh the force governing board elections are open. So, you guys would have gotten a mail from You can go there and vote. That's it. Thank you. I won't I won't say for whom that that's up to you.
