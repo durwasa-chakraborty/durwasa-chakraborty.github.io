@@ -1,7 +1,7 @@
 +++
 title = 'From "Kundalahalli Is Not Kundalahalli Gate" to "LGTM Is Not a Theorem" :: Reflections on IndiaFOSS 2026'
-date = 2026-10-23T00:00:00+05:30
-draft = true
+date = 2026-10-24T00:00:00+05:30
+draft = false
 author = 'durwasa'
 math = true
 comments = true
@@ -44,7 +44,7 @@ So yes, books need to evolve. When I read about entropy, I should be able to fin
 
 ## The Programming Languages and Systems devroom
 
-My talk was in the [Programming Languages and Systems devroom](https://fossunited.org/indiafoss/2026/devrooms/compilers), and the whole devroom is on [YouTube](https://www.youtube.com/watch?v=rb1ZALRGFjw) with chapters for every talk. The devroom managers were Pradeep and {{< mention "Ashutosh Pandey" "https://www.linkedin.com/in/ashupdsce/" >}} from LLVM Social Bangalore. They are *the* people right now, and they even got a shoutout from Google (not that we need Western validation to appreciate great work, but yeah, it is kind of a big deal). A disclaimer: some of these ideas are not captured verbatim. That is entirely down to my inability to have a sumptuous lunch and then not doze off while the convention centre AC runs at full capacity.
+My talk was in the [Programming Languages and Systems devroom](https://fossunited.org/indiafoss/2026/devrooms/compilers), and the whole devroom is on [YouTube](https://www.youtube.com/watch?v=rb1ZALRGFjw) with chapters for every talk. The devroom managers were Pradeep and {{< mention "Ashutosh Pandey" "https://www.linkedin.com/in/ashupdsce/" >}} from LLVM Social Bangalore. They are *the* people right now, and they even got a shoutout from Google (not that we need Western scholarship to appreciate great work, but yeah, it is kind of a big deal). A disclaimer: some of these ideas are not captured verbatim. That is entirely down to my inability to have a sumptuous lunch and then not doze off while the convention centre AC runs at full capacity.
 
 **Semantic Quantization in KV Cache Eviction**, by GiGi. The idea is to evict KV cache entries using only the key and value tensors already in the cache, so open models can run on a laptop without hitting OOM. Whenever I hear the word "tensor" my ability to visualise the engineering takes a hit, but the JPEG analogy landed: you lose the fine detail but keep what the image means. I came away with PyTorch SDPA and PagedAttention on my reading list.
 
