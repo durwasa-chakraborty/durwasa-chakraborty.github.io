@@ -284,7 +284,7 @@ article header h1.text-4xl {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   white-space: pre; overflow-x: auto; min-height: 1.6em;
 }
-.match-row { font-size: 1.15rem; line-height: 1.9; }
+.match-row { font-size: 1.15rem; line-height: 1.9; height: 1.9em; }
 .match-bind { font-size: 0.95rem; }
 .match-row .match-a { background: rgba(59, 130, 246, 0.25); border-radius: 2px; }
 .match-row .match-b { background: rgba(249, 115, 22, 0.28); border-radius: 2px; }
@@ -292,4 +292,8 @@ article header h1.text-4xl {
 .match-row .match-bad { outline: 2px solid rgb(239, 68, 68); outline-offset: 1px; border-radius: 2px; text-decoration: line-through; }
 .match-row .match-new { animation: beta-pop 0.6s ease-out; }
 @media (prefers-reduced-motion: reduce) { .match-row .match-new { animation: none; } }
-.match-steps .match-note { margin: 0.75rem 0; min-height: 3.2em; }
+.match-notes { display: grid; margin: 0.75rem 0; }
+.match-notes .match-note { grid-area: 1 / 1; margin: 0; visibility: hidden; }
+.match-notes .match-note.match-on { visibility: visible; }
+.match-row { scrollbar-gutter: stable; }
+.match-steps .match-credit { margin-top: 0.6rem; font-size: 0.75rem; opacity: 0.6; }

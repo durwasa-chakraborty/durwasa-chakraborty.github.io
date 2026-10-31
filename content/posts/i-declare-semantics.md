@@ -57,7 +57,7 @@ So we wait for a wise hermit, who brings a successor function, $S(n) = n + 1$, a
 
 Wait!! If you don't have `+` `add`, then how did you define $S(n)$ as $n + 1$? Our religion depends on an oracle; the oracle can't depend on another religion! We need some base God on which the system as a whole can stand.
 
-$S$ is not defined in terms of anything. $S$ just *is*. {{< mention "The numbers" "https://en.wikipedia.org/wiki/Peano_axioms" "Peano axioms, Wikipedia" >}} are $0$, $S(0)$, $S(S(0))$, and so on; 3 is not a thing in itself, 3 is just a representation of $S(S(S(0)))$. Nobody added anything to make $S$.
+$S$ is not defined in terms of anything. $S$ just *is*. The numbers are $0$, $S(0)$, $S(S(0))$, and so on; 3 is not a thing in itself, 3 is just a representation of $S(S(S(0)))$. Nobody added anything to make $S$.
 
 With $S$ in hand, `max` is finally out: `max(5, S(0)) = 5`, but `S(max(5, 0)) = S(5) = 6`. Excommunicated.
 
@@ -104,9 +104,17 @@ None of these say *how*. They only say *what must be true*. Each one is a comman
 
 ## Amendments
 
-Well, there is one difference. Nobody amends a holy book, and as a believer, I would not want them to.  Scripture is meant to be eternal, and that is rather the point of it. Whenever mortal beings make something amendable, the amending passes through a power imbalance: whoever has the numbers, the wealth or the position starts rewriting it to suit themselves. A book that nobody can amend cannot be bent by anyone, whatever the social order of the day happens to be. Its finality is what keeps it out of everyone's hands, equally.
+Well, there is one difference. Nobody amends a holy book, and well, I would not want them to.  Scripture is meant to be eternal, and that is rather the point of it. Whenever mortal beings make something amendable, the amending passes through a power imbalance: whoever has the numbers, the wealth or the position starts rewriting it to suit themselves. A book that nobody can amend cannot be bent by anyone, whatever the social order of the day happens to be. Its finality is what keeps it out of everyone's hands, equally.
 
-Science works the other way round. You can be a lowly clerk at a patent office in Bern, write a paper telling a certain Lucasian Professor of Mathematics at Cambridge, the greatest scientific mind of all time, that his *Philosophiae Naturalis Principia Mathematica* is not the final word, and get your amendment accepted. :) {{< mention "A Short History of Nearly Everything, p. 74" "https://en.wikipedia.org/wiki/A_Short_History_of_Nearly_Everything" >}} Newton was not thrown out, mind you. His laws still work beautifully for cricket balls, bridges and rockets to the Moon; they only stop being exact close to the speed of light or near something very heavy, and his single absolute clock, ticking the same for everyone, had to go. Science did not burn the old book. It added a chapter, and wrote in the margin exactly where the old one stops working. Karl Popper: a theory that nothing could ever refute is not science at all. Being refutable is not a weakness of science; it is the definition of it.
+Science works the other way round. You can be a lowly clerk at a patent office in Bern, write a paper telling a certain Lucasian Professor of Mathematics at Cambridge, the greatest scientific mind of all time, that his *Philosophiae Naturalis Principia Mathematica* is not the final word, and get your amendment accepted. :) And to quote Karl Popper: a theory that nothing could ever refute is not science at all. Being refutable is not a weakness of science; it is the definition of it.
 
 Specifications live on the science side of that line. When a spec turns out to be wrong, the way "the list is in order" happily let an empty list through, we do not excommunicate the person who noticed. We amend the spec.
 
+
+
+---
+
+### References & links
+
+- **Peano axioms** :: [Wikipedia](https://en.wikipedia.org/wiki/Peano_axioms) :: the $0$ and $S$ our little religion of addition is built on
+- **Bill Bryson** :: [*A Short History of Nearly Everything*](https://en.wikipedia.org/wiki/A_Short_History_of_Nearly_Everything), 2003, p. 74 :: the mentioning of Isaac Newton as Lucasian Professor of Mathematics at University of Cambridge.
