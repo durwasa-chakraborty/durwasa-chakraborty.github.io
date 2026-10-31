@@ -1,0 +1,107 @@
+{{- /* Step-through pattern matching of add(S(S(0)), S(0)) against the two
+     addition commandments, deliberately slow: try a rule, line up the pattern
+     against the term piece by piece, bind a and b, rewrite, repeat.
+
+     Each step has an active rule (1 = add(a, 0), 2 = add(a, S(b)), or 0),
+     a verdict mark, a pattern row and a term row. Rows are lists of
+     [text, "classes"] segments; classes: a, b (bound variables), s (an S or 0
+     that lines up literally), bad (mismatch), new (just rewritten). Styles live in
+     assets/css/custom.css under `.match-steps`.
+
+     Usage :: {{< match-steps >}}
+*/ -}}
+{{- $id := printf "match-%s-%d" (substr (sha1 .Page.RelPermalink) 0 8) .Ordinal -}}
+<figure class="match-steps" id="{{ $id }}">
+  <div class="match-rules">
+    <div class="match-rule" data-rule="1"><span class="match-mark"></span><code>add(a, 0)    = a</code><span class="match-rule-name">commandment 2</span></div>
+    <div class="match-rule" data-rule="2"><span class="match-mark"></span><code>add(a, S(b)) = S(add(a, b))</code><span class="match-rule-name">successor commandment</span></div>
+  </div>
+  <div class="match-rows">
+    <span class="match-label">pattern</span><div class="match-row match-pat"></div>
+    <span class="match-label">term</span><div class="match-row match-term" aria-live="polite"></div>
+    <span class="match-label">so far</span><div class="match-bind"></div>
+  </div>
+  <p class="match-note"></p>
+  <div class="beta-controls">
+    <button type="button" data-act="reset">⟲ Reset</button>
+    <button type="button" data-act="prev">← Back</button>
+    <span class="beta-count"></span>
+    <button type="button" data-act="next">Next step →</button>
+  </div>
+  <noscript><p class="match-note">This animation needs JavaScript; the same steps are written out above.</p></noscript>
+</figure>
+<script>
+(function () {
+  var steps = [
+    { rule: 0, mark: "", pat: [],
+      term: [["add(S(S(0)), S(0))"]], bind: "nothing yet",
+      n: "We want <code>add(2, 1)</code>, written in our religion's own numbers. The engine has no idea what \"adding\" is. All it can do is hold the term up against each commandment and check whether the shapes match." },
+    { rule: 1, mark: "✗",
+      pat:  [["add("], ["a", "a"], [", "], ["0", "bad"], [")"]],
+      term: [["add("], ["S(S(0))", "a"], [", "], ["S(0)", "bad"], [")"]], bind: "a = S(S(0))",
+      n: "Try commandment 2: <code>add(a, 0)</code>. <code>a</code> is happy to stand for anything, so <code>a = S(S(0))</code>. But the pattern wants a bare <code>0</code> in the second slot, and the term has <code>S(0)</code> there. <code>S(0)</code> is not <code>0</code>. No match. Next commandment, please." },
+    { rule: 2, mark: "…",
+      pat:  [["add("], ["a", "a"], [", S(b))"]],
+      term: [["add("], ["S(S(0))", "a"], [", S(0))"]], bind: "a = S(S(0))",
+      n: "Try the successor commandment: <code>add(a, S(b))</code>. First slot: <code>a</code> still matches anything, so <code>a = S(S(0))</code> again." },
+    { rule: 2, mark: "…",
+      pat:  [["add(a, "], ["S", "s"], ["(b))"]],
+      term: [["add(S(S(0)), "], ["S", "s"], ["(0))"]], bind: "a = S(S(0))",
+      n: "Second slot. The pattern starts with an <code>S</code>. Does the term? It does: <code>S</code> lines up with <code>S</code>. So far so good." },
+    { rule: 2, mark: "✓",
+      pat:  [["add(a, S("], ["b", "b"], ["))"]],
+      term: [["add(S(S(0)), S("], ["0", "b"], ["))"]], bind: "a = S(S(0)),  b = 0",
+      n: "Peel off the matching <code>S</code> on both sides. What is left inside is <code>b</code> on one side and <code>0</code> on the other, so <code>b = 0</code>. Every piece lined up. Match!" },
+    { rule: 2, mark: "✓",
+      pat:  [["S", "s"], ["(add("], ["a", "a"], [", "], ["b", "b"], ["))"]],
+      term: [["S", "s new"], ["(add("], ["S(S(0))", "a"], [", "], ["0", "b"], ["))"]], bind: "a = S(S(0)),  b = 0",
+      n: "Now rewrite. The commandment says <code>add(a, S(b))</code> becomes <code>S(add(a, b))</code>, so fill in <code>a</code> and <code>b</code>. Watch the <code>S</code>: it used to sit inside, on the second argument. Now it is outside, wrapped around everything. One <code>S</code> pushed out." },
+    { rule: 1, mark: "✓",
+      pat:  [["  add("], ["a", "a"], [", "], ["0", "s"], [")"]],
+      term: [["S(add("], ["S(S(0))", "a"], [", "], ["0", "s"], ["))"]], bind: "a = S(S(0))",
+      n: "The outer <code>S</code> just waits. Inside it sits <code>add(S(S(0)), 0)</code>, so we start again from the top. Commandment 2, <code>add(a, 0)</code>: <code>a = S(S(0))</code>, and this time the second slot really is a bare <code>0</code>. Match!" },
+    { rule: 1, mark: "✓",
+      pat:  [["  "], ["a", "a"]],
+      term: [["S("], ["S(S(0))", "a new"], [")"]], bind: "a = S(S(0))",
+      n: "Commandment 2 says <code>add(a, 0)</code> is just <code>a</code>. So the whole <code>add(…)</code> is replaced by <code>S(S(0))</code>, and the <code>S</code> we pushed out earlier wraps around it." },
+    { rule: 0, mark: "", pat: [],
+      term: [["S", "s"], ["("], ["S", "s"], ["("], ["S", "s"], ["(0)))"]], bind: "done",
+      n: "No <code>add</code> left, so no commandment matches anything, and the engine stops. Count the <code>S</code>s: one, two, three. <code>add(2, 1) = 3</code>, and at no point did anybody \"add\". We only matched shapes and moved an <code>S</code>." }
+  ];
+
+  var root = document.getElementById("{{ $id }}");
+  var q = function (s) { return root.querySelector(s); };
+  var btn = function (a) { return q('[data-act="' + a + '"]'); };
+  var i = 0;
+
+  function fill(el, segs) {
+    el.textContent = "";
+    segs.forEach(function (seg) {
+      var s = document.createElement("span");
+      s.textContent = seg[0];
+      if (seg[1]) s.className = seg[1].split(" ").map(function (c) { return "match-" + c; }).join(" ");
+      el.appendChild(s);
+    });
+  }
+  function render() {
+    var st = steps[i];
+    root.querySelectorAll(".match-rule").forEach(function (r) {
+      var on = Number(r.dataset.rule) === st.rule;
+      r.classList.toggle("match-active", on);
+      r.classList.toggle("match-fail", on && st.mark === "✗");
+      r.querySelector(".match-mark").textContent = on ? st.mark : "";
+    });
+    fill(q(".match-pat"), st.pat);
+    fill(q(".match-term"), st.term);
+    q(".match-bind").textContent = st.bind;
+    q(".match-note").innerHTML = st.n;
+    q(".beta-count").textContent = "Step " + i + " / " + (steps.length - 1);
+    btn("prev").disabled = i === 0;
+    btn("next").disabled = i === steps.length - 1;
+  }
+  btn("next").addEventListener("click", function () { i = Math.min(steps.length - 1, i + 1); render(); });
+  btn("prev").addEventListener("click", function () { i = Math.max(0, i - 1); render(); });
+  btn("reset").addEventListener("click", function () { i = 0; render(); });
+  render();
+})();
+</script>
