@@ -1,6 +1,6 @@
 +++
 title = 'I Declare Semantics :: What Is Declarative Semantics'
-date = 2026-10-30T00:00:00+05:30
+date = 2026-11-06T00:00:00+05:30
 draft = true
 author = 'durwasa'
 math = true
@@ -13,9 +13,7 @@ tags = ['programming', 'formal-methods', 'semantics', 'fpl']
 Grand Canyon, Arizona, USA, 10 January 2018 · Fujifilm X-T3 · XF 56mm f/1.2 · f/5 · 1/1100 s · ISO 160
 {.photo-caption}
 
-I DECLARE ~~BANKRUPTCY~~ SEMANTICS! 
-
-{{< mention "Reference : Michael Scott Declaring Bankruptcy" "https://www.youtube.com/watch?v=C-m3RtoguAQ" >}}
+I DECLARE ~~BANKRUPTCY~~ {{< mention "SEMANTICS" "https://www.youtube.com/watch?v=C-m3RtoguAQ" >}}
 
 After my _phenomenal success_ of my last blog that almost competed with Rajni sir's [Jailer 2](https://en.wikipedia.org/wiki/Jailer_2) at the box office, if the box office is my WhatsApp/Discord and the collection is counted in people reaching out of 'nowhere' to text me that they are reading the blog. I am extremely; extremely happy!
 
