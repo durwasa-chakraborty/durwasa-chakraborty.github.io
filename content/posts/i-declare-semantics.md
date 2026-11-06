@@ -1,7 +1,7 @@
 +++
 title = 'I Declare Semantics :: What Is Declarative Semantics'
 date = 2026-11-06T00:00:00+05:30
-draft = true
+draft = false
 author = 'durwasa'
 math = true
 comments = true
