@@ -8,25 +8,30 @@ comments = true
 tags = ['programming', 'formal-methods', 'semantics', 'fpl']
 +++
 
-I DECLARE ~~BANKRUPTCY~~ SEMANTICS!
+![Two people seen from behind on a metal bench at the rim of the Grand Canyon, the layered canyon walls fading into haze, in black and white.](/images/couple-at-grand-canyon.jpg "Carved By Time; Shared by two")
 
-Yes, that is [Michael Scott walking into the office and declaring bankruptcy](https://www.youtube.com/watch?v=C-m3RtoguAQ) by shouting it. Unlike Michael, I will also explain what I am declaring.
+Grand Canyon, Arizona, USA, 10 January 2018 · Fujifilm X-T3 · XF 56mm f/1.2 · f/5 · 1/1100 s · ISO 160
+{.photo-caption}
 
-After my _phenomenal success_ of my last blog that almost competed with Rajni sir's [Jailer 2](https://en.wikipedia.org/wiki/Jailer_2) at the box office, if the box office is my WhatsApp and the collection is counted in people reaching out of 'nowhere' to text me that they are reading the blog. I am extremely; extremely happy!
+I DECLARE ~~BANKRUPTCY~~ SEMANTICS! 
 
-But. Most of my friend circle are in business, entrepreneurs, musicians and even within the computer science landscape formal verification is a relatively new idea. So a lot of the heartfelt messages went like: "I read it, but I didn't understand the technical part." And as Benjen Stark once said, nothing someone says before the word "but" really counts. So the actual review was *didn't understand the technical part*. Ouch. Let's be extremely critical of my own explanation and think about how to make the material more accessible. :) 
+{{< mention "Reference : Michael Scott Declaring Bankruptcy" "https://www.youtube.com/watch?v=C-m3RtoguAQ" >}}
+
+After my _phenomenal success_ of my last blog that almost competed with Rajni sir's [Jailer 2](https://en.wikipedia.org/wiki/Jailer_2) at the box office, if the box office is my WhatsApp/Discord and the collection is counted in people reaching out of 'nowhere' to text me that they are reading the blog. I am extremely; extremely happy!
+
+But. Most of my friend circle are in business, entrepreneurs, musicians and even within the computer science landscape formal verification is a relatively new idea. So a lot of the heartfelt messages went like: "I read it, but I didn't understand the technical part." And as {{< mention "Benjen Stark" "https://gameofthrones.fandom.com/wiki/Benjen_Stark" >}} once said, nothing someone says before the word "but" really counts. So the actual review was *didn't understand the technical part*. Ouch! Let's be extremely critical of my own explanation and think about how to make the material more accessible. :) 
 
 So today we will look into declarative semantics.
 
-## Operational semantics: watching the gears move
+## Operational Semantics: Watching The Gears Move
 
 What is declarative semantics, and what does it mean as opposed to operational semantics?
 
-Operational semantics is about how things *operationally* move.  Prof. {{< mention "V. Krishna Nandivada" "https://www.cse.iitm.ac.in/~krishna/" >}}  once told me that you cannot explain points-to analysis using "points to", or any verb form of it. I have just committed the same felony. So let me try again without the word o-p-e-r-a-t-i-o-n: operational semantics describes a program by the steps a machine takes to run it, one step at a time, from the input all the way to the answer.
+Operational semantics is about how things *operationally* move.  Prof. {{< mention "V. Krishna Nandivada" "https://www.cse.iitm.ac.in/~krishna/" >}}  once told me that you cannot explain points-to analysis using "points to", or any verb form of it. I have just committed the same felony. So let me try again without the letters o-p-e-r-a-t-i-o-n: operational semantics describes a program by the steps a machine takes to run it, one step at a time, from the input all the way to the answer.
 
 We will keep it very simple, throughout the blog. Say we have an `add` function. It takes two 'things' and returns their sum.
 
-To give `add` an operational semantics, you need to know how every individual gear of this adding machine moves. You might build it out of gates: NAND gates alone, or some minimal configuration of AND, OR and NOT gates, the kind you get out of a K-map. ({{< mention "Arnav Pahuja" "https://www.linkedin.com/in/arnav-pahuja/" >}} recently told me about K-maps, which, unfortunately, I should have known already, after an engineering degree at a government institute in a socialist country, paid for by its taxpayers, and after spending a great many US dollars in a capitalist one. But the ritual of Electrical Engineers teaching me engineering or just wisdom in general has been fairly constant in my life, so I will take it in that spirit.) Or you can just have `add(1, 2)` return `x + y`, where the `+` is secretly an `addq` or some other assembly-level detail. Whichever you pick, at each step you are telling the machine exactly how to take the next step.
+To give `add` an operational semantics, you need to know how every individual gear of this adding machine moves. You might build it out of gates: NAND gates alone, or some minimal configuration of AND, OR and NOT gates, the kind you get out of a K-map. (courtesy {{< mention "Arnav Pahuja" "https://www.linkedin.com/in/arnav-pahuja/" >}})  or you can just have `add(1, 2)` return `x + y`, where the `+` is secretly an `addq` or some other assembly-level detail. Whichever you pick, at each step you are telling the machine exactly how to take the next step.
 
 Now, given my glittering record in Computer Architecture (I topped the class, if you sort the marks in ascending order), I will stay as far away from gates as I can. My other option is lambda calculus, but it is too close to my heart to be squeezed into a corner of a post about declarative semantics. It deserves a post of its own. Besides in the history of mankind no paragraph containing a λ and a latin word for a pebble (_calculus_) has ever been described as non-technical. And if I start on lambda calculus now, I will lose the three readers I gained from the last post.
 
@@ -38,7 +43,7 @@ Now suppose you ask the aforementioned Oracle "what is `add(2, 3)`?" and it give
 
 Whatever answer the oracle gives us, we run it past the axioms. If it obeys every one of them, it is accepted. We never once ask *how* the oracle got there.
 
-## Let's Start A Religion (Since we don't have enough of them)
+## Let's Start A Religion (Since We Don't Have Enough Of Them)
 
 Alright, so let's make our own small religion whose only God is addition (or shall I say, let's {{< mention "proselytize" "https://www.merriam-webster.com/dictionary/proselytize" "Merriam-Webster: to induce someone to convert to one's faith" >}} :P).
 
@@ -61,7 +66,7 @@ $S$ is not defined in terms of anything. $S$ just *is*. The numbers are $0$, $S(
 
 With $S$ in hand, `max` is finally out: `max(5, S(0)) = 5`, but `S(max(5, 0)) = S(5) = 6`. Excommunicated.
 
-### The scripture
+### The Scripture
 
 So now the `add` function has exactly two axioms:
 
@@ -91,7 +96,7 @@ At this point every Computer Science student thinks: "But what if `a` is `INT_MA
 
 That is declarative semantics. It lets you reason about a program as a *definition*, without worrying about how the gears move, or even what the gears are.
 
-## Back to real programs
+## Back To Real Programs
 
 Clearly, in programming we are doing much more than just writing an `add` function. But we do define properties declaratively, as specifications:
 
@@ -114,7 +119,7 @@ Specifications live on the science side of that line. When a spec turns out to b
 
 ---
 
-### References & links
+### References & Links
 
 - **Peano axioms** :: [Wikipedia](https://en.wikipedia.org/wiki/Peano_axioms) :: the $0$ and $S$ our little religion of addition is built on
 - **Bill Bryson** :: [*A Short History of Nearly Everything*](https://en.wikipedia.org/wiki/A_Short_History_of_Nearly_Everything), 2003, p. 74 :: the mentioning of Isaac Newton as Lucasian Professor of Mathematics at University of Cambridge.
